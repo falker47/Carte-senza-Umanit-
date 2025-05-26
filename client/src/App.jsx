@@ -27,13 +27,16 @@ const App = () => {
     }
   }, []);
 
+  // Modifica la connessione socket per usare l'URL del server in produzione
   useEffect(() => {
-    // Inizializza socket solo se non esiste già
     if (!socket) {
-      const newSocket = io('http://localhost:3001');
+      const serverUrl = import.meta.env.PROD 
+        ? 'https://carte-senza-umanita-server.onrender.com' 
+        : 'http://localhost:3001';
+      const newSocket = io(serverUrl);
       setSocket(newSocket);
       
-      // Aggiungi questo per il debug
+      // Debug
       newSocket.on('connect', () => {
         console.log('Connesso al server Socket.io!');
       });
@@ -41,8 +44,7 @@ const App = () => {
       newSocket.on('connect_error', (error) => {
         console.error('Errore di connessione Socket.io:', error);
       });
-
-      // Cleanup alla disconnessione
+  
       return () => newSocket.disconnect();
     }
   }, [socket]);
