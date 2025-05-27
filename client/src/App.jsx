@@ -30,9 +30,12 @@ const App = () => {
   // Modifica la connessione socket per usare l'URL del server in produzione
   useEffect(() => {
     if (!socket) {
+      // Usa la variabile d'ambiente invece dell'URL hardcoded
       const serverUrl = import.meta.env.PROD 
-        ? 'https://carte-senza-umanit-server.onrender.com' 
+        ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanit-server.onrender.com'
         : 'http://localhost:3001';
+      
+      console.log('Connessione al server:', serverUrl);
       
       const newSocket = io(serverUrl, {
         // Opzioni per migliorare la stabilità della connessione
