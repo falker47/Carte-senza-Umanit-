@@ -9,35 +9,27 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   const [error, setError] = useState('');
   const socket = useSocket();
   
-  // Modifica la funzione handleCreateRoom
   const handleCreateRoom = () => {
     if (!localNickname.trim()) {
       setError('Inserisci un nickname per continuare');
       return;
     }
     
+    if (!socket) {
+      setError('Connessione al server non disponibile. Riprova.');
+      return;
+    }
+    
+    if (!socket.connected) {
+      setError('Connessione al server in corso. Attendi un momento e riprova.');
+      return;
+    }
+    
     setNickname(localNickname);
     setGameState('lobby');
     
-    // Funzione migliorata per verificare la connessione socket
-    const emitCreateRoom = (attempts = 0) => {
-      if (attempts > 20) { // Aumenta i tentativi
-        setError('Impossibile connettersi al server. Riprova più tardi.');
-        setGameState('home'); // Torna alla home in caso di errore
-        return;
-      }
-      
-      if (socket && socket.connected) {
-        console.log('Socket connesso, emetto create-room');
-        socket.emit('create-room', { nickname: localNickname });
-      } else {
-        console.log(`Socket non connesso, tentativo ${attempts + 1}/20`);
-        setTimeout(() => emitCreateRoom(attempts + 1), 500); // Aumenta l'intervallo
-      }
-    };
-    
-    // Aspetta un po' di più prima di iniziare i tentativi
-    setTimeout(() => emitCreateRoom(), 200);
+    console.log('Emetto create-room con nickname:', localNickname);
+    socket.emit('create-room', { nickname: localNickname });
   };
   
   const handleJoinRoom = () => {

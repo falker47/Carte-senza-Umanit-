@@ -21,8 +21,13 @@ const io = new Server(server, {
     origin: process.env.NODE_ENV === 'production' 
       ? "https://carte-senza-umanit.onrender.com"  // ✅ URL CORRETTO
       : "*",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  // Aggiungi queste opzioni per migliorare la stabilità
+  pingTimeout: 60000,
+  pingInterval: 25000,
+  transports: ['websocket', 'polling']
 });
 
 // Carica le carte dai file JSON separati

@@ -31,21 +31,47 @@ const App = () => {
   useEffect(() => {
     if (!socket) {
       const serverUrl = import.meta.env.PROD 
-        ? 'https://carte-senza-umanita-server.onrender.com' 
+        ? 'https://carte-senza-umanit-server.onrender.com' 
         : 'http://localhost:3001';
-      const newSocket = io(serverUrl);
+      
+      const newSocket = io(serverUrl, {
+        // Opzioni per migliorare la stabilità della connessione
+        transports: ['websocket', 'polling'],
+        timeout: 20000,
+        forceNew: true,
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5,
+        maxReconnectionAttempts: 5
+      });
+      
       setSocket(newSocket);
       
-      // Debug
+      // Debug migliorato
       newSocket.on('connect', () => {
-        console.log('Connesso al server Socket.io!');
+        console.log('Connesso al server Socket.io! ID:', newSocket.id);
       });
       
       newSocket.on('connect_error', (error) => {
-        console.error('Errore di connessione Socket.io:', error);
+        console.error('Errore di connessione Socket.io:', error.message);
+      });
+      
+      newSocket.on('disconnect', (reason) => {
+        console.log('Disconnesso dal server:', reason);
+      });
+      
+      newSocket.on('reconnect', (attemptNumber) => {
+        console.log('Riconnesso dopo', attemptNumber, 'tentativi');
+      });
+      
+      newSocket.on('reconnect_error', (error) => {
+        console.error('Errore di riconnessione:', error);
       });
   
-      return () => newSocket.disconnect();
+      return () => {
+        console.log('Disconnessione socket...');
+        newSocket.disconnect();
+      };
     }
   }, [socket]);
 
