@@ -283,7 +283,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                     <Card 
                       key={index}
                       type="white" 
-                      text={card.text} // Ensure card.text is what you expect
+                      text={card} // MODIFICATO DA card.text A card
                       onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
                       selected={gameData.selectedCard === index}
                     />
