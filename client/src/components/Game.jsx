@@ -115,8 +115,13 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   };
   
   const handleJudgeSelect = (cardIndex) => {
-    if (gameData.roundStatus !== 'judging' || !isCurrentPlayerJudge()) return;
+    console.log('handleJudgeSelect chiamata con cardIndex:', cardIndex, 'Stato round:', gameData.roundStatus, 'È giudice:', isCurrentPlayerJudge()); // <--- NUOVO LOG
+    if (gameData.roundStatus !== 'judging' || !isCurrentPlayerJudge()) {
+      console.log('handleJudgeSelect: Condizioni non soddisfatte, uscita.'); // <--- NUOVO LOG (opzionale, per vedere se esce qui)
+      return;
+    }
     
+    console.log('handleJudgeSelect: Emissione evento judge-select con:', { roomCode, cardIndex }); // <--- NUOVO LOG
     socket.emit('judge-select', {
       roomCode,
       cardIndex
