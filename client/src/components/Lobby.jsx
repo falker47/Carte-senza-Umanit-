@@ -17,10 +17,17 @@ const Lobby = ({ roomCode, nickname, setGameState }) => {
   useEffect(() => {
     if (!socket) return;
 
+    // Aggiungi questo log per debug
+    console.log('Codice stanza ricevuto:', roomCode);
+
     // Ascolta gli aggiornamenti dei giocatori nella stanza
-    socket.on('room-players', ({ players, host }) => {
+    socket.on('room-players', ({ players, host, code }) => {
       setPlayers(players);
       setIsHost(host === socket.id);
+      // Se il server invia il codice, aggiornalo
+      if (code) {
+        console.log('Codice stanza aggiornato dal server:', code);
+      }
     });
 
     // Ascolta gli errori
@@ -39,7 +46,38 @@ const Lobby = ({ roomCode, nickname, setGameState }) => {
       socket.off('error');
       socket.off('game-started');
     };
-  }, [socket, setGameState]);
+  }, [socket, setGameState, roomCode]);
+
+  // Modifica la funzione handleCopyCode per aggiungere fallback
+  const handleCopyCode = () => {
+    if (!roomCode) {
+      setError('Codice stanza non disponibile');
+      return;
+    }
+    
+    try {
+      navigator.clipboard.writeText(roomCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      console.log('Codice copiato:', roomCode);
+    } catch (err) {
+      console.error('Errore durante la copia:', err);
+      // Fallback per browser che non supportano clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = roomCode;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (e) {
+        setError('Impossibile copiare il codice. Copialo manualmente: ' + roomCode);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
 
   const handleStartGame = () => {
     if (players.length < 3) {
@@ -48,12 +86,6 @@ const Lobby = ({ roomCode, nickname, setGameState }) => {
     }
 
     socket.emit('start-game', { roomCode, settings: gameSettings });
-  };
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(roomCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleLeaveRoom = () => {
@@ -78,13 +110,19 @@ const Lobby = ({ roomCode, nickname, setGameState }) => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Lobby</h1>
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium">Codice: {roomCode}</span>
-            <button
-              onClick={handleCopyCode}
-              className="btn btn-secondary py-1 px-2 text-sm"
-            >
-              {copied ? 'Copiato!' : 'Copia'}
-            </button>
+            {roomCode ? (
+              <>
+                <span className="text-sm font-medium">Codice: {roomCode}</span>
+                <button
+                  onClick={handleCopyCode}
+                  className="btn btn-secondary py-1 px-2 text-sm"
+                >
+                  {copied ? 'Copiato!' : 'Copia'}
+                </button>
+              </>
+            ) : (
+              <span className="text-sm font-medium text-red-500">Codice non disponibile</span>
+            )}
           </div>
         </div>
 
