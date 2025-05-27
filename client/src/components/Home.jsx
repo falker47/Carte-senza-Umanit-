@@ -50,23 +50,23 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen">
+    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen bg-texture">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
       
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-fade-in">
-        <h1 className="text-3xl font-bold text-center mb-6">Carte Senza Umanità</h1>
-        <p className="text-center mb-8 text-gray-600 dark:text-gray-400">Un gioco per persone orribili</p>
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-md shadow-cah p-6 animate-slide-in">
+        <h1 className="text-4xl font-black text-center mb-2 uppercase tracking-tight">Carte Senza Umanità</h1>
+        <p className="text-center mb-8 text-gray-600 dark:text-gray-400 italic">Un gioco per persone orribili</p>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 dark:bg-red-900 dark:text-red-200 dark:border-red-800">
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded mb-4 dark:bg-red-900 dark:text-red-200 dark:border-red-800">
             {error}
           </div>
         )}
         
         <div className="mb-4">
-          <label htmlFor="nickname" className="block text-sm font-medium mb-2">Nickname</label>
+          <label htmlFor="nickname" className="block text-sm font-bold mb-2 uppercase">Nickname</label>
           <input
             type="text"
             id="nickname"
@@ -88,12 +88,12 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
           
           <div className="flex items-center">
             <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-            <span className="px-2 text-gray-500 dark:text-gray-400">oppure</span>
+            <span className="px-2 text-gray-500 dark:text-gray-400 font-bold">oppure</span>
             <hr className="flex-grow border-gray-300 dark:border-gray-600" />
           </div>
           
           <div className="mb-4">
-            <label htmlFor="roomCode" className="block text-sm font-medium mb-2">Codice Stanza</label>
+            <label htmlFor="roomCode" className="block text-sm font-bold mb-2 uppercase">Codice Stanza</label>
             <input
               type="text"
               id="roomCode"
@@ -114,7 +114,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         </div>
       </div>
       
-      <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+      <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 font-bold">
         &copy; {new Date().getFullYear()} Carte Senza Umanità - Versione italiana di Cards Against Humanity
       </footer>
     </div>

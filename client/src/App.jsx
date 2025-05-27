@@ -96,7 +96,7 @@ const App = () => {
   return (
     <ThemeProvider value={{ darkMode, toggleTheme }}>
       <SocketProvider value={socket}>
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
+        <div className="min-h-screen bg-texture text-gray-900 dark:text-white transition-colors duration-200">
           {renderContent()}
         </div>
       </SocketProvider>

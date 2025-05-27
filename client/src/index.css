@@ -2,13 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+    @apply px-4 py-2 rounded-md font-bold uppercase tracking-wider transition-colors duration-200 text-sm;
   }
   
   .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800;
+    @apply bg-cah-black text-white hover:bg-gray-800 dark:bg-cah-white dark:text-cah-black dark:hover:bg-gray-200;
   }
   
   .btn-secondary {
@@ -16,24 +23,20 @@
   }
   
   .card {
-    @apply rounded-lg shadow-md overflow-hidden transition-transform duration-200 cursor-pointer hover:scale-105;
+    @apply rounded-md shadow-cah overflow-hidden transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-lg;
   }
   
   .card-black {
-    @apply bg-black text-white p-4 min-h-[180px];
+    @apply bg-cah-black text-white p-5 min-h-[180px] flex items-center justify-center;
   }
   
   .card-white {
-    @apply bg-white text-black p-4 min-h-[180px];
+    @apply bg-white text-cah-black p-5 min-h-[180px] flex items-center justify-center border-2 border-gray-300;
   }
   
   .input {
-    @apply px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white;
+    @apply px-4 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cah-black dark:bg-gray-800 dark:border-gray-700 dark:text-white;
   }
-}
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .card-grid {
@@ -42,12 +45,42 @@ body {
   gap: 1rem;
 }
 
+/* Texture di sfondo */
+.bg-texture {
+  background-color: #f0f0f0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.dark .bg-texture {
+  background-color: #2d3748;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
 /* Animazioni */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes cardFlip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.animate-card-flip {
+  animation: cardFlip 0.6s ease-in-out;
+  backface-visibility: hidden;
 }

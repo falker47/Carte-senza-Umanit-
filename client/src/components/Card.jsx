@@ -2,10 +2,10 @@ import React from 'react';
 
 const Card = ({ type, text, onClick, selected, blanks }) => {
   const cardClasses = `
-    relative w-full h-40 rounded-lg shadow-md p-4 flex items-center justify-center text-center
-    ${type === 'black' ? 'bg-black text-white' : 'bg-white text-black border border-gray-300'}
-    ${selected ? 'ring-4 ring-blue-500' : ''}
-    ${onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''}
+    relative w-full h-40 rounded-md shadow-cah p-5 flex items-center justify-center text-center
+    ${type === 'black' ? 'bg-cah-black text-white' : 'bg-white text-cah-black border-2 border-gray-300'}
+    ${selected ? 'ring-4 ring-cah-accent' : ''}
+    ${onClick ? 'cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105' : ''}
   `;
 
   // Sostituisce gli spazi vuoti con linee sottili
@@ -21,11 +21,16 @@ const Card = ({ type, text, onClick, selected, blanks }) => {
       data-blanks={blanks}
     >
       <div 
-        className="text-lg font-medium"
+        className={`text-lg font-bold ${type === 'black' ? 'uppercase tracking-wide' : ''}`}
         dangerouslySetInnerHTML={{ __html: formatText(text) }}
       />
       {type === 'white' && (
-        <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+        <div className="absolute bottom-2 right-2 text-xs text-gray-500 font-bold">
+          Carte Senza Umanità ®
+        </div>
+      )}
+      {type === 'black' && (
+        <div className="absolute top-2 left-2 text-xs text-gray-400 font-bold">
           Carte Senza Umanità
         </div>
       )}
