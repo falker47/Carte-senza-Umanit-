@@ -22,8 +22,11 @@ const Card = ({ type, text, onClick, selected, blanks }) => {
     >
       <div 
         className={`text-lg font-bold ${type === 'black' ? 'uppercase tracking-wide' : ''}`}
-        dangerouslySetInnerHTML={{ __html: formatText(text) }}
-      />
+        // dangerouslySetInnerHTML={{ __html: formatText(text) }} // Commenta temporaneamente questa riga
+      >
+        TESTO DI PROVA VISIBILE?
+        {/* O prova a stampare direttamente text: {text} */} 
+      </div>
       {type === 'white' && (
         <div className="absolute bottom-2 right-2 text-xs text-gray-500 font-bold">
           Carte Senza Umanità ®
