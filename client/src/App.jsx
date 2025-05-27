@@ -69,7 +69,8 @@ const App = () => {
           <Home 
             setGameState={setGameState} 
             setNickname={setNickname} 
-            setRoomCode={setRoomCode} 
+            setRoomCode={setRoomCode}
+            nickname={nickname} // Aggiungi questa prop
           />
         );
       case 'lobby':
@@ -78,7 +79,7 @@ const App = () => {
             roomCode={roomCode} 
             nickname={nickname} 
             setGameState={setGameState} 
-            setRoomCode={setRoomCode} // Aggiungi questa prop
+            setRoomCode={setRoomCode}
           />
         );
       case 'game':

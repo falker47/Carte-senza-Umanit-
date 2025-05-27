@@ -15,19 +15,22 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   const socket = useSocket();
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) {
+      console.error('Socket non disponibile in Lobby');
+      return;
+    }
 
-    // Aggiungi questo log per debug
+    console.log('Lobby montata - Socket ID:', socket.id);
     console.log('Codice stanza ricevuto:', roomCode);
 
     // Ascolta gli aggiornamenti dei giocatori nella stanza
     socket.on('room-players', ({ players, host, code }) => {
+      console.log('Evento room-players ricevuto:', { players, host, code });
       setPlayers(players);
       setIsHost(host === socket.id);
       // Se il server invia il codice, aggiornalo
       if (code) {
         console.log('Codice stanza aggiornato dal server:', code);
-        // Aggiungi questa riga per aggiornare il codice stanza nel componente App
         setRoomCode(code);
       }
     });
@@ -48,7 +51,7 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
       socket.off('error');
       socket.off('game-started');
     };
-  }, [socket, setGameState, roomCode]);
+  }, [socket, setGameState, roomCode, setRoomCode]); // Aggiungi setRoomCode alle dipendenze
 
   // Modifica la funzione handleCopyCode per aggiungere fallback
   const handleCopyCode = () => {
