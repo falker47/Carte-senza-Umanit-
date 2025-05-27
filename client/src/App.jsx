@@ -3,23 +3,20 @@ import { io } from 'socket.io-client';
 import Home from './components/Home';
 import Lobby from './components/Lobby';
 import Game from './components/Game';
-import { SocketProvider } from './hooks/useSocket';
-import { ThemeProvider } from './hooks/useTheme';
+import { SocketProvider } from './hooks/useSocket'; // Assicurati che il percorso sia corretto
+import { ThemeProvider } from './hooks/useTheme'; // Assicurati che il percorso sia corretto
 
 const App = () => {
-  const [gameState, setGameState] = useState('home'); // home, lobby, game
+  const [gameState, setGameState] = useState('home');
   const [socket, setSocket] = useState(null);
   const [nickname, setNickname] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Controlla se il tema scuro è già impostato
     const isDarkMode = localStorage.getItem('darkMode') === 'true' || 
                       window.matchMedia('(prefers-color-scheme: dark)').matches;
     setDarkMode(isDarkMode);
-    
-    // Applica il tema
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -27,67 +24,54 @@ const App = () => {
     }
   }, []);
 
-  // Modifica la connessione socket per usare l'URL del server in produzione
+  // Modifica la gestione del socket
   useEffect(() => {
-    if (!socket) {
-      // Usa la variabile d'ambiente invece dell'URL hardcoded
-      const serverUrl = import.meta.env.PROD 
-        ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanita-server.onrender.com'
-        : 'http://localhost:3001';
-      
-      console.log('Ambiente:', import.meta.env.PROD ? 'PRODUZIONE' : 'SVILUPPO');
-      console.log('VITE_APP_SERVER_URL:', import.meta.env.VITE_APP_SERVER_URL);
-      console.log('URL finale del server:', serverUrl);
-      
-      const newSocket = io(serverUrl, {
-        // Forza solo polling - risolve problemi WebSocket su Render
-        transports: ['polling'],
-        timeout: 20000,
-        forceNew: true,
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionAttempts: 5,
-        maxReconnectionAttempts: 5
-      });
-      
-      newSocket.on('connect', () => {
-        console.log('✅ Connesso al server:', serverUrl);
-      });
-      
-      newSocket.on('connect_error', (error) => {
-        console.error('❌ Errore di connessione:', error);
-        console.error('URL tentato:', serverUrl);
-      });
-      
-      setSocket(newSocket);
-      
-      // Debug migliorato
-      newSocket.on('connect', () => {
-        console.log('Connesso al server Socket.io! ID:', newSocket.id);
-      });
-      
-      newSocket.on('connect_error', (error) => {
-        console.error('Errore di connessione Socket.io:', error.message);
-      });
-      
-      newSocket.on('disconnect', (reason) => {
-        console.log('Disconnesso dal server:', reason);
-      });
-      
-      newSocket.on('reconnect', (attemptNumber) => {
-        console.log('Riconnesso dopo', attemptNumber, 'tentativi');
-      });
-      
-      newSocket.on('reconnect_error', (error) => {
-        console.error('Errore di riconnessione:', error);
-      });
-  
-      return () => {
-        console.log('Disconnessione socket...');
-        newSocket.disconnect();
-      };
-    }
-  }, [socket]);
+    const serverUrl = import.meta.env.PROD 
+      ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanita-server.onrender.com'
+      : 'http://localhost:3001';
+    
+    console.log('Ambiente:', import.meta.env.PROD ? 'PRODUZIONE' : 'SVILUPPO');
+    console.log('VITE_APP_SERVER_URL:', import.meta.env.VITE_APP_SERVER_URL);
+    console.log('URL finale del server:', serverUrl);
+
+    const newSocket = io(serverUrl, {
+      transports: ['polling'],
+      timeout: 20000,
+      // forceNew: true, // Rimuovi o commenta forceNew, può causare problemi
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 5, // Potrebbe essere Infinity per tentativi illimitati
+    });
+
+    setSocket(newSocket); // Imposta il socket qui
+
+    newSocket.on('connect', () => {
+      console.log('✅ Connesso al server Socket.io! ID:', newSocket.id);
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('❌ Errore di connessione Socket.io:', error.message, 'URL:', serverUrl);
+    });
+
+    newSocket.on('disconnect', (reason) => {
+      console.log('Disconnesso dal server:', reason);
+      // Potresti voler gestire la logica di riconnessione o lo stato UI qui
+    });
+
+    newSocket.on('reconnect', (attemptNumber) => {
+      console.log('Riconnesso dopo', attemptNumber, 'tentativi');
+    });
+
+    newSocket.on('reconnect_error', (error) => {
+      console.error('Errore di riconnessione:', error);
+    });
+
+    // Cleanup effect: disconnetti il socket quando il componente App viene smontato
+    return () => {
+      console.log('App.jsx: Disconnessione socket...');
+      newSocket.disconnect();
+    };
+  }, []); // Esegui questo effetto solo una volta al mount del componente App
 
   const toggleTheme = () => {
     const newDarkMode = !darkMode;
