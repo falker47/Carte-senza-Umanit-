@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css'; // Aggiungi questa riga per importare il CSS
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

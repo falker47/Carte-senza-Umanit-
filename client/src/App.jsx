@@ -78,6 +78,7 @@ const App = () => {
             roomCode={roomCode} 
             nickname={nickname} 
             setGameState={setGameState} 
+            setRoomCode={setRoomCode} // Aggiungi questa prop
           />
         );
       case 'game':

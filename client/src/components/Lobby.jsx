@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import ThemeToggle from './ThemeToggle';
 
-const Lobby = ({ roomCode, nickname, setGameState }) => {
+const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   const [players, setPlayers] = useState([]);
   const [isHost, setIsHost] = useState(false);
   const [error, setError] = useState('');
@@ -27,6 +27,8 @@ const Lobby = ({ roomCode, nickname, setGameState }) => {
       // Se il server invia il codice, aggiornalo
       if (code) {
         console.log('Codice stanza aggiornato dal server:', code);
+        // Aggiungi questa riga per aggiornare il codice stanza nel componente App
+        setRoomCode(code);
       }
     });
 
