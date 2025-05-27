@@ -247,10 +247,13 @@ export class Room {
       gameStarted: this.gameStarted,
       currentRound: this.currentRound,
       currentJudge: this.players[this.judgeIndex]?.id,
-      currentBlackCard: this.currentBlackCard,
+      blackCard: this.currentBlackCard, // Changed from currentBlackCard to blackCard for direct mapping
       maxPoints: this.maxPoints,
       maxPlayers: this.maxPlayers,
-      handSize: this.handSize
+      handSize: this.handSize,
+      roundStatus: this.gameStarted ? 'playing' : 'waiting', // ADD THIS LINE
+      // You might want to send player hands only to the specific player
+      // For now, this sends the full state; consider security/privacy for hands later
     };
   }
 }

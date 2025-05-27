@@ -23,15 +23,17 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   useEffect(() => {
     if (!socket) return;
     
-    // Ascolta gli aggiornamenti del gioco
     socket.on('game-update', (data) => {
+      console.log('Received game-update:', data); // Good for debugging
       setGameData(prev => ({
         ...prev,
-        ...data,
-        hasPlayed: data.roundStatus === 'playing' 
+        ...data, // This will now correctly update roundStatus and blackCard from server
+        // Reset hasPlayed and selectedCard if the roundStatus is no longer 'playing'
+        // or if it's a new 'playing' state (e.g. start of a new round after judging)
+        hasPlayed: data.roundStatus === 'playing' && prev.roundStatus === 'playing' 
           ? prev.hasPlayed 
           : false,
-        selectedCard: data.roundStatus === 'playing' 
+        selectedCard: data.roundStatus === 'playing' && prev.roundStatus === 'playing' 
           ? prev.selectedCard 
           : null
       }));
