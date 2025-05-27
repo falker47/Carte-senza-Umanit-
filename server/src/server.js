@@ -45,17 +45,14 @@ io.on('connection', (socket) => {
   console.log(`Nuovo client connesso: ${socket.id}`);
 
   // Gestione creazione stanza
-  // Gestione creazione stanza
   socket.on('create-room', ({ nickname }) => {
     console.log(`Creazione stanza richiesta da ${socket.id} con nickname: ${nickname}`);
     
     const { roomCode } = gameManager.createRoom(socket.id, nickname);
     console.log(`Stanza creata con codice: ${roomCode}`);
     
-    // Fai entrare il socket nella stanza
     socket.join(roomCode);
     
-    // Invia aggiornamento ai giocatori nella stanza
     const players = gameManager.getPlayersInRoom(roomCode);
     console.log(`Emetto room-players per stanza ${roomCode}:`, { players, host: socket.id, code: roomCode });
     
@@ -71,10 +68,8 @@ io.on('connection', (socket) => {
     const result = gameManager.joinRoom(socket.id, nickname, roomCode);
     
     if (result.success) {
-      // Fai entrare il socket nella stanza
       socket.join(roomCode);
       
-      // Invia aggiornamento ai giocatori nella stanza
       const players = gameManager.getPlayersInRoom(roomCode);
       const hostId = gameManager.rooms[roomCode].hostId;
       io.to(roomCode).emit('room-players', {
@@ -83,10 +78,31 @@ io.on('connection', (socket) => {
         code: roomCode
       });
     } else {
-      // Invia errore al client
       socket.emit('error', { message: result.error });
     }
   });
+
+  // AGGIUNGI QUESTO BLOCCO PER GESTIRE L'INIZIO DEL GIOCO
+  socket.on('start-game', ({ roomCode, settings }) => {
+    console.log(`Richiesta start-game per la stanza ${roomCode} da ${socket.id} con impostazioni:`, settings);
+    // Assicurati che 'settings' contenga 'maxPoints', altrimenti usa un default o gestisci l'errore
+    const maxPoints = settings && settings.maxPoints ? settings.maxPoints : 5; // Esempio di fallback
+
+    const result = gameManager.startGame(roomCode, socket.id, maxPoints);
+
+    if (result.success) {
+      console.log(`Gioco avviato nella stanza ${roomCode}`);
+      // Notifica a tutti i client nella stanza che il gioco è iniziato
+      io.to(roomCode).emit('game-started');
+      // Potresti voler inviare anche lo stato iniziale del gioco qui
+      // const gameState = gameManager.getGameState(roomCode);
+      // io.to(roomCode).emit('game-state-update', gameState);
+    } else {
+      console.error(`Errore durante l'avvio del gioco nella stanza ${roomCode}: ${result.error}`);
+      socket.emit('error', { message: result.error });
+    }
+  });
+  // FINE BLOCCO AGGIUNTO
 
   // Altri gestori di eventi socket...
 

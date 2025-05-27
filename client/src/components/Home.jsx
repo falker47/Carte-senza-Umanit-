@@ -120,78 +120,82 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen bg-texture">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-md shadow-cah p-6 animate-slide-in">
-        <h1 className="text-4xl font-black text-center mb-2 uppercase tracking-tight">Carte Senza Umanità</h1>
-        <p className="text-center mb-8 text-gray-600 dark:text-gray-400 italic">Un gioco per persone orribili</p>
-        
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-xl rounded-xl p-8">
+        <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white">
+          CARTE SENZA UMANITÀ
+        </h1>
+        <p className="text-center text-gray-600 dark:text-gray-300 mb-10">
+          Un gioco per persone orribili
+        </p>
+
         {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded mb-4 dark:bg-red-900 dark:text-red-200 dark:border-red-800">
-            {error}
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <strong className="font-bold">Errore: </strong>
+            <span className="block sm:inline">{error}</span>
           </div>
         )}
-        
-        <div className="mb-4">
-          <label htmlFor="nickname" className="block text-sm font-bold mb-2 uppercase">Nickname</label>
+
+        <div className="mb-6">
+          <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            NICKNAME
+          </label>
           <input
             type="text"
             id="nickname"
-            className="input w-full"
             value={localNickname}
             onChange={(e) => setLocalNickname(e.target.value)}
-            placeholder="Il tuo nickname"
-            maxLength={20}
+            placeholder="Il tuo soprannome"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
-        
-        <div className="grid grid-cols-1 gap-4 mb-6">
+
+        <button
+          className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+            isConnecting || !socket?.connected
+              ? 'bg-gray-400 cursor-not-allowed text-gray-700'
+              : 'bg-blue-600 hover:bg-blue-700 text-white' // MODIFICATO QUI
+          }`}
+          onClick={handleCreateRoom}
+          disabled={isConnecting || !socket?.connected}
+        >
+          {isConnecting ? 'CONNESSIONE IN CORSO...' : 'CREA NUOVA STANZA'}
+        </button>
+
+        <div className="my-8 flex items-center">
+          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
+          <span className="mx-4 text-gray-500 dark:text-gray-400">oppure</span>
+          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
+        </div>
+
+        <div>
+          <label htmlFor="roomCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            CODICE STANZA
+          </label>
+          <input
+            type="text"
+            id="roomCode"
+            value={localRoomCode}
+            onChange={(e) => setLocalRoomCode(e.target.value)}
+            placeholder="Inserisci il codice"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-white mb-4"
+          />
           <button
-            className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+             className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
               isConnecting || !socket?.connected
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-red-600 hover:bg-red-700 text-white'
+                ? 'bg-gray-400 cursor-not-allowed text-gray-700'
+                : 'bg-green-600 hover:bg-green-700 text-white'
             }`}
-            onClick={handleCreateRoom}
+            onClick={handleJoinRoom}
             disabled={isConnecting || !socket?.connected}
           >
-            {isConnecting ? 'CONNESSIONE IN CORSO...' : 'CREA NUOVA STANZA'}
-          </button>
-          
-          <div className="flex items-center">
-            <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-            <span className="px-2 text-gray-500 dark:text-gray-400 font-bold">oppure</span>
-            <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-          </div>
-          
-          <div className="mb-4">
-            <label htmlFor="roomCode" className="block text-sm font-bold mb-2 uppercase">Codice Stanza</label>
-            <input
-              type="text"
-              id="roomCode"
-              className="input w-full"
-              value={localRoomCode}
-              onChange={(e) => setLocalRoomCode(e.target.value.toUpperCase())}
-              placeholder="Inserisci il codice"
-              maxLength={6}
-            />
-          </div>
-          
-          <button
-            className="btn btn-secondary"
-            onClick={handleJoinRoom}
-          >
-            Unisciti a Stanza
+            ENTRA NELLA STANZA
           </button>
         </div>
       </div>
-      
-      <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 font-bold">
-        &copy; {new Date().getFullYear()} Carte Senza Umanità - Versione italiana di Cards Against Humanity
-      </footer>
     </div>
   );
 };
