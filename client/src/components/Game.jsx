@@ -237,16 +237,13 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             <div>
               <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {gameData.playedCards.map((cardText, index) => ( // Renamed 'card' to 'cardText' for clarity
+                {gameData.playedCards.map((playedCardObject, index) => ( // Renamed 'cardText' to 'playedCardObject'
                   <Card 
                     key={index}
                     type="white" 
-                    text={cardText} // Use the card string directly
+                    text={playedCardObject.card} // CHANGED: Pass the 'card' property of the object
                     onClick={isCurrentPlayerJudge() ? () => handleJudgeSelect(index) : undefined}
-                    // isSelected prop is for the blue ring, typically for player's own selection
-                    // isWinner prop is for the yellow border, for the round winner card
-                    // For judging phase, cards are just selectable by the judge, none are 'winner' yet until selected.
-                    isSelectable={isCurrentPlayerJudge()} // Make cards selectable if current player is judge
+                    isSelectable={isCurrentPlayerJudge()} 
                   />
                 ))}
               </div>
@@ -262,8 +259,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </p>
                 <Card 
                   type="white" 
-                  text={gameData.playedCards[gameData.roundWinner.cardIndex]} // Assuming playedCards is array of strings
-                  isWinner={true} // Mark this card as the winner
+                  text={gameData.playedCards[gameData.roundWinner.cardIndex].card} // CHANGED: Access .card property
+                  isWinner={true}
                 />
                 
                 {isCurrentPlayerJudge() && (
