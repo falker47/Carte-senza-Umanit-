@@ -19,7 +19,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? ["https://carte-senza-umanita-server.onrender.com", "https://carte-senza-umanita.vercel.app"] 
+      ? "https://carte-senza-umanit.onrender.com"  // ✅ URL CORRETTO
       : "*",
     methods: ["GET", "POST"]
   }

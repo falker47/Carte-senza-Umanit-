@@ -9,6 +9,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   const [error, setError] = useState('');
   const socket = useSocket();
   
+  // Modifica la funzione handleCreateRoom
   const handleCreateRoom = () => {
     if (!localNickname.trim()) {
       setError('Inserisci un nickname per continuare');
@@ -18,12 +19,23 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
     setNickname(localNickname);
     setGameState('lobby');
     
-    // Il socket verrà creato in App.jsx e gestirà la creazione della stanza
-    setTimeout(() => {
-      if (socket) {
-        socket.emit('create-room', { nickname: localNickname });
+    // Funzione ricorsiva per verificare la connessione socket
+    const emitCreateRoom = (attempts = 0) => {
+      if (attempts > 10) {
+        console.error('Impossibile connettersi al server dopo 10 tentativi');
+        return;
       }
-    }, 100);
+      
+      if (socket && socket.connected) {
+        console.log('Socket connesso, emetto create-room');
+        socket.emit('create-room', { nickname: localNickname });
+      } else {
+        console.log(`Socket non connesso, tentativo ${attempts + 1}/10`);
+        setTimeout(() => emitCreateRoom(attempts + 1), 300);
+      }
+    };
+    
+    emitCreateRoom();
   };
   
   const handleJoinRoom = () => {
