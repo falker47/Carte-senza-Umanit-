@@ -17,19 +17,28 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   useEffect(() => {
     if (!socket) {
       console.error('Socket non disponibile in Lobby');
+      setError('Connessione non disponibile');
       return;
     }
 
     console.log('Lobby montata - Socket ID:', socket.id);
     console.log('Codice stanza ricevuto:', roomCode);
+    
+    // Se non abbiamo un roomCode, torna alla home
+    if (!roomCode) {
+      console.error('Nessun codice stanza disponibile');
+      setError('Codice stanza non disponibile');
+      setTimeout(() => setGameState('home'), 2000);
+      return;
+    }
 
     // Ascolta gli aggiornamenti dei giocatori nella stanza
     socket.on('room-players', ({ players, host, code }) => {
       console.log('Evento room-players ricevuto:', { players, host, code });
-      setPlayers(players);
+      setPlayers(players || []);
       setIsHost(host === socket.id);
       // Se il server invia il codice, aggiornalo
-      if (code) {
+      if (code && code !== roomCode) {
         console.log('Codice stanza aggiornato dal server:', code);
         setRoomCode(code);
       }

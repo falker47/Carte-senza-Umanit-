@@ -26,9 +26,38 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
     }
     
     setNickname(localNickname);
-    setGameState('lobby');
+    setError(''); // Pulisci errori precedenti
     
     console.log('Emetto create-room con nickname:', localNickname);
+    
+    // Timeout per gestire mancate risposte del server
+    const timeout = setTimeout(() => {
+      socket.off('room-players', handleRoomCreated);
+      socket.off('error', handleError);
+      setError('Timeout nella creazione della stanza. Riprova.');
+    }, 10000); // 10 secondi di timeout
+    
+    // Gestisci la creazione della stanza
+    const handleRoomCreated = ({ players, host, code }) => {
+      console.log('Stanza creata con codice:', code);
+      clearTimeout(timeout);
+      setRoomCode(code);
+      setGameState('lobby');
+      socket.off('room-players', handleRoomCreated);
+      socket.off('error', handleError);
+    };
+    
+    // Gestisci errori del server
+    const handleError = ({ message }) => {
+      console.error('Errore dal server:', message);
+      clearTimeout(timeout);
+      setError(message);
+      socket.off('room-players', handleRoomCreated);
+      socket.off('error', handleError);
+    };
+    
+    socket.on('room-players', handleRoomCreated);
+    socket.on('error', handleError);
     socket.emit('create-room', { nickname: localNickname });
   };
   

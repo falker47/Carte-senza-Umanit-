@@ -45,14 +45,20 @@ io.on('connection', (socket) => {
   console.log(`Nuovo client connesso: ${socket.id}`);
 
   // Gestione creazione stanza
+  // Gestione creazione stanza
   socket.on('create-room', ({ nickname }) => {
+    console.log(`Creazione stanza richiesta da ${socket.id} con nickname: ${nickname}`);
+    
     const { roomCode } = gameManager.createRoom(socket.id, nickname);
+    console.log(`Stanza creata con codice: ${roomCode}`);
     
     // Fai entrare il socket nella stanza
     socket.join(roomCode);
     
     // Invia aggiornamento ai giocatori nella stanza
     const players = gameManager.getPlayersInRoom(roomCode);
+    console.log(`Emetto room-players per stanza ${roomCode}:`, { players, host: socket.id, code: roomCode });
+    
     io.to(roomCode).emit('room-players', {
       players,
       host: socket.id,
