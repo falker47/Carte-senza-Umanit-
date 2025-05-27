@@ -32,7 +32,7 @@ const App = () => {
     if (!socket) {
       // Usa la variabile d'ambiente invece dell'URL hardcoded
       const serverUrl = import.meta.env.PROD 
-        ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanit-server.onrender.com'
+        ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanita-server.onrender.com'
         : 'http://localhost:3001';
       
       console.log('Ambiente:', import.meta.env.PROD ? 'PRODUZIONE' : 'SVILUPPO');
