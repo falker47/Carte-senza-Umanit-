@@ -40,7 +40,8 @@ const App = () => {
       console.log('URL finale del server:', serverUrl);
       
       const newSocket = io(serverUrl, {
-        transports: ['websocket', 'polling'],
+        // Forza solo polling - risolve problemi WebSocket su Render
+        transports: ['polling'],
         timeout: 20000,
         forceNew: true,
         reconnection: true,
