@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Card = ({ type, text, onClick, selected, blanks }) => {
+  console.log(`Card type: ${type}, text: '${text}'`); // <-- AGGIUNGI QUESTO
   const cardClasses = `
     relative w-full h-40 rounded-md shadow-cah p-5 flex items-center justify-center text-center
     ${type === 'black' ? 'bg-cah-black text-white' : 'bg-white text-cah-black border-2 border-gray-300'}
@@ -11,7 +12,9 @@ const Card = ({ type, text, onClick, selected, blanks }) => {
   // Sostituisce gli spazi vuoti con linee sottili
   const formatText = (text) => {
     if (!text) return '';
-    return text.replace(/_____/g, '<span class="inline-block w-16 h-0.5 bg-current mx-1 align-middle"></span>');
+    const formatted = text.replace(/_____/g, '<span class="inline-block w-16 h-0.5 bg-current mx-1 align-middle"></span>');
+    console.log(`Input to formatText: '${text}', Output: '${formatted}'`); // <-- AGGIUNGI QUESTO
+    return formatted;
   };
 
   return (
