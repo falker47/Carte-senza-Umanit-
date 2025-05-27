@@ -62,9 +62,21 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   }, [socket]);
   
   const handleCardSelect = (cardIndex) => {
-    if (gameData.roundStatus !== 'playing' || gameData.hasPlayed) return;
-    if (isCurrentPlayerJudge()) return;
+    console.log('handleCardSelect chiamata con cardIndex:', cardIndex);
+    console.log('gameData.roundStatus:', gameData.roundStatus);
+    console.log('gameData.hasPlayed:', gameData.hasPlayed);
+    console.log('isCurrentPlayerJudge():', isCurrentPlayerJudge());
     
+    if (gameData.roundStatus !== 'playing' || gameData.hasPlayed) {
+      console.log('Condizioni non soddisfatte per selezionare carta');
+      return;
+    }
+    if (isCurrentPlayerJudge()) {
+      console.log('Il giocatore è il giudice, non può selezionare carte');
+      return;
+    }
+    
+    console.log('Carta selezionata:', cardIndex);
     setGameData(prev => ({
       ...prev,
       selectedCard: cardIndex
@@ -72,7 +84,22 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   };
   
   const handleCardPlay = () => {
-    if (!gameData.selectedCard && gameData.selectedCard !== 0) return;
+    console.log('handleCardPlay chiamata');
+    console.log('gameData.selectedCard:', gameData.selectedCard);
+    console.log('gameData.roundStatus:', gameData.roundStatus);
+    console.log('gameData.hasPlayed:', gameData.hasPlayed);
+    console.log('isCurrentPlayerJudge():', isCurrentPlayerJudge());
+    
+    // SOLUZIONE: usa questa condizione invece
+    if (gameData.selectedCard === null || gameData.selectedCard === undefined) {
+      console.log('Nessuna carta selezionata, uscita dalla funzione');
+      return;
+    }
+    
+    console.log('Emissione evento play-card con:', {
+      roomCode,
+      cardIndex: gameData.selectedCard
+    });
     
     socket.emit('play-card', {
       roomCode,
@@ -83,6 +110,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       ...prev,
       hasPlayed: true
     }));
+    
+    console.log('hasPlayed impostato a true');
   };
   
   const handleJudgeSelect = (cardIndex) => {

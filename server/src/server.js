@@ -19,7 +19,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? "https://carte-senza-umanit.onrender.com"  // ✅ URL CORRETTO
+      ? "https://carte-senza-umanit.onrender.com"  // Questo DEVE essere l'URL del CLIENT
       : "*",
     methods: ["GET", "POST"],
     credentials: true
