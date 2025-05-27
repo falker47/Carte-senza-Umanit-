@@ -35,10 +35,11 @@ const App = () => {
         ? import.meta.env.VITE_APP_SERVER_URL || 'https://carte-senza-umanit-server.onrender.com'
         : 'http://localhost:3001';
       
-      console.log('Connessione al server:', serverUrl);
+      console.log('Ambiente:', import.meta.env.PROD ? 'PRODUZIONE' : 'SVILUPPO');
+      console.log('VITE_APP_SERVER_URL:', import.meta.env.VITE_APP_SERVER_URL);
+      console.log('URL finale del server:', serverUrl);
       
       const newSocket = io(serverUrl, {
-        // Opzioni per migliorare la stabilità della connessione
         transports: ['websocket', 'polling'],
         timeout: 20000,
         forceNew: true,
@@ -46,6 +47,15 @@ const App = () => {
         reconnectionDelay: 1000,
         reconnectionAttempts: 5,
         maxReconnectionAttempts: 5
+      });
+      
+      newSocket.on('connect', () => {
+        console.log('✅ Connesso al server:', serverUrl);
+      });
+      
+      newSocket.on('connect_error', (error) => {
+        console.error('❌ Errore di connessione:', error);
+        console.error('URL tentato:', serverUrl);
       });
       
       setSocket(newSocket);
