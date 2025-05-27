@@ -5,6 +5,7 @@ import Lobby from './components/Lobby';
 import Game from './components/Game';
 import { SocketProvider } from './hooks/useSocket'; // Assicurati che il percorso sia corretto
 import { ThemeProvider } from './hooks/useTheme'; // Assicurati che il percorso sia corretto
+import AppFooter from './components/AppFooter'; // <-- IMPORT THE FOOTER
 
 const App = () => {
   const [gameState, setGameState] = useState('home');
@@ -122,8 +123,11 @@ const App = () => {
   return (
     <ThemeProvider value={{ darkMode, toggleTheme }}>
       <SocketProvider value={socket}>
-        <div className="min-h-screen bg-texture text-gray-900 dark:text-white transition-colors duration-200">
-          {renderContent()}
+        <div className="min-h-screen bg-texture text-gray-900 dark:text-white transition-colors duration-200 flex flex-col"> {/* <-- ADD flex flex-col HERE */}
+          <main className="flex-grow"> {/* <-- WRAP content in main and add flex-grow */}
+            {renderContent()}
+          </main>
+          <AppFooter /> {/* <-- ADD THE FOOTER COMPONENT HERE */}
         </div>
       </SocketProvider>
     </ThemeProvider>
