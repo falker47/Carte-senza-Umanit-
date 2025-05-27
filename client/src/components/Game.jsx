@@ -24,7 +24,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     if (!socket) return;
     
     socket.on('game-update', (data) => {
-      console.log('Received game-update:', data); // Good for debugging
+      console.log('Received game-update:', data); 
       setGameData(prev => ({
         ...prev,
         ...data, 
@@ -38,7 +38,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     });
 
     socket.on('update-hand', (hand) => {
-      console.log('Received update-hand:', hand);
+      console.log('Received update-hand (inspect card text here):', hand); // Added for debugging card text
       setGameData(prev => ({
         ...prev,
         hand: hand
@@ -277,53 +277,27 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   </button>
                 )}
               </div>
-              <div className="space-y-3">
-                {gameData.hand.map((card, index) => (
-                  <Card 
-                    key={index}
-                    type="white" 
-                    text={card.text}
-                    onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
-                    selected={gameData.selectedCard === index}
-                  />
-                ))}
-              </div>
+              {gameData.hand && gameData.hand.length > 0 ? (
+                <div className="space-y-3">
+                  {gameData.hand.map((card, index) => (
+                    <Card 
+                      key={index}
+                      type="white" 
+                      text={card.text} // Ensure card.text is what you expect
+                      onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
+                      selected={gameData.selectedCard === index}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400">
+                  {/* Message when hand is empty */}
+                  Nessuna carta in mano. Attendi la distribuzione.
+                </p>
+              )}
             </div>
           )}
-          {/* Colonna destra - La tua mano */} 
-          <div className="lg:col-span-1">
-            <h2 className="text-lg font-medium mb-2">La tua mano</h2>
-            {gameData.hand && gameData.hand.length > 0 ? (
-              <div className="grid grid-cols-1 gap-2">
-                {gameData.hand.map((card, index) => (
-                  <Card 
-                    key={index} 
-                    type="white" 
-                    text={card.text} 
-                    isSelected={gameData.selectedCard === index}
-                    onClick={() => handleCardSelect(index)}
-                    disabled={gameData.hasPlayed || isCurrentPlayerJudge() || gameData.roundStatus !== 'playing'}
-                  />
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 dark:text-gray-400">
-                {gameData.roundStatus === 'playing' && !isCurrentPlayerJudge() 
-                  ? 'Nessuna carta in mano. Attendi la distribuzione.' 
-                  : gameData.roundStatus === 'waiting' 
-                    ? 'In attesa dell\'inizio del round...'
-                    : ''}
-              </p>
-            )}
-            {gameData.roundStatus === 'playing' && !isCurrentPlayerJudge() && !gameData.hasPlayed && gameData.selectedCard !== null && (
-              <button 
-                onClick={handleCardPlay}
-                className="btn btn-primary w-full mt-4"
-              >
-                Gioca Carta Selezionata
-              </button>
-            )}
-          </div>
+          {/* REMOVED DUPLICATE HAND RENDERING BLOCK */}
         </div>
       </div>
     </div>
