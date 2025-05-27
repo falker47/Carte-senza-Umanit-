@@ -7,7 +7,42 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   const [localNickname, setLocalNickname] = useState(nickname || '');
   const [localRoomCode, setLocalRoomCode] = useState('');
   const [error, setError] = useState('');
+  const [isConnecting, setIsConnecting] = useState(true);
   const socket = useSocket();
+  
+  // Aggiungi questo useEffect per monitorare lo stato della connessione
+  useEffect(() => {
+    if (socket) {
+      const handleConnect = () => {
+        setIsConnecting(false);
+        setError('');
+      };
+      
+      const handleDisconnect = () => {
+        setIsConnecting(true);
+      };
+      
+      const handleConnectError = () => {
+        setIsConnecting(false);
+        setError('Errore di connessione al server');
+      };
+      
+      socket.on('connect', handleConnect);
+      socket.on('disconnect', handleDisconnect);
+      socket.on('connect_error', handleConnectError);
+      
+      // Controlla lo stato iniziale
+      if (socket.connected) {
+        setIsConnecting(false);
+      }
+      
+      return () => {
+        socket.off('connect', handleConnect);
+        socket.off('disconnect', handleDisconnect);
+        socket.off('connect_error', handleConnectError);
+      };
+    }
+  }, [socket]);
   
   const handleCreateRoom = () => {
     if (!localNickname.trim()) {
@@ -115,10 +150,15 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         
         <div className="grid grid-cols-1 gap-4 mb-6">
           <button
-            className="btn btn-primary"
+            className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+              isConnecting || !socket?.connected
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-red-600 hover:bg-red-700 text-white'
+            }`}
             onClick={handleCreateRoom}
+            disabled={isConnecting || !socket?.connected}
           >
-            Crea Nuova Stanza
+            {isConnecting ? 'CONNESSIONE IN CORSO...' : 'CREA NUOVA STANZA'}
           </button>
           
           <div className="flex items-center">
