@@ -98,12 +98,46 @@ io.on('connection', (socket) => {
       if (initialGameState) {
         io.to(roomCode).emit('game-update', initialGameState);
         console.log(`Inviato stato iniziale del gioco per la stanza ${roomCode}:`, initialGameState);
+
+        // Send hand to each player
+        const room = gameManager.rooms[roomCode];
+        if (room) {
+          room.players.forEach(player => {
+            io.to(player.id).emit('update-hand', player.hand);
+            console.log(`Inviata mano al giocatore ${player.id}:`, player.hand);
+          });
+        }
       } else {
         console.error(`Impossibile ottenere lo stato iniziale del gioco per la stanza ${roomCode}`);
         // Potresti voler emettere un errore specifico ai client qui
       }
     } else {
       console.error(`Errore durante l'avvio del gioco nella stanza ${roomCode}: ${result.error}`);
+      socket.emit('error', { message: result.error });
+    }
+  });
+
+  socket.on('play-card', ({ roomCode, cardIndex }) => {
+    const result = gameManager.playCard(roomCode, socket.id, cardIndex);
+    if (result.success) {
+      io.to(roomCode).emit('game-update', gameManager.getGameState(roomCode));
+      // Send updated hand to the player who played
+      const room = gameManager.rooms[roomCode];
+      const player = room.players.find(p => p.id === socket.id);
+      if (player) {
+        io.to(socket.id).emit('update-hand', player.hand);
+        console.log(`Inviata mano aggiornata al giocatore ${socket.id}:`, player.hand);
+      }
+
+      // Check if all players have played
+      if (room.allPlayersPlayed()) {
+        io.to(roomCode).emit('game-update', { 
+          ...gameManager.getGameState(roomCode),
+          roundStatus: 'judging',
+          playedCards: room.getPlayedCards() // Send shuffled played cards
+        });
+      }
+    } else {
       socket.emit('error', { message: result.error });
     }
   });

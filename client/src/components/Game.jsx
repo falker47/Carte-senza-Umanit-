@@ -27,15 +27,21 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       console.log('Received game-update:', data); // Good for debugging
       setGameData(prev => ({
         ...prev,
-        ...data, // This will now correctly update roundStatus and blackCard from server
-        // Reset hasPlayed and selectedCard if the roundStatus is no longer 'playing'
-        // or if it's a new 'playing' state (e.g. start of a new round after judging)
+        ...data, 
         hasPlayed: data.roundStatus === 'playing' && prev.roundStatus === 'playing' 
           ? prev.hasPlayed 
           : false,
         selectedCard: data.roundStatus === 'playing' && prev.roundStatus === 'playing' 
           ? prev.selectedCard 
           : null
+      }));
+    });
+
+    socket.on('update-hand', (hand) => {
+      console.log('Received update-hand:', hand);
+      setGameData(prev => ({
+        ...prev,
+        hand: hand
       }));
     });
     
@@ -50,6 +56,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     // Cleanup
     return () => {
       socket.off('game-update');
+      socket.off('update-hand'); // Add this line
       socket.off('game-over');
     };
   }, [socket]);
@@ -283,6 +290,40 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               </div>
             </div>
           )}
+          {/* Colonna destra - La tua mano */} 
+          <div className="lg:col-span-1">
+            <h2 className="text-lg font-medium mb-2">La tua mano</h2>
+            {gameData.hand && gameData.hand.length > 0 ? (
+              <div className="grid grid-cols-1 gap-2">
+                {gameData.hand.map((card, index) => (
+                  <Card 
+                    key={index} 
+                    type="white" 
+                    text={card.text} 
+                    isSelected={gameData.selectedCard === index}
+                    onClick={() => handleCardSelect(index)}
+                    disabled={gameData.hasPlayed || isCurrentPlayerJudge() || gameData.roundStatus !== 'playing'}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400">
+                {gameData.roundStatus === 'playing' && !isCurrentPlayerJudge() 
+                  ? 'Nessuna carta in mano. Attendi la distribuzione.' 
+                  : gameData.roundStatus === 'waiting' 
+                    ? 'In attesa dell\'inizio del round...'
+                    : ''}
+              </p>
+            )}
+            {gameData.roundStatus === 'playing' && !isCurrentPlayerJudge() && !gameData.hasPlayed && gameData.selectedCard !== null && (
+              <button 
+                onClick={handleCardPlay}
+                className="btn btn-primary w-full mt-4"
+              >
+                Gioca Carta Selezionata
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
