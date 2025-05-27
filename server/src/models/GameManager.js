@@ -51,7 +51,7 @@ export class GameManager {
     return { success: true };
   }
 
-  startGame(roomCode, playerId, maxPoints = 5) {
+  startGame(roomCode, playerId, maxPoints = 5, handSize = 7) { // Aggiunto handSize come parametro
     // Verifica se la stanza esiste
     if (!this.rooms[roomCode]) {
       return { success: false, error: 'Stanza non trovata' };
@@ -68,7 +68,7 @@ export class GameManager {
     }
 
     // Avvia il gioco
-    this.rooms[roomCode].startGame(maxPoints);
+    this.rooms[roomCode].startGame(maxPoints, handSize); // Passa handSize a Room.startGame
     return { success: true };
   }
 

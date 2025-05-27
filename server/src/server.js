@@ -86,8 +86,9 @@ io.on('connection', (socket) => {
   socket.on('start-game', ({ roomCode, settings }) => {
     console.log(`Richiesta start-game per la stanza ${roomCode} da ${socket.id} con impostazioni:`, settings);
     const maxPoints = settings && settings.maxPoints ? settings.maxPoints : 5;
+    const handSize = settings && settings.handSize ? settings.handSize : 7; // Default a 7 se non specificato
 
-    const result = gameManager.startGame(roomCode, socket.id, maxPoints);
+    const result = gameManager.startGame(roomCode, socket.id, maxPoints, handSize); // Passa handSize
 
     if (result.success) {
       console.log(`Gioco avviato nella stanza ${roomCode}`);

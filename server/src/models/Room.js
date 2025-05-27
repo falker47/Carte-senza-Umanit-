@@ -12,7 +12,7 @@ export class Room {
     this.playedCards = []; // Array di { playerId, cards }
     this.maxPlayers = 10;
     this.maxPoints = 5;
-    this.handSize = 10;
+    this.handSize = 7;    // Valore di default, sovrascritto da startGame
   }
 
   isFull() {
@@ -64,18 +64,19 @@ export class Room {
     return this.players.map(({ id, nickname, score }) => ({ id, nickname, score }));
   }
 
-  startGame(maxPoints = 5) {
+  startGame(maxPoints = 5, handSize = 7) { // Aggiunto handSize come parametro
     this.gameStarted = true;
     this.currentRound = 1;
     this.judgeIndex = 0;
     this.maxPoints = maxPoints;
+    this.handSize = handSize; // Imposta handSize dalle impostazioni
     this.playedCards = [];
 
     // Mescola le carte
     this.shuffleCards();
 
     // Distribuisci le carte ai giocatori
-    this.dealCards();
+    this.dealCards(); // dealCards userà this.handSize aggiornato
 
     // Seleziona la prima carta nera
     this.currentBlackCard = this.blackCards.pop();
