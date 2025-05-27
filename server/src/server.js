@@ -130,12 +130,15 @@ io.on('connection', (socket) => {
       }
 
       // Check if all players have played
-      if (room.allPlayersPlayed()) {
+      const allPlayed = room.allPlayersPlayed(); // Store the result
+      console.log(`Room ${roomCode}: allPlayersPlayed() returned ${allPlayed}`); // Log the result
+      if (allPlayed) {
         io.to(roomCode).emit('game-update', { 
           ...gameManager.getGameState(roomCode),
           roundStatus: 'judging',
           playedCards: room.getPlayedCards() // Send shuffled played cards
         });
+        console.log(`Room ${roomCode}: All players played, round status set to judging.`); // Added log
       }
     } else {
       socket.emit('error', { message: result.error });
