@@ -85,18 +85,23 @@ io.on('connection', (socket) => {
   // AGGIUNGI QUESTO BLOCCO PER GESTIRE L'INIZIO DEL GIOCO
   socket.on('start-game', ({ roomCode, settings }) => {
     console.log(`Richiesta start-game per la stanza ${roomCode} da ${socket.id} con impostazioni:`, settings);
-    // Assicurati che 'settings' contenga 'maxPoints', altrimenti usa un default o gestisci l'errore
-    const maxPoints = settings && settings.maxPoints ? settings.maxPoints : 5; // Esempio di fallback
+    const maxPoints = settings && settings.maxPoints ? settings.maxPoints : 5;
 
     const result = gameManager.startGame(roomCode, socket.id, maxPoints);
 
     if (result.success) {
       console.log(`Gioco avviato nella stanza ${roomCode}`);
-      // Notifica a tutti i client nella stanza che il gioco è iniziato
-      io.to(roomCode).emit('game-started');
-      // Potresti voler inviare anche lo stato iniziale del gioco qui
-      // const gameState = gameManager.getGameState(roomCode);
-      // io.to(roomCode).emit('game-state-update', gameState);
+      io.to(roomCode).emit('game-started'); // Client uses this to change view to Game.jsx
+      
+      // Send initial game state immediately after starting
+      const initialGameState = gameManager.getGameState(roomCode);
+      if (initialGameState) {
+        io.to(roomCode).emit('game-update', initialGameState);
+        console.log(`Inviato stato iniziale del gioco per la stanza ${roomCode}:`, initialGameState);
+      } else {
+        console.error(`Impossibile ottenere lo stato iniziale del gioco per la stanza ${roomCode}`);
+        // Potresti voler emettere un errore specifico ai client qui
+      }
     } else {
       console.error(`Errore durante l'avvio del gioco nella stanza ${roomCode}: ${result.error}`);
       socket.emit('error', { message: result.error });

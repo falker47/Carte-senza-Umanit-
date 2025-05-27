@@ -142,21 +142,23 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 flex flex-col min-h-screen">
-      <div className="absolute top-4 right-4">
+    <div className="container mx-auto px-4 py-6 flex flex-col min-h-screen relative">
+      {/* Adjusted positioning for ThemeToggle and Esci button */}
+      <div className="absolute top-4 right-4 flex items-center space-x-2">
         <ThemeToggle />
+        <button 
+          onClick={handleLeaveGame}
+          className="btn btn-secondary py-1 px-3 text-sm"
+        >
+          Esci
+        </button>
       </div>
       
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 pt-16"> {/* Added pt-16 to prevent overlap with absolute positioned elements */}
         <h1 className="text-2xl font-bold">Carte Senza Umanità</h1>
         <div>
           <span className="mr-4">Stanza: {roomCode}</span>
-          <button 
-            onClick={handleLeaveGame}
-            className="btn btn-secondary py-1 px-3 text-sm"
-          >
-            Esci
-          </button>
+          {/* Esci button moved to top right with ThemeToggle */}
         </div>
       </div>
       
