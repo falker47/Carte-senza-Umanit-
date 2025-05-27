@@ -126,7 +126,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('play-card', ({ roomCode, cardIndex }) => {
-    const result = gameManager.playCard(roomCode, socket.id, cardIndex);
+    const result = gameManager.playWhiteCard(roomCode, socket.id, cardIndex); // Changed playCard to playWhiteCard
     if (result.success) {
       io.to(roomCode).emit('game-update', gameManager.getGameState(roomCode));
       // Send updated hand to the player who played
