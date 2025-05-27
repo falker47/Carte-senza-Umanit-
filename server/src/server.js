@@ -25,6 +25,64 @@ const io = new Server(server, {
   }
 });
 
+// Carica le carte dal file JSON
+const cardsPath = path.join(__dirname, '..', 'data', 'cards.json');
+const cardsData = JSON.parse(fs.readFileSync(cardsPath, 'utf8'));
+
+// Inizializza il game manager con le carte
+const gameManager = new GameManager(cardsData.whiteCards, cardsData.blackCards);
+
+// Gestione degli eventi socket
+io.on('connection', (socket) => {
+  console.log(`Nuovo client connesso: ${socket.id}`);
+
+  // Gestione creazione stanza
+  socket.on('create-room', ({ nickname }) => {
+    const { roomCode } = gameManager.createRoom(socket.id, nickname);
+    
+    // Fai entrare il socket nella stanza
+    socket.join(roomCode);
+    
+    // Invia aggiornamento ai giocatori nella stanza
+    const players = gameManager.getPlayersInRoom(roomCode);
+    io.to(roomCode).emit('room-players', {
+      players,
+      host: socket.id,
+      code: roomCode
+    });
+  });
+
+  // Gestione ingresso in stanza
+  socket.on('join-room', ({ nickname, roomCode }) => {
+    const result = gameManager.joinRoom(socket.id, nickname, roomCode);
+    
+    if (result.success) {
+      // Fai entrare il socket nella stanza
+      socket.join(roomCode);
+      
+      // Invia aggiornamento ai giocatori nella stanza
+      const players = gameManager.getPlayersInRoom(roomCode);
+      const hostId = gameManager.rooms[roomCode].hostId;
+      io.to(roomCode).emit('room-players', {
+        players,
+        host: hostId,
+        code: roomCode
+      });
+    } else {
+      // Invia errore al client
+      socket.emit('error', { message: result.error });
+    }
+  });
+
+  // Altri gestori di eventi socket...
+
+  // Gestione disconnessione
+  socket.on('disconnect', () => {
+    console.log(`Client disconnesso: ${socket.id}`);
+    // Logica per gestire l'uscita del giocatore dalle stanze
+  });
+});
+
 // Modifica la porta per usare quella assegnata da Render
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
