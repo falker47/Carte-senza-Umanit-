@@ -13,32 +13,32 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   // Aggiungi questo useEffect per monitorare lo stato della connessione
   useEffect(() => {
     if (socket) {
-      const handleConnect = () => {
-        setIsConnecting(false);
-        setError('');
+      const updateConnectionStatus = () => {
+        setIsConnecting(!socket.connected);
+        if (socket.connected) {
+          setError('');
+        }
       };
       
-      const handleDisconnect = () => {
-        setIsConnecting(true);
-      };
-      
-      const handleConnectError = () => {
+      const handleConnectError = (error) => {
+        console.error('Errore connessione:', error);
         setIsConnecting(false);
         setError('Errore di connessione al server');
       };
       
-      socket.on('connect', handleConnect);
-      socket.on('disconnect', handleDisconnect);
+      // Aggiorna lo stato ogni volta che cambia la connessione
+      socket.on('connect', updateConnectionStatus);
+      socket.on('disconnect', updateConnectionStatus);
+      socket.on('reconnect', updateConnectionStatus);
       socket.on('connect_error', handleConnectError);
       
-      // Controlla lo stato iniziale
-      if (socket.connected) {
-        setIsConnecting(false);
-      }
+      // Imposta lo stato iniziale
+      updateConnectionStatus();
       
       return () => {
-        socket.off('connect', handleConnect);
-        socket.off('disconnect', handleDisconnect);
+        socket.off('connect', updateConnectionStatus);
+        socket.off('disconnect', updateConnectionStatus);
+        socket.off('reconnect', updateConnectionStatus);
         socket.off('connect_error', handleConnectError);
       };
     }
