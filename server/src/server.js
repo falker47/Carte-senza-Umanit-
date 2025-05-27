@@ -25,12 +25,15 @@ const io = new Server(server, {
   }
 });
 
-// Carica le carte dal file JSON
-const cardsPath = path.join(__dirname, '..', 'data', 'cards.json');
-const cardsData = JSON.parse(fs.readFileSync(cardsPath, 'utf8'));
+// Carica le carte dai file JSON separati
+const carteBianchePath = path.join(__dirname, '..', 'data', 'carte_bianche.json');
+const carteNerePath = path.join(__dirname, '..', 'data', 'carte_nere.json');
+
+const carteBianche = JSON.parse(fs.readFileSync(carteBianchePath, 'utf8'));
+const carteNere = JSON.parse(fs.readFileSync(carteNerePath, 'utf8'));
 
 // Inizializza il game manager con le carte
-const gameManager = new GameManager(cardsData.whiteCards, cardsData.blackCards);
+const gameManager = new GameManager(carteBianche, carteNere);
 
 // Gestione degli eventi socket
 io.on('connection', (socket) => {
