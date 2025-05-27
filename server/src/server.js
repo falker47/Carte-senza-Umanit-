@@ -15,6 +15,13 @@ app.use(cors());
 app.use(express.json());
 
 const server = http.createServer(app);
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://carte-senza-umanit.onrender.com'  // URL del client
+    : 'http://localhost:5173',
+  methods: ['GET', 'POST'],
+  credentials: true
+};
 // Modifica la configurazione CORS per accettare il dominio del client in produzione
 const io = new Server(server, {
   cors: {
