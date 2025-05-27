@@ -154,6 +154,35 @@ io.on('connection', (socket) => {
   });
   // FINE BLOCCO AGGIUNTO
 
+  // AGGIUNGI QUESTO NUOVO GESTORE PER LA SELEZIONE DEL GIUDICE
+  socket.on('judge-select', ({ roomCode, cardIndex }) => {
+    console.log(`Richiesta judge-select per stanza ${roomCode} da ${socket.id} con cardIndex: ${cardIndex}`);
+    
+    // Assumendo che tu abbia un metodo in GameManager per gestire la selezione del vincitore
+    // Questo metodo dovrebbe:
+    // 1. Verificare che socket.id sia il giudice corrente per roomCode.
+    // 2. Verificare che lo stato del round sia 'judging'.
+    // 3. Identificare il giocatore che ha giocato la carta all'indice cardIndex.
+    // 4. Assegnare un punto a quel giocatore.
+    // 5. Impostare roundWinner e cambiare roundStatus a 'roundEnd'.
+    // 6. Controllare se c'è un vincitore della partita (se i punti max sono stati raggiunti).
+    // 7. Restituire un oggetto { success: true/false, error: 'messaggio opzionale' }
+    const result = gameManager.judgeSelectsWinner(roomCode, socket.id, cardIndex);
+
+    if (result && result.success) {
+      console.log(`Selezione del giudice avvenuta con successo nella stanza ${roomCode}`);
+      // Invia l'aggiornamento dello stato del gioco a tutti i client nella stanza
+      // Questo dovrebbe includere il roundWinner, il nuovo punteggio, e roundStatus: 'roundEnd'
+      // Se c'è un gameWinner, includi anche quello.
+      io.to(roomCode).emit('game-update', gameManager.getGameState(roomCode));
+      console.log(`Inviato game-update dopo la selezione del giudice per la stanza ${roomCode}:`, gameManager.getGameState(roomCode));
+    } else {
+      const errorMessage = result && result.error ? result.error : 'Errore durante la selezione del giudice.';
+      console.error(`Errore durante judge-select nella stanza ${roomCode}: ${errorMessage}`);
+      socket.emit('error', { message: errorMessage });
+    }
+  });
+
   // Altri gestori di eventi socket...
 
   // Gestione disconnessione
