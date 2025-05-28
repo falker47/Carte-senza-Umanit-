@@ -255,16 +255,19 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             </div>
           )}
           
-          {gameData.roundStatus === 'roundEnd' && gameData.roundWinner && (
+          {gameData.roundStatus === 'roundEnd' && gameData.roundWinner && gameData.winningCardText && (
             <div className="mt-6">
               <h2 className="text-lg font-medium mb-2">Carta Vincente</h2>
               <div className="flex flex-col items-center">
                 <p className="mb-2 text-center">
-                  <span className="font-bold">{gameData.roundWinner.nickname}</span> ha vinto questo round!
+                  {/* Trova il nickname del vincitore del round */} 
+                  <span className="font-bold">
+                    {gameData.players.find(p => p.id === gameData.roundWinner)?.nickname || 'Giocatore Sconosciuto'}
+                  </span> ha vinto questo round!
                 </p>
                 <Card 
                   type="white" 
-                  text={gameData.playedCards[gameData.roundWinner.cardIndex].card} // CHANGED: Access .card property
+                  text={gameData.winningCardText} // USA LA NUOVA PROPRIETÀ
                   isWinner={true}
                 />
                 

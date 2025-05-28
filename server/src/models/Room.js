@@ -328,6 +328,20 @@ export class Room {
   }
   
   getGameState() {
+    let winningCardText = null;
+    // Trova il testo della carta vincente se il round è terminato e c'è un vincitore del round
+    if (this.roundStatus === 'roundEnd' && this.roundWinner) {
+      // this.playedCards contiene gli oggetti { playerId, card } originali, non ancora mescolati per il giudizio.
+      // È importante recuperare la carta da this.playedCards originale per assicurarsi che sia quella corretta.
+      const originalWinningSubmission = this.playedCards.find(pc => pc.playerId === this.roundWinner);
+      if (originalWinningSubmission) {
+        winningCardText = originalWinningSubmission.card;
+      } else {
+        // Log di fallback se non troviamo la carta, anche se non dovrebbe succedere
+        console.warn(`[Room ${this.roomCode}] Non è stato possibile trovare la carta vincente originale per il vincitore del round ${this.roundWinner} in this.playedCards.`);
+      }
+    }
+  
     return {
       roomCode: this.roomCode,
       hostId: this.hostId,
@@ -340,8 +354,11 @@ export class Room {
       maxPlayers: this.maxPlayers,
       handSize: this.handSize,
       roundStatus: this.roundStatus, // Use the actual roundStatus property
-      playedCards: this.roundStatus === 'judging' || this.roundStatus === 'roundEnd' ? this.getPlayedCards() : [], // Only send played cards when relevant
-      roundWinner: this.roundWinner,
+      // Invia le carte giocate (mescolate) solo se si sta giudicando o il round è finito.
+      // Per la visualizzazione della carta vincente, useremo winningCardText.
+      playedCards: (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd') ? this.getPlayedCards() : [], 
+      roundWinner: this.roundWinner, // Questo rimane l'ID del giocatore vincitore del round
+      winningCardText: winningCardText, // NUOVA PROPRIETÀ
       gameOver: this.gameOver,
       gameWinner: this.gameWinner,
       // You might want to send player hands only to the specific player
