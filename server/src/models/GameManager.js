@@ -9,6 +9,65 @@ export class GameManager {
     this.blackCards = blackCards;
   }
 
+judgeSelectsWinner(roomCode, judgeId, cardIndex) {
+  const room = this.rooms[roomCode];
+  if (!room) {
+    console.error(`[judgeSelectsWinner] Stanza non trovata: ${roomCode}`);
+    return { success: false, error: 'Stanza non trovata.' };
+  }
+
+  if (!room.currentJudge || room.currentJudge.id !== judgeId) {
+    console.error(`[judgeSelectsWinner] Utente ${judgeId} non è il giudice ${room.currentJudge ? room.currentJudge.id : 'N/A'} nella stanza ${roomCode}`);
+    return { success: false, error: 'Non sei il giudice di questo round.' };
+  }
+
+  if (room.roundStatus !== 'judging') {
+    console.error(`[judgeSelectsWinner] Stato round errato: ${room.roundStatus} (atteso judging) nella stanza ${roomCode}`);
+    return { success: false, error: 'Non è il momento di giudicare.' };
+  }
+
+  if (!room.playedCards || cardIndex < 0 || cardIndex >= room.playedCards.length) {
+    console.error(`[judgeSelectsWinner] Indice carta non valido: ${cardIndex} per playedCards di lunghezza ${room.playedCards ? room.playedCards.length : 'N/A'} nella stanza ${roomCode}`);
+    return { success: false, error: 'Indice carta non valido o carte non giocate.' };
+  }
+
+  // Le carte giocate dovrebbero già essere state mescolate prima di inviarle al client per la fase di giudizio
+  // Quindi l'indice corrisponde direttamente.
+  const winningSubmission = room.playedCards[cardIndex];
+  if (!winningSubmission || !winningSubmission.playerId) {
+      console.error(`[judgeSelectsWinner] Dati sottomissione vincente mancanti o corrotti per cardIndex ${cardIndex} nella stanza ${roomCode}`);
+      return { success: false, error: 'Dati carta vincente corrotti.' };
+  }
+
+  const winnerPlayer = room.players.find(p => p.id === winningSubmission.playerId);
+
+  if (!winnerPlayer) {
+    console.error(`[judgeSelectsWinner] Giocatore vincente non trovato con ID: ${winningSubmission.playerId} nella stanza ${roomCode}`);
+    return { success: false, error: 'Giocatore vincente non trovato.' };
+  }
+
+  winnerPlayer.score += 1;
+  room.roundWinnerDetails = {
+      playerId: winnerPlayer.id,
+      nickname: winnerPlayer.nickname,
+      playedCard: winningSubmission.card // La carta bianca giocata
+  };
+  room.roundStatus = 'roundEnd';
+  // Non resettare currentJudge qui, fallo all'inizio del prossimo round (nextRound)
+  // Non resettare playedCards qui, fallo all'inizio del prossimo round (nextRound)
+
+  console.log(`[judgeSelectsWinner] Giocatore ${winnerPlayer.nickname} (ID: ${winnerPlayer.id}) vince il round ${room.currentRound} nella stanza ${roomCode}. Punteggio: ${winnerPlayer.score}. Carta: "${winningSubmission.card}"`);
+
+  if (winnerPlayer.score >= room.maxPoints) {
+    room.gameOver = true;
+    room.gameWinner = winnerPlayer.id; // o nickname, o oggetto intero
+    room.status = 'finished'; // Aggiorna lo stato generale della stanza
+    console.log(`[judgeSelectsWinner] Partita terminata nella stanza ${roomCode}. Vincitore: ${winnerPlayer.nickname}`);
+  }
+
+  return { success: true };
+}
+
   createRoom(hostId, nickname) {
     // Genera un codice stanza univoco
     let roomCode;
