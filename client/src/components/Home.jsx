@@ -149,7 +149,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             value={localNickname}
             onChange={(e) => setLocalNickname(e.target.value)}
             placeholder="Il tuo soprannome"
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600"
           />
         </div>
 
@@ -181,7 +181,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             value={localRoomCode}
             onChange={(e) => setLocalRoomCode(e.target.value)}
             placeholder="Inserisci il codice"
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-white mb-4"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 mb-4"
           />
           <button
              className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
