@@ -145,44 +145,57 @@ export class GameManager {
       return { success: false, error: 'Solo il giudice può selezionare il vincitore.' };
     }
 
+    // The primary validation of roundStatus is now inside room.processJudgeSelection
+    // but we can keep a check here for early exit if needed, or rely on the Room's method.
     if (room.roundStatus !== 'judging') {
-      return { success: false, error: 'Non è il momento di giudicare.' };
+      console.warn(`[GameManager] judgeSelectsWinner called for room ${roomCode} when roundStatus was ${room.roundStatus}. Expected 'judging'.`);
+      return { success: false, error: 'Non è il momento di giudicare (controllo GameManager).' };
     }
 
-    const playedCards = room.getPlayedCards(); // Assicurati che questo metodo esista e restituisca {playerId, cardText, cardIndexInHand}
-    if (selectedCardIndex < 0 || selectedCardIndex >= playedCards.length) {
-      return { success: false, error: 'Selezione della carta non valida.' };
+    // Call the new method in Room.js to handle the logic
+    const result = room.processJudgeSelection(selectedCardIndex);
+
+    if (result.success) {
+      console.log(`[GameManager] Stanza ${roomCode}: Giudice ${judgeId} ha selezionato la carta. Vincitore: ${result.winnerInfo.nickname}.`);
+      // The gameState is already part of the result from processJudgeSelection
+      return { success: true, gameState: result.gameState };
+    } else {
+      console.error(`[GameManager] Errore durante la selezione del vincitore per la stanza ${roomCode}: ${result.error}`);
+      return { success: false, error: result.error };
     }
-
-    const winningSubmission = playedCards[selectedCardIndex];
-    const winnerId = winningSubmission.playerId;
-
-    room.awardPointToPlayer(winnerId);
-    room.roundWinner = winnerId;
-    room.roundStatus = 'roundEnd'; // Cambia lo stato del round
-
-    // Controlla se qualcuno ha vinto la partita
-    const gameWinner = room.checkForGameWinner();
-    if (gameWinner) {
-      room.gameOver = true;
-      room.gameWinner = gameWinner;
-    }
-
-    // Prepara per il prossimo round o termina il gioco
-    // Questa logica potrebbe essere in parte qui o in startNewRound
-    // Per ora, ci assicuriamo che lo stato sia aggiornato.
-    // Se non c'è un vincitore del gioco, si potrebbe già chiamare room.startNewRound() qui
-    // o attendere un input dal client per procedere.
-    // Per semplicità, assumiamo che lo stato 'roundEnd' sia sufficiente per ora
-    // e il client gestirà la visualizzazione e il passaggio al prossimo round.
-
-    console.log(`[GameManager] Stanza ${roomCode}: Giudice ${judgeId} ha selezionato la carta ${selectedCardIndex} (Giocatore ${winnerId}) come vincitrice.`);
-    return { success: true, gameState: room.getGameState() };
   }
 
-  startNewRound(roomCode) {
-    if (!this.rooms[roomCode]) return null;
-    return this.rooms[roomCode].startNewRound();
+  startNewRound(roomCode, playerId) { // Added playerId to check if the requester is the host or judge (optional)
+    const room = this.rooms[roomCode];
+    if (!room) {
+      return { success: false, error: 'Stanza non trovata' };
+    }
+
+    // Optional: Add a check to ensure only host or current judge can start a new round, if desired.
+    // For now, let's assume it's okay or handled by client-side logic for triggering this.
+
+    if (room.gameOver) {
+        return { success: false, error: 'Il gioco è terminato.', gameState: room.getGameState() };
+    }
+
+    // Ensure previous round is 'roundEnd' before starting a new one
+    if (room.roundStatus !== 'roundEnd') {
+        // It might be okay to proceed if it's 'gameOver' and they want to see final scores before a new game (if that's a feature)
+        // but generally, a new round follows 'roundEnd'.
+        console.warn(`[GameManager] startNewRound called for room ${roomCode} when roundStatus was ${room.roundStatus}. Expected 'roundEnd'.`);
+        // Decide if this should be an error or if the state should be forced.
+        // For now, let's allow it but log a warning.
+    }
+
+    const result = room.startNewRound(); // This now sets roundStatus to 'playing'
+    if (result.success) {
+      console.log(`[GameManager] Nuovo round avviato per la stanza ${roomCode}`);
+      return { success: true, gameState: room.getGameState() };
+    } else {
+      // This case should ideally not happen if checks are in place
+      console.error(`[GameManager] Errore imprevisto durante l'avvio del nuovo round per ${roomCode}.`);
+      return { success: false, error: 'Errore durante l\'avvio del nuovo round.', gameState: room.getGameState() };
+    }
   }
 
   handleDisconnect(playerId) {

@@ -126,11 +126,15 @@ io.on('connection', (socket) => {
   });
 
   socket.on('play-card', ({ roomCode, cardIndex }) => {
-    const result = gameManager.playWhiteCard(roomCode, socket.id, cardIndex); // Changed playCard to playWhiteCard
+    const room = gameManager.rooms[roomCode]; // Get the room instance
+    if (!room) {
+      socket.emit('error', { message: 'Stanza non trovata durante play-card' });
+      return;
+    }
+
+    const result = gameManager.playWhiteCard(roomCode, socket.id, cardIndex); 
     if (result.success) {
-      io.to(roomCode).emit('game-update', gameManager.getGameState(roomCode));
       // Send updated hand to the player who played
-      const room = gameManager.rooms[roomCode];
       const player = room.players.find(p => p.id === socket.id);
       if (player) {
         io.to(socket.id).emit('update-hand', player.hand);
@@ -138,16 +142,24 @@ io.on('connection', (socket) => {
       }
 
       // Check if all players have played
-      const allPlayed = room.allPlayersPlayed(); // Store the result
-      console.log(`Room ${roomCode}: allPlayersPlayed() returned ${allPlayed}`); // Log the result
+      const allPlayed = room.allPlayersPlayed(); 
+      console.log(`Room ${roomCode}: allPlayersPlayed() returned ${allPlayed}`); 
+      
+      let gameStateForUpdate = room.getGameState(); // Get current game state
+
       if (allPlayed) {
-        io.to(roomCode).emit('game-update', { 
-          ...gameManager.getGameState(roomCode),
-          roundStatus: 'judging',
-          playedCards: room.getPlayedCards() // Send shuffled played cards
-        });
-        console.log(`Room ${roomCode}: All players played, round status set to judging.`); // Added log
+        room.setRoundStatus('judging'); // <--- IMPORTANT: Update server-side room state
+        console.log(`Room ${roomCode}: All players played, server-side roundStatus set to judging.`);
+        // Refresh gameStateForUpdate to include the new roundStatus and playedCards for judging
+        gameStateForUpdate = room.getGameState(); 
+        // Ensure playedCards are included for the 'judging' state update
+        gameStateForUpdate.playedCards = room.getPlayedCards(); 
       }
+      
+      // Emit game-update with the potentially modified gameStateForUpdate
+      io.to(roomCode).emit('game-update', gameStateForUpdate);
+      console.log(`Room ${roomCode}: Emesso game-update dopo play-card. Stato:`, gameStateForUpdate.roundStatus);
+
     } else {
       socket.emit('error', { message: result.error });
     }
@@ -158,30 +170,78 @@ io.on('connection', (socket) => {
   socket.on('judge-select', ({ roomCode, cardIndex }) => {
     console.log(`Richiesta judge-select per stanza ${roomCode} da ${socket.id} con cardIndex: ${cardIndex}`);
     
-    // Assumendo che tu abbia un metodo in GameManager per gestire la selezione del vincitore
-    // Questo metodo dovrebbe:
-    // 1. Verificare che socket.id sia il giudice corrente per roomCode.
-    // 2. Verificare che lo stato del round sia 'judging'.
-    // 3. Identificare il giocatore che ha giocato la carta all'indice cardIndex.
-    // 4. Assegnare un punto a quel giocatore.
-    // 5. Impostare roundWinner e cambiare roundStatus a 'roundEnd'.
-    // 6. Controllare se c'è un vincitore della partita (se i punti max sono stati raggiunti).
-    // 7. Restituire un oggetto { success: true/false, error: 'messaggio opzionale' }
     const result = gameManager.judgeSelectsWinner(roomCode, socket.id, cardIndex);
 
     if (result && result.success) {
       console.log(`Selezione del giudice avvenuta con successo nella stanza ${roomCode}`);
-      // Invia l'aggiornamento dello stato del gioco a tutti i client nella stanza
-      // Questo dovrebbe includere il roundWinner, il nuovo punteggio, e roundStatus: 'roundEnd'
-      // Se c'è un gameWinner, includi anche quello.
-      io.to(roomCode).emit('game-update', gameManager.getGameState(roomCode));
-      console.log(`Inviato game-update dopo la selezione del giudice per la stanza ${roomCode}:`, gameManager.getGameState(roomCode));
+      // result.gameState already contains the updated state from Room.processJudgeSelection
+      io.to(roomCode).emit('game-update', result.gameState);
+      console.log(`Inviato game-update dopo la selezione del giudice per la stanza ${roomCode}:`, result.gameState);
+
+      // If the game is not over, you might want to automatically start a new round or wait for a client action
+      // For now, the client will see 'roundEnd' and can decide to show scores/winner, then trigger 'start-new-round'
+      const room = gameManager.rooms[roomCode];
+      if (room && room.roundStatus === 'roundEnd' && !room.gameOver) {
+        // Optional: Automatically start a new round after a delay
+        // setTimeout(() => {
+        //   const newRoundResult = gameManager.startNewRound(roomCode, socket.id); // socket.id might not be relevant here
+        //   if (newRoundResult.success) {
+        //     io.to(roomCode).emit('game-update', newRoundResult.gameState);
+        //     console.log(`[Server] Stanza ${roomCode}: Nuovo round avviato automaticamente.`);
+        //      room.players.forEach(p => {
+        //          io.to(p.id).emit('update-hand', p.hand); // Send updated hands for new round
+        //      });
+        //   }
+        // }, 5000); // Delay of 5 seconds for players to see the round winner
+      }
+
     } else {
       const errorMessage = result && result.error ? result.error : 'Errore durante la selezione del giudice.';
       console.error(`Errore durante judge-select nella stanza ${roomCode}: ${errorMessage}`);
       socket.emit('error', { message: errorMessage });
     }
   });
+
+  socket.on('start-new-round', ({ roomCode }) => {
+    console.log(`[Server] Richiesta start-new-round per la stanza ${roomCode} da ${socket.id}`);
+    const room = gameManager.rooms[roomCode];
+
+    if (!room) {
+        socket.emit('error', { message: 'Stanza non trovata.' });
+        return;
+    }
+
+    // Add any necessary validation (e.g., is the game over? is it the right time to start a new round?)
+    if (room.gameOver) {
+        socket.emit('error', { message: 'Il gioco è terminato. Impossibile avviare un nuovo round.' });
+        io.to(roomCode).emit('game-update', room.getGameState()); // Send final state
+        return;
+    }
+
+    if (room.roundStatus !== 'roundEnd') {
+        socket.emit('error', { message: 'Non è possibile avviare un nuovo round ora.' });
+        // Optionally send current state if it helps client debug or understand
+        // io.to(roomCode).emit('game-update', room.getGameState()); 
+        return;
+    }
+
+    const result = gameManager.startNewRound(roomCode, socket.id); // socket.id might be used for validation if needed
+
+    if (result.success) {
+        io.to(roomCode).emit('game-update', result.gameState);
+        console.log(`[Server] Stanza ${roomCode}: Nuovo round avviato su richiesta. Stato:`, result.gameState.roundStatus);
+        // Send updated hands to all players for the new round
+        if (room && room.players) {
+            room.players.forEach(p => {
+                if (p.hand) { // Ensure player object has hand property
+                    io.to(p.id).emit('update-hand', p.hand);
+                }
+            });
+        }
+    } else {
+        socket.emit('error', { message: result.error || 'Errore durante l\'avvio del nuovo round.' });
+    }
+});
 
   // Altri gestori di eventi socket...
 

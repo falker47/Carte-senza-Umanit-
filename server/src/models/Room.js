@@ -13,6 +13,10 @@ export class Room {
     this.maxPlayers = 10;
     this.maxPoints = 5;
     this.handSize = 7;    // Valore di default, sovrascritto da startGame
+    this.roundStatus = 'waiting'; // 'waiting', 'playing', 'judging', 'roundEnd', 'gameOver'
+    this.roundWinner = null; // playerId of the winner of the current round
+    this.gameWinner = null; // player object of the game winner
+    this.gameOver = false;
   }
 
   isFull() {
@@ -71,6 +75,10 @@ export class Room {
     this.maxPoints = maxPoints;
     this.handSize = handSize; // Imposta handSize dalle impostazioni
     this.playedCards = [];
+    this.roundStatus = 'playing'; // Set round status to playing
+    this.gameOver = false;
+    this.gameWinner = null;
+    this.roundWinner = null;
 
     // Mescola le carte
     this.shuffleCards();
@@ -186,11 +194,77 @@ export class Room {
     return cards;
   }
   
+  setRoundStatus(status) {
+    this.roundStatus = status;
+    console.log(`[Room ${this.roomCode}] Round status set to: ${status}`);
+  }
+
+  awardPointToPlayer(playerId) {
+    const player = this.players.find(p => p.id === playerId);
+    if (player) {
+      player.score += 1;
+      console.log(`[Room ${this.roomCode}] Player ${playerId} awarded a point. New score: ${player.score}`);
+      return player.score;
+    }
+    return null;
+  }
+
+  checkForGameWinner() {
+    const winner = this.players.find(p => p.score >= this.maxPoints);
+    if (winner) {
+      this.gameOver = true;
+      this.gameWinner = winner;
+      this.setRoundStatus('gameOver');
+      console.log(`[Room ${this.roomCode}] Game over! Winner: ${winner.nickname}`);
+      return winner;
+    }
+    return null;
+  }
+
+  // This method will be called by GameManager.judgeSelectsWinner
+  processJudgeSelection(selectedCardIndex) {
+    if (this.roundStatus !== 'judging') {
+      return { success: false, error: 'Non è il momento di giudicare (controllo interno Room).' };
+    }
+    if (selectedCardIndex < 0 || selectedCardIndex >= this.playedCards.length) {
+      return { success: false, error: 'Indice carta selezionata non valido.' };
+    }
+
+    const winningSubmission = this.playedCards[selectedCardIndex]; // Assuming playedCards is still shuffled for display but GameManager gets the original index
+    const winnerId = winningSubmission.playerId;
+    const winnerPlayer = this.players.find(p => p.id === winnerId);
+
+    if (!winnerPlayer) {
+      return { success: false, error: 'Giocatore vincente non trovato.' };
+    }
+
+    this.awardPointToPlayer(winnerId);
+    this.roundWinner = winnerId;
+    this.setRoundStatus('roundEnd');
+
+    const gameWinner = this.checkForGameWinner();
+
+    return {
+      success: true,
+      winnerInfo: {
+        playerId: winnerId,
+        nickname: winnerPlayer.nickname,
+        score: winnerPlayer.score,
+        cardPlayed: winningSubmission.card // Or whatever structure card has
+      },
+      gameOver: this.gameOver,
+      gameWinner: gameWinner,
+      gameState: this.getGameState() // Return updated game state
+    };
+  }
+
   selectWinner(cardIndex) {
     if (cardIndex < 0 || cardIndex >= this.playedCards.length) {
       return { success: false, error: 'Indice carta non valido' };
     }
     
+    // This method's logic should be mostly covered by processJudgeSelection now.
+    // For now, let's keep it but it might be deprecated or refactored.
     const winningCard = this.playedCards[cardIndex];
     const winnerIndex = this.players.findIndex(player => player.id === winningCard.playerId);
     
@@ -227,6 +301,8 @@ export class Room {
     
     // Resetta le carte giocate
     this.playedCards = [];
+    this.roundWinner = null;
+    this.setRoundStatus('playing'); // Set round status to playing for the new round
     
     // Seleziona una nuova carta nera
     if (this.blackCards.length === 0) {
@@ -252,7 +328,11 @@ export class Room {
       maxPoints: this.maxPoints,
       maxPlayers: this.maxPlayers,
       handSize: this.handSize,
-      roundStatus: this.gameStarted ? 'playing' : 'waiting', // ADD THIS LINE
+      roundStatus: this.roundStatus, // Use the actual roundStatus property
+      playedCards: this.roundStatus === 'judging' || this.roundStatus === 'roundEnd' ? this.getPlayedCards() : [], // Only send played cards when relevant
+      roundWinner: this.roundWinner,
+      gameOver: this.gameOver,
+      gameWinner: this.gameWinner,
       // You might want to send player hands only to the specific player
       // For now, this sends the full state; consider security/privacy for hands later
     };
