@@ -4,10 +4,6 @@
     "blanks": 1
   },
   {
-    "text": "Il segreto di una buona relazione è _____ e _____.",
-    "blanks": 2
-  },
-  {
     "text": "Cosa mi ha fatto licenziare dal mio ultimo lavoro? _____.",
     "blanks": 1
   },
@@ -28,20 +24,12 @@
     "blanks": 1
   },
   {
-    "text": "Ho perso il mio lavoro a causa di _____ e _____.",
-    "blanks": 2
-  },
-  {
     "text": "La cosa peggiore da dire a un funerale: '_____'.",
     "blanks": 1
   },
   {
     "text": "Il mio professore di matematica è stato licenziato per _____.",
     "blanks": 1
-  },
-  {
-    "text": "Il nuovo piatto di Masterchef: _____ al _____.",
-    "blanks": 2
   },
   {
     "text": "La mia tecnica di rimorchio preferita è _____.",
@@ -76,7 +64,7 @@
     "blanks": 1
   },
   {
-    "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
-    "blanks": 2
+    "text": "Nulla è più pericoloso di _____.",
+    "blanks": 1
   }
 ]
