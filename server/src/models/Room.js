@@ -181,17 +181,17 @@ export class Room {
   
   getPlayedCards() {
     // Restituisci le carte giocate in ordine casuale per non rivelare chi ha giocato cosa
-    return this.shufflePlayedCards();
+    return this.shufflePlayedCards(); // shufflePlayedCards returns a shuffled copy of this.playedCards
   }
   
   shufflePlayedCards() {
-    const cards = [...this.playedCards];
+    const cards = [...this.playedCards]; // Each element is { playerId, card }
     // Fisher-Yates shuffle
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [cards[i], cards[j]] = [cards[j], cards[i]];
     }
-    return cards;
+    return cards; // Returns an array of { playerId, card }
   }
   
   setRoundStatus(status) {
@@ -226,23 +226,34 @@ export class Room {
     if (this.roundStatus !== 'judging') {
       return { success: false, error: 'Non è il momento di giudicare (controllo interno Room).' };
     }
-    if (selectedCardIndex < 0 || selectedCardIndex >= this.playedCards.length) {
+
+    // Get the list of cards as displayed to the judge (shuffled)
+    const displayedPlayedCards = this.getPlayedCards();
+
+    if (selectedCardIndex < 0 || selectedCardIndex >= displayedPlayedCards.length) {
       return { success: false, error: 'Indice carta selezionata non valido.' };
     }
 
-    const winningSubmission = this.playedCards[selectedCardIndex]; // Assuming playedCards is still shuffled for display but GameManager gets the original index
+    // Identify the winning submission from the displayed list
+    const winningSubmission = displayedPlayedCards[selectedCardIndex];
+    // winningSubmission is an object like { playerId: 'someId', card: 'text of card' }
+
     const winnerId = winningSubmission.playerId;
     const winnerPlayer = this.players.find(p => p.id === winnerId);
 
     if (!winnerPlayer) {
+      // This should not happen if playerId in playedCards is always valid
+      console.error(`[Room ${this.roomCode}] Errore critico: Giocatore vincente non trovato con ID ${winnerId} dalla carta selezionata.`);
       return { success: false, error: 'Giocatore vincente non trovato.' };
     }
 
     this.awardPointToPlayer(winnerId);
-    this.roundWinner = winnerId;
+    this.roundWinner = winnerId; // Store the ID of the round winner
     this.setRoundStatus('roundEnd');
 
     const gameWinner = this.checkForGameWinner();
+
+    console.log(`[Room ${this.roomCode}] Giudice ha selezionato la carta. Vincitore del round: ${winnerPlayer.nickname}. Carta: ${JSON.stringify(winningSubmission.card)}`);
 
     return {
       success: true,
@@ -250,7 +261,7 @@ export class Room {
         playerId: winnerId,
         nickname: winnerPlayer.nickname,
         score: winnerPlayer.score,
-        cardPlayed: winningSubmission.card // Or whatever structure card has
+        cardPlayed: winningSubmission.card // This is the actual card object/text
       },
       gameOver: this.gameOver,
       gameWinner: gameWinner,
