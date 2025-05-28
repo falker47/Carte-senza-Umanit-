@@ -136,7 +136,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   const handleNextRound = () => {
     if (gameData.roundStatus !== 'roundEnd' || !isCurrentPlayerJudge()) return;
     
-    socket.emit('next-round', { roomCode });
+    socket.emit('start-new-round', { roomCode }); // MODIFICATO: da 'next-round' a 'start-new-round'
   };
   
   const isCurrentPlayerJudge = () => {

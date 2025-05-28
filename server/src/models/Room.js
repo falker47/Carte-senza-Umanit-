@@ -1,5 +1,7 @@
 export class Room {
   constructor(roomCode, hostId, hostNickname, whiteCards, blackCards) {
+    this.instanceId = Date.now() + '_' + Math.random().toString(36).substr(2, 9); // Aggiungi un ID univoco
+    console.log(`[Room ${roomCode}] Created with instanceId: ${this.instanceId}`);
     this.roomCode = roomCode;
     this.hostId = hostId;
     this.players = [{ id: hostId, nickname: hostNickname, score: 0, hand: [] }];
