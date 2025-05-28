@@ -13,11 +13,6 @@ export class Room {
     this.maxPlayers = 10;
     this.maxPoints = 5;
     this.handSize = 7;    // Valore di default, sovrascritto da startGame
-    this.roundStatus = 'waiting';
-    this.roundWinnerDetails = null;
-    this.gameOver = false;
-    this.gameWinner = null;
-    this.status = 'waiting';
   }
 
   isFull() {
@@ -253,11 +248,11 @@ export class Room {
       gameStarted: this.gameStarted,
       currentRound: this.currentRound,
       currentJudge: this.players[this.judgeIndex]?.id,
-      blackCard: this.currentBlackCard,
+      blackCard: this.currentBlackCard, // Changed from currentBlackCard to blackCard for direct mapping
       maxPoints: this.maxPoints,
       maxPlayers: this.maxPlayers,
       handSize: this.handSize,
-      roundStatus: this.roundStatus || (this.gameStarted ? 'playing' : 'waiting'),
+      roundStatus: this.gameStarted ? 'playing' : 'waiting', // ADD THIS LINE
       // You might want to send player hands only to the specific player
       // For now, this sends the full state; consider security/privacy for hands later
     };
