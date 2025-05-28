@@ -32,7 +32,7 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                 )}
               </div>
               <div className="flex items-center">
-                <span className="text-sm font-medium">{player.points || 0} pt</span>
+                <span className="text-sm font-medium">{player.score || 0} pt</span>
                 {isJudge && (
                   <span className="ml-2 text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">
                     Giudice
