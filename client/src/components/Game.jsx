@@ -171,7 +171,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     
     if (gameData.roundStatus === 'roundEnd') {
       if (gameData.roundWinner) {
-        return `${gameData.roundWinner.nickname} ha vinto questo round!`;
+        const winnerPlayer = gameData.players.find(p => p.id === gameData.roundWinner);
+        const winnerNickname = winnerPlayer ? winnerPlayer.nickname : 'Giocatore Sconosciuto';
+        return `${winnerNickname} ha vinto questo round!`;
       }
       return 'Fine del round.';
     }
