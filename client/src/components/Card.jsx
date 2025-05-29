@@ -13,7 +13,7 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable }) {
 
   const cardClasses = `
     ${type === 'black' ? 'bg-black text-white' : 'bg-white text-gray-800'}
-    ${isWinner ? 'border-4 border-yellow-400 shadow-yellow-500/50' : 'border-2 border-gray-300'}
+    ${isWinner ? 'border-4 border-green-500 shadow-green-500/50' : 'border-2 border-gray-300'}
     ${isSelected ? 'ring-4 ring-blue-500 shadow-blue-500/50' : ''}
     ${isSelectable && type === 'white' ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all duration-150 ease-in-out' : ''}
     p-4 rounded-lg shadow-lg h-64 flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
