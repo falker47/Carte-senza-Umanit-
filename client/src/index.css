@@ -167,3 +167,26 @@
 .victory-glow {
   animation: victory-glow 2s ease-in-out infinite;
 }
+
+/* Miglioramento del gradiente per le carte */
+.card-container-gradient {
+  background: linear-gradient(to top, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.7) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+}
+
+.dark .card-container-gradient {
+  background: linear-gradient(to top, 
+    rgba(17, 24, 39, 0.9) 0%, 
+    rgba(17, 24, 39, 0.7) 50%, 
+    rgba(17, 24, 39, 0) 100%);
+}
+
+/* Assicura che i banner abbiano dimensioni consistenti */
+.control-panel-fixed {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
