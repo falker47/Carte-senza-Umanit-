@@ -380,14 +380,14 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               {/* Indicatore di scroll */}
               <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />
                 </svg>
                 Scorri per vedere tutte le carte
               </div>
               
-              {/* Contenitore scrollabile per le carte */}
+              {/* Contenitore scrollabile per le carte - VERSIONE FINALE */}
               <div className="flex-1 relative">
-                <div className="absolute inset-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 300px)' }}>
                   <div className="space-y-3 pr-2">
                     {gameData.hand && gameData.hand.length > 0 ? (
                       gameData.hand.map((card, index) => (
@@ -409,8 +409,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   </div>
                 </div>
                 
-                {/* Gradiente per indicare che c'è contenuto sotto */}
-                <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
+                {/* Gradiente condizionale */}
+                {gameData.hand && gameData.hand.length > 3 && (
+                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none opacity-75"></div>
+                )}
               </div>
               
               {/* Pannello di controllo per la selezione della carta */}
