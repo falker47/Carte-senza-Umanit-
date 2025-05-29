@@ -18,8 +18,14 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     hasPlayed: false
   });
   
-  // Nuovo stato per la selezione del giudice
+  // Stato per la selezione del giudice
   const [judgeSelection, setJudgeSelection] = useState({
+    selectedIndex: null,
+    isConfirming: false
+  });
+  
+  // Nuovo stato per la selezione delle carte della mano
+  const [handSelection, setHandSelection] = useState({
     selectedIndex: null,
     isConfirming: false
   });
@@ -42,9 +48,12 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           : null
       }));
       
-      // Reset judge selection when round status changes
+      // Reset delle selezioni quando cambia lo stato del round
       if (data.roundStatus !== 'judging') {
         setJudgeSelection({ selectedIndex: null, isConfirming: false });
+      }
+      if (data.roundStatus !== 'playing') {
+        setHandSelection({ selectedIndex: null, isConfirming: false });
       }
     });
 
@@ -86,10 +95,40 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     }
     
     console.log('Carta selezionata:', cardIndex);
+    setHandSelection({
+      selectedIndex: cardIndex,
+      isConfirming: false
+    });
+  };
+  
+  // Nuova funzione per confermare la selezione della carta
+  const handleCardConfirm = () => {
+    if (handSelection.selectedIndex === null || handSelection.isConfirming) {
+      return;
+    }
+    
+    setHandSelection(prev => ({ ...prev, isConfirming: true }));
+    
+    socket.emit('play-card', {
+      roomCode,
+      cardIndex: handSelection.selectedIndex
+    });
+    
     setGameData(prev => ({
       ...prev,
-      selectedCard: cardIndex
+      selectedCard: handSelection.selectedIndex,
+      hasPlayed: true
     }));
+    
+    // Reset della selezione dopo aver giocato
+    setTimeout(() => {
+      setHandSelection({ selectedIndex: null, isConfirming: false });
+    }, 500);
+  };
+  
+  // Funzione per annullare la selezione della carta
+  const handleCardCancel = () => {
+    setHandSelection({ selectedIndex: null, isConfirming: false });
   };
   
   const handleCardPlay = () => {
@@ -101,11 +140,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       return;
     }
     
-    console.log('Emissione evento play-card con:', {
-      roomCode,
-      cardIndex: gameData.selectedCard
-    });
-    
+    console.log('Invio play-card al server con cardIndex:', gameData.selectedCard);
     socket.emit('play-card', {
       roomCode,
       cardIndex: gameData.selectedCard
@@ -115,52 +150,6 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       ...prev,
       hasPlayed: true
     }));
-    
-    console.log('hasPlayed impostato a true');
-  };
-  
-  // Nuova funzione per la selezione del giudice con conferma
-  const handleJudgeCardSelect = (cardIndex) => {
-    console.log('[CLIENT] handleJudgeCardSelect called with cardIndex:', cardIndex);
-    
-    if (gameData.roundStatus !== 'judging' || !isCurrentPlayerJudge()) {
-      console.log('[CLIENT] handleJudgeCardSelect: Conditions not met, exiting.');
-      return;
-    }
-    
-    // Se la stessa carta è già selezionata, deseleziona
-    if (judgeSelection.selectedIndex === cardIndex) {
-      setJudgeSelection({ selectedIndex: null, isConfirming: false });
-      return;
-    }
-    
-    // Seleziona la nuova carta
-    setJudgeSelection({ selectedIndex: cardIndex, isConfirming: false });
-    console.log('[CLIENT] Card selected for judge review:', cardIndex);
-  };
-  
-  // Funzione per confermare la selezione del giudice
-  const handleJudgeConfirm = () => {
-    if (judgeSelection.selectedIndex === null) return;
-    
-    console.log('[CLIENT] Judge confirming selection of cardIndex:', judgeSelection.selectedIndex);
-    console.log('[CLIENT] Current gameData.playedCards for judge:', JSON.stringify(gameData.playedCards));
-    
-    if (gameData.playedCards && gameData.playedCards[judgeSelection.selectedIndex]) {
-      console.log('[CLIENT] Selected card content:', JSON.stringify(gameData.playedCards[judgeSelection.selectedIndex]));
-    }
-    
-    setJudgeSelection(prev => ({ ...prev, isConfirming: true }));
-    
-    socket.emit('judge-select', {
-      roomCode,
-      cardIndex: judgeSelection.selectedIndex
-    });
-  };
-  
-  // Funzione per annullare la selezione
-  const handleJudgeCancel = () => {
-    setJudgeSelection({ selectedIndex: null, isConfirming: false });
   };
   
   const handleLeaveGame = () => {
@@ -377,37 +366,82 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           )}
         </div>
         
-        {/* Colonna destra - Mano del giocatore */}
-        <div className="lg:col-span-1">
+        {/* Colonna destra - Mano del giocatore con contenitore scrollabile */}
+        <div className="lg:col-span-1 flex flex-col">
           {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
-            <div>
+            <div className="flex flex-col h-full">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-medium">La tua mano</h2>
-                {gameData.selectedCard !== null && !gameData.hasPlayed && (
-                  <button 
-                    onClick={handleCardPlay}
-                    className="btn btn-primary py-1 px-3 text-sm"
-                  >
-                    Gioca Carta
-                  </button>
-                )}
-              </div>
-              {gameData.hand && gameData.hand.length > 0 ? (
-                <div className="space-y-3">
-                  {gameData.hand.map((card, index) => (
-                    <Card 
-                      key={index}
-                      type="white" 
-                      text={card}
-                      onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
-                      selected={gameData.selectedCard === index}
-                    />
-                  ))}
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {gameData.hand?.length || 0} carte
                 </div>
-              ) : (
-                <p className="text-gray-500 dark:text-gray-400">
-                  Nessuna carta in mano. Attendi la distribuzione.
-                </p>
+              </div>
+              
+              {/* Indicatore di scroll */}
+              <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Scorri per vedere tutte le carte
+              </div>
+              
+              {/* Contenitore scrollabile per le carte */}
+              <div className="flex-1 relative">
+                <div className="absolute inset-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                  <div className="space-y-3 pr-2">
+                    {gameData.hand && gameData.hand.length > 0 ? (
+                      gameData.hand.map((card, index) => (
+                        <Card 
+                          key={index}
+                          type="white" 
+                          text={card}
+                          onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
+                          isSelectable={!gameData.hasPlayed}
+                          isSelected={handSelection.selectedIndex === index}
+                          isPending={handSelection.selectedIndex === index && handSelection.isConfirming}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400">
+                        Nessuna carta in mano. Attendi la distribuzione.
+                      </p>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Gradiente per indicare che c'è contenuto sotto */}
+                <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
+              </div>
+              
+              {/* Pannello di controllo per la selezione della carta */}
+              {handSelection.selectedIndex !== null && !gameData.hasPlayed && (
+                <div className="mt-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                  <div className="flex flex-col items-center space-y-3">
+                    <p className="text-center font-medium text-sm">
+                      Carta #{handSelection.selectedIndex + 1} selezionata
+                    </p>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={handleCardConfirm}
+                        disabled={handSelection.isConfirming}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                          handSelection.isConfirming 
+                            ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                            : 'bg-green-600 hover:bg-green-700 text-white'
+                        }`}
+                      >
+                        {handSelection.isConfirming ? 'Giocando...' : 'Gioca Carta'}
+                      </button>
+                      <button 
+                        onClick={handleCardCancel}
+                        disabled={handSelection.isConfirming}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                      >
+                        Annulla
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
