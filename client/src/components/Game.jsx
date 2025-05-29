@@ -296,116 +296,215 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         
         {/* Colonna centrale - Carta nera e carte giocate */}
         <div className="lg:col-span-2">
-          {gameData.blackCard && (
-            <div className="mb-6">
-              <h2 className="text-lg font-medium mb-2">Carta Nera</h2>
-              <Card 
-                type="black" 
-                text={gameData.blackCard.text} 
-                blanks={gameData.blackCard.blanks}
-              />
-            </div>
-          )}
-          
-          {gameData.roundStatus === 'judging' && (
-            <div>
-              <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
-              {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
+          {/* Schermata di vittoria elaborata */}
+          {gameData.gameWinner ? (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center relative overflow-hidden">
+              {/* Effetto confetti con CSS */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="confetti-container">
+                  {[...Array(50)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className="confetti" 
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        animationDelay: `${Math.random() * 3}s`,
+                        backgroundColor: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'][Math.floor(Math.random() * 6)]
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
               
-              {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO */}
-              {isCurrentPlayerJudge() && (
-                <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                  {judgeSelection.selectedIndex !== null ? (
-                    <div className="flex flex-col items-center space-y-3">
-                      <p className="text-center font-medium">
-                        Hai selezionato la carta #{judgeSelection.selectedIndex + 1}
+              {/* Contenuto principale della vittoria */}
+              <div className="relative z-10 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md mx-auto border-4 border-yellow-400">
+                {/* Corona o trofeo */}
+                <div className="text-6xl mb-4 animate-bounce">
+                  🏆
+                </div>
+                
+                {/* Messaggio di vittoria */}
+                <h1 className="text-4xl font-bold mb-4 text-yellow-600 dark:text-yellow-400 animate-pulse">
+                  {gameData.gameWinner.nickname === nickname ? 'VITTORIA!' : 'PARTITA FINITA!'}
+                </h1>
+                
+                <div className="mb-6">
+                  {gameData.gameWinner.nickname === nickname ? (
+                    <div>
+                      <p className="text-xl font-semibold text-green-600 dark:text-green-400 mb-2">
+                        Complimenti! Hai vinto la partita!
                       </p>
-                      <div className="flex space-x-3">
-                        <button 
-                          onClick={handleJudgeConfirm}
-                          disabled={judgeSelection.isConfirming}
-                          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                            judgeSelection.isConfirming 
-                              ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                              : 'bg-green-600 hover:bg-green-700 text-white'
-                          }`}
-                        >
-                          {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma Scelta'}
-                        </button>
-                        <button 
-                          onClick={handleJudgeCancel}
-                          disabled={judgeSelection.isConfirming}
-                          className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50"
-                        >
-                          Annulla
-                        </button>
-                      </div>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        Hai raggiunto {gameData.gameWinner.score} punti
+                      </p>
                     </div>
                   ) : (
-                    <p className="text-center text-gray-600 dark:text-gray-300">
-                      Clicca su una carta per selezionarla
-                    </p>
+                    <div>
+                      <p className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2">
+                        {gameData.gameWinner.nickname} ha vinto!
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        Con {gameData.gameWinner.score} punti
+                      </p>
+                    </div>
                   )}
+                </div>
+                
+                {/* Classifica finale */}
+                <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <h3 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Classifica Finale</h3>
+                  <div className="space-y-2">
+                    {gameData.players
+                      .sort((a, b) => b.score - a.score)
+                      .map((player, index) => (
+                        <div 
+                          key={player.id} 
+                          className={`flex justify-between items-center p-2 rounded ${
+                            index === 0 
+                              ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' 
+                              : 'bg-white dark:bg-gray-600'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <span className="font-bold">
+                              {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                            </span>
+                            <span className={player.nickname === nickname ? 'font-bold' : ''}>
+                              {player.nickname}
+                            </span>
+                          </div>
+                          <span className="font-semibold">{player.score} punti</span>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+                
+                {/* Pulsanti di azione */}
+                <div className="space-y-3">
+                  <button 
+                    onClick={handleLeaveGame}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105"
+                  >
+                    Torna alla Home
+                  </button>
+                  
+                  {/* Solo l'host può iniziare una nuova partita */}
+                  {gameData.hostId === nickname && (
+                    <button 
+                      onClick={() => {
+                        // Qui potresti aggiungere la logica per iniziare una nuova partita
+                        // Per ora mostra solo un messaggio
+                        alert('Funzionalità in arrivo: Nuova Partita!');
+                      }}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-all"
+                    >
+                      Nuova Partita
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Mostra la carta nera solo se il gioco non è finito */}
+              {gameData.blackCard && (
+                <div className="mb-6">
+                  <h2 className="text-lg font-medium mb-2">Carta Nera</h2>
+                  <Card 
+                    type="black" 
+                    text={gameData.blackCard.text} 
+                    blanks={gameData.blackCard.blanks}
+                  />
                 </div>
               )}
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {gameData.playedCards.map((playedCardObject, index) => (
-                  <Card 
-                    key={index}
-                    type="white" 
-                    text={playedCardObject.card}
-                    onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
-                    isSelectable={isCurrentPlayerJudge()}
-                    isSelected={judgeSelection.selectedIndex === index}
-                    isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {gameData.roundStatus === 'roundEnd' && gameData.roundWinner && gameData.winningCardText && (
-            <div className="mt-6">
-              <h2 className="text-lg font-medium mb-2">Carta Vincente</h2>
-              <div className="flex flex-col items-center">
-                <p className="mb-2 text-center">
-                  <span className="font-bold">
-                    {gameData.players.find(p => p.id === gameData.roundWinner)?.nickname || 'Giocatore Sconosciuto'}
-                  </span> ha vinto questo round!
-                </p>
-                <Card 
-                  type="white" 
-                  text={gameData.winningCardText}
-                  isWinner={true}
-                />
-                
-                {isCurrentPlayerJudge() && (
-                  <button 
-                    onClick={handleNextRound}
-                    className="mt-4 btn btn-primary"
-                  >
-                    Prossimo Round
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-          
-          {gameData.gameWinner && (
-            <div className="mt-6 text-center">
-              <h2 className="text-2xl font-bold mb-4">
-                {gameData.gameWinner.nickname === nickname 
-                  ? 'Hai vinto la partita!' 
-                  : `${gameData.gameWinner.nickname} ha vinto la partita!`}
-              </h2>
-              <button 
-                onClick={handleLeaveGame}
-                className="btn btn-primary"
-              >
-                Torna alla Home
-              </button>
-            </div>
+              {/* Resto del contenuto esistente per le fasi di gioco normali */}
+              {gameData.roundStatus === 'judging' && (
+                <div>
+                  <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
+                  {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
+                  
+                  {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO */}
+                  {isCurrentPlayerJudge() && (
+                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                      {judgeSelection.selectedIndex !== null ? (
+                        <div className="flex flex-col items-center space-y-3">
+                          <p className="text-center font-medium">
+                            Hai selezionato la carta #{judgeSelection.selectedIndex + 1}
+                          </p>
+                          <div className="flex space-x-3">
+                            <button 
+                              onClick={handleJudgeConfirm}
+                              disabled={judgeSelection.isConfirming}
+                              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                                judgeSelection.isConfirming 
+                                  ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                                  : 'bg-green-600 hover:bg-green-700 text-white'
+                              }`}
+                            >
+                              {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma Scelta'}
+                            </button>
+                            <button 
+                              onClick={handleJudgeCancel}
+                              disabled={judgeSelection.isConfirming}
+                              className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50"
+                            >
+                              Annulla
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-center text-gray-600 dark:text-gray-300">
+                          Clicca su una carta per selezionarla
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {gameData.playedCards.map((playedCardObject, index) => (
+                      <Card 
+                        key={index}
+                        type="white" 
+                        text={playedCardObject.card}
+                        onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
+                        isSelectable={isCurrentPlayerJudge()}
+                        isSelected={judgeSelection.selectedIndex === index}
+                        isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {gameData.roundStatus === 'roundEnd' && gameData.roundWinner && gameData.winningCardText && (
+                <div className="mt-6">
+                  <h2 className="text-lg font-medium mb-2">Carta Vincente</h2>
+                  <div className="flex flex-col items-center">
+                    <p className="mb-2 text-center">
+                      <span className="font-bold">
+                        {gameData.players.find(p => p.id === gameData.roundWinner)?.nickname || 'Giocatore Sconosciuto'}
+                      </span> ha vinto questo round!
+                    </p>
+                    <Card 
+                      type="white" 
+                      text={gameData.winningCardText}
+                      isWinner={true}
+                    />
+                    
+                    {isCurrentPlayerJudge() && (
+                      <button 
+                        onClick={handleNextRound}
+                        className="mt-4 btn btn-primary"
+                      >
+                        Prossimo Round
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
         
