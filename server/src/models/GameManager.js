@@ -24,29 +24,30 @@ export class GameManager {
   }
 
   joinRoom(playerId, nickname, roomCode) {
+    const upperCaseRoomCode = roomCode.toUpperCase(); // Converti in maiuscolo
     // Verifica se la stanza esiste
-    if (!this.rooms[roomCode]) {
+    if (!this.rooms[upperCaseRoomCode]) { // Usa il codice in maiuscolo
       return { success: false, error: 'Stanza non trovata' };
     }
 
     // Verifica se il gioco è già iniziato
-    if (this.rooms[roomCode].gameStarted) {
+    if (this.rooms[upperCaseRoomCode].gameStarted) { // Usa il codice in maiuscolo
       return { success: false, error: 'Il gioco è già iniziato' };
     }
 
     // Verifica se la stanza è piena
-    if (this.rooms[roomCode].isFull()) {
+    if (this.rooms[upperCaseRoomCode].isFull()) { // Usa il codice in maiuscolo
       return { success: false, error: 'La stanza è piena' };
     }
 
     // Verifica se il nickname è già in uso
-    if (this.rooms[roomCode].isNicknameTaken(nickname)) {
+    if (this.rooms[upperCaseRoomCode].isNicknameTaken(nickname)) { // Usa il codice in maiuscolo
       return { success: false, error: 'Nickname già in uso' };
     }
 
     // Aggiungi il giocatore alla stanza
-    this.rooms[roomCode].addPlayer(playerId, nickname);
-    this.playerRooms[playerId] = roomCode;
+    this.rooms[upperCaseRoomCode].addPlayer(playerId, nickname); // Usa il codice in maiuscolo
+    this.playerRooms[playerId] = upperCaseRoomCode; // Usa il codice in maiuscolo
 
     return { success: true };
   }

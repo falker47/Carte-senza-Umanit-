@@ -101,20 +101,22 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
       setError('Inserisci un nickname per continuare');
       return;
     }
-    
-    if (!localRoomCode.trim()) {
+
+    const upperCaseLocalRoomCode = localRoomCode.toUpperCase(); // Converti in maiuscolo
+
+    if (!upperCaseLocalRoomCode.trim()) {
       setError('Inserisci un codice stanza per continuare');
       return;
     }
-    
+
     setNickname(localNickname);
-    setRoomCode(localRoomCode);
+    setRoomCode(upperCaseLocalRoomCode); // Imposta il codice in maiuscolo
     setGameState('lobby');
-    
+
     // Il socket verrà creato in App.jsx e gestirà l'ingresso nella stanza
     setTimeout(() => {
       if (socket) {
-        socket.emit('join-room', { nickname: localNickname, roomCode: localRoomCode });
+        socket.emit('join-room', { nickname: localNickname, roomCode: upperCaseLocalRoomCode }); // Invia il codice in maiuscolo
       }
     }, 100);
   };
@@ -179,9 +181,11 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             type="text"
             id="roomCode"
             value={localRoomCode}
-            onChange={(e) => setLocalRoomCode(e.target.value)}
+            onChange={(e) => setLocalRoomCode(e.target.value.toUpperCase())} // Converti in maiuscolo all'inserimento
             placeholder="Inserisci il codice"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 mb-4"
+            maxLength={6} // Opzionale: se il codice ha lunghezza fissa
+            style={{ textTransform: 'uppercase' }} // Visualizza sempre in maiuscolo
           />
           <button
              className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
