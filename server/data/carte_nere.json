@@ -81,7 +81,7 @@
   },
   {
     "text": "Usando la tua macchina del tempo, incontri il te stesso del passato. Cosa fai?",
-    "blanks": 0
+    "blanks": 1
   },
   {
     "text": "Goduria è: ____.",
@@ -229,11 +229,11 @@
   },
   {
     "text": "Qual è la soluzione migliore per smettere di fumare?",
-    "blanks": 0
+    "blanks": 1
   },
   {
     "text": "Cosa fare in caso di difficoltà?",
-    "blanks": 0
+    "blanks": 1
   },
   {
     "text": "Salve, sono Troy McClure. Sicuramente mi ricorderete per ____.",
@@ -354,12 +354,46 @@
   },
   {
     "text": "L'attività preferita di Federica Pellegrini quando non nuota?",
-    "blanks": 0
-  },  
+    "blanks": 1
+  },
+  {
+    "text": "Una cosa completamente inutile? ____.",
+    "blanks": 1
+  },   
   {
     "text": "Adoro il profumo del ____.",
     "blanks": 1
+  },
+  {
+    "text": "Alza la cornetta, ____ ti aspetta!",
+    "blanks": 1
+  },
+  {
+    "text": "Ho un disperato bisogno di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sin da piccolo sono stato educato a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____, ecco come potrei punire mio figlio!",
+    "blanks": 1
+  },
+  {
+    "text": "Il vero significato del Natale è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La mia prima parola è stata ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Come tutti sanno, l'unico modo per uccidere Dracula è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Fra tutte le cose che so fare, di sicuro, quella che mi riesce meglio è ____.",
+    "blanks": 1
   }
-  
-  
 ]
