@@ -187,12 +187,14 @@ export class Room {
   }
   
   shufflePlayedCards() {
+    console.log(`[SERVER Room ${this.roomCode}] shufflePlayedCards: Original playedCards before shuffle:`, JSON.stringify(this.playedCards));
     const cards = [...this.playedCards]; // Each element is { playerId, card }
     // Fisher-Yates shuffle
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [cards[i], cards[j]] = [cards[j], cards[i]];
     }
+    console.log(`[SERVER Room ${this.roomCode}] shufflePlayedCards: Shuffled cards:`, JSON.stringify(cards));
     return cards; // Returns an array of { playerId, card }
   }
   
@@ -225,19 +227,27 @@ export class Room {
 
   // This method will be called by GameManager.judgeSelectsWinner
   processJudgeSelection(selectedCardIndex) {
+    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: Received selectedCardIndex: ${selectedCardIndex}`);
+    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: Current this.playedCards (original order):`, JSON.stringify(this.playedCards));
+
     if (this.roundStatus !== 'judging') {
+      console.warn(`[SERVER Room ${this.roomCode}] processJudgeSelection: Attempted when roundStatus was ${this.roundStatus}.`);
       return { success: false, error: 'Non è il momento di giudicare (controllo interno Room).' };
     }
 
     // Get the list of cards as displayed to the judge (shuffled)
-    const displayedPlayedCards = this.getPlayedCards();
+    const displayedPlayedCards = this.getPlayedCards(); // this calls shufflePlayedCards which now has logs
+    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: displayedPlayedCards (shuffled for judge):`, JSON.stringify(displayedPlayedCards));
 
     if (selectedCardIndex < 0 || selectedCardIndex >= displayedPlayedCards.length) {
+      console.error(`[SERVER Room ${this.roomCode}] processJudgeSelection: Invalid selectedCardIndex: ${selectedCardIndex} for displayedPlayedCards length: ${displayedPlayedCards.length}`);
       return { success: false, error: 'Indice carta selezionata non valido.' };
     }
 
     // Identify the winning submission from the displayed list
     const winningSubmission = displayedPlayedCards[selectedCardIndex];
+    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: Winning submission based on index ${selectedCardIndex}:`, JSON.stringify(winningSubmission));
+
     // winningSubmission is an object like { playerId: 'someId', card: 'text of card' }
 
     const winnerId = winningSubmission.playerId;

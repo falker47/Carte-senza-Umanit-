@@ -115,13 +115,20 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   };
   
   const handleJudgeSelect = (cardIndex) => {
-    console.log('handleJudgeSelect chiamata con cardIndex:', cardIndex, 'Stato round:', gameData.roundStatus, 'È giudice:', isCurrentPlayerJudge()); // <--- NUOVO LOG
+    console.log('[CLIENT] handleJudgeSelect called with cardIndex:', cardIndex, 'Stato round:', gameData.roundStatus, 'È giudice:', isCurrentPlayerJudge());
+    console.log('[CLIENT] Current gameData.playedCards for judge:', JSON.stringify(gameData.playedCards));
+    if (gameData.playedCards && gameData.playedCards[cardIndex]) {
+      console.log('[CLIENT] Selected card content:', JSON.stringify(gameData.playedCards[cardIndex]));
+    } else {
+      console.log('[CLIENT] Selected cardIndex is out of bounds or playedCards is not yet populated.');
+    }
+
     if (gameData.roundStatus !== 'judging' || !isCurrentPlayerJudge()) {
-      console.log('handleJudgeSelect: Condizioni non soddisfatte, uscita.'); // <--- NUOVO LOG (opzionale, per vedere se esce qui)
+      console.log('[CLIENT] handleJudgeSelect: Conditions not met, exiting.');
       return;
     }
     
-    console.log('handleJudgeSelect: Emissione evento judge-select con:', { roomCode, cardIndex }); // <--- NUOVO LOG
+    console.log('[CLIENT] Emitting judge-select with:', { roomCode, cardIndex });
     socket.emit('judge-select', {
       roomCode,
       cardIndex
@@ -243,6 +250,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           {gameData.roundStatus === 'judging' && (
             <div>
               <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
+              {/* Log l'array delle carte giocate quando vengono renderizzate per il giudice */}
+              {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {gameData.playedCards.map((playedCardObject, index) => ( // Renamed 'cardText' to 'playedCardObject'
                   <Card 
