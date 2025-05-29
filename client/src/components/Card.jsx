@@ -1,22 +1,24 @@
 import React from 'react';
 
-function Card({ type, text, onClick, isSelected, isWinner, isSelectable }) {
-  console.log(`Card component received text:`, text); // Log del prop text ricevuto
+function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending }) {
+  console.log(`Card component received text:`, text);
 
   const formatText = (text) => {
     if (!text) return '';
-    console.log(`formatText input:`, text); // Log dell'input di formatText
+    console.log(`formatText input:`, text);
     const formatted = text.replace(/_/g, '<span class="underline">_____</span>');
-    console.log(`formatText output:`, formatted); // Log dell'output di formatText
+    console.log(`formatText output:`, formatted);
     return formatted;
   };
 
   const cardClasses = `
     ${type === 'black' ? 'bg-black text-white' : 'bg-white text-gray-800'}
-    ${isWinner ? 'border-4 border-green-500 shadow-green-500/50' : 'border-2 border-gray-300'}
-    ${isSelected ? 'ring-4 ring-blue-500 shadow-blue-500/50' : ''}
-    ${isSelectable && type === 'white' ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all duration-150 ease-in-out' : ''}
+    ${isWinner ? 'border-4 border-green-500 shadow-green-500/50 shadow-xl' : 'border-2 border-gray-300'}
+    ${isSelected ? 'ring-4 ring-blue-500 shadow-blue-500/50 shadow-xl border-blue-400' : ''}
+    ${isPending ? 'ring-4 ring-yellow-500 shadow-yellow-500/50 shadow-xl border-yellow-400 animate-pulse' : ''}
+    ${isSelectable && type === 'white' ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105' : ''}
     p-4 rounded-lg shadow-lg h-64 flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
+    ${isSelected || isPending ? 'transform scale-105' : ''}
   `;
 
   const textClasses = `
@@ -24,7 +26,6 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable }) {
     ${type === 'black' ? 'leading-relaxed' : ''}
   `;
 
-  // Rimuovi il testo statico qui e usa formatText(text)
   const displayText = formatText(text);
 
   return (
@@ -32,6 +33,26 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable }) {
       <div className="flex-grow">
         <div className={textClasses} dangerouslySetInnerHTML={{ __html: displayText }} />
       </div>
+      
+      {/* Indicatore di stato per le carte selezionate */}
+      {isSelected && !isPending && (
+        <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+          ✓
+        </div>
+      )}
+      
+      {isPending && (
+        <div className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+          ⏳
+        </div>
+      )}
+      
+      {isWinner && (
+        <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+          🏆
+        </div>
+      )}
+      
       {type === 'white' && (
         <div className="absolute bottom-2 right-2 text-xs text-gray-500 font-bold">
           Carte Senza Umanità ®

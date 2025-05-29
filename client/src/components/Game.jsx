@@ -13,9 +13,15 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     playedCards: [],
     roundWinner: null,
     gameWinner: null,
-    roundStatus: 'waiting', // waiting, playing, judging, roundEnd
+    roundStatus: 'waiting',
     selectedCard: null,
     hasPlayed: false
+  });
+  
+  // Nuovo stato per la selezione del giudice
+  const [judgeSelection, setJudgeSelection] = useState({
+    selectedIndex: null,
+    isConfirming: false
   });
   
   const socket = useSocket();
@@ -35,17 +41,21 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           ? prev.selectedCard 
           : null
       }));
+      
+      // Reset judge selection when round status changes
+      if (data.roundStatus !== 'judging') {
+        setJudgeSelection({ selectedIndex: null, isConfirming: false });
+      }
     });
 
     socket.on('update-hand', (hand) => {
-      console.log('Received update-hand (inspect card text here):', hand); // Added for debugging card text
+      console.log('Received update-hand (inspect card text here):', hand);
       setGameData(prev => ({
         ...prev,
         hand: hand
       }));
     });
     
-    // Ascolta la fine del gioco
     socket.on('game-over', ({ winner }) => {
       setGameData(prev => ({
         ...prev,
@@ -53,10 +63,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       }));
     });
     
-    // Cleanup
     return () => {
       socket.off('game-update');
-      socket.off('update-hand'); // Add this line
+      socket.off('update-hand');
       socket.off('game-over');
     };
   }, [socket]);
@@ -86,11 +95,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   const handleCardPlay = () => {
     console.log('handleCardPlay chiamata');
     console.log('gameData.selectedCard:', gameData.selectedCard);
-    console.log('gameData.roundStatus:', gameData.roundStatus);
-    console.log('gameData.hasPlayed:', gameData.hasPlayed);
-    console.log('isCurrentPlayerJudge():', isCurrentPlayerJudge());
     
-    // SOLUZIONE: usa questa condizione invece
     if (gameData.selectedCard === null || gameData.selectedCard === undefined) {
       console.log('Nessuna carta selezionata, uscita dalla funzione');
       return;
@@ -114,25 +119,48 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     console.log('hasPlayed impostato a true');
   };
   
-  const handleJudgeSelect = (cardIndex) => {
-    console.log('[CLIENT] handleJudgeSelect called with cardIndex:', cardIndex, 'Stato round:', gameData.roundStatus, 'È giudice:', isCurrentPlayerJudge());
-    console.log('[CLIENT] Current gameData.playedCards for judge:', JSON.stringify(gameData.playedCards));
-    if (gameData.playedCards && gameData.playedCards[cardIndex]) {
-      console.log('[CLIENT] Selected card content:', JSON.stringify(gameData.playedCards[cardIndex]));
-    } else {
-      console.log('[CLIENT] Selected cardIndex is out of bounds or playedCards is not yet populated.');
-    }
-
+  // Nuova funzione per la selezione del giudice con conferma
+  const handleJudgeCardSelect = (cardIndex) => {
+    console.log('[CLIENT] handleJudgeCardSelect called with cardIndex:', cardIndex);
+    
     if (gameData.roundStatus !== 'judging' || !isCurrentPlayerJudge()) {
-      console.log('[CLIENT] handleJudgeSelect: Conditions not met, exiting.');
+      console.log('[CLIENT] handleJudgeCardSelect: Conditions not met, exiting.');
       return;
     }
     
-    console.log('[CLIENT] Emitting judge-select with:', { roomCode, cardIndex });
+    // Se la stessa carta è già selezionata, deseleziona
+    if (judgeSelection.selectedIndex === cardIndex) {
+      setJudgeSelection({ selectedIndex: null, isConfirming: false });
+      return;
+    }
+    
+    // Seleziona la nuova carta
+    setJudgeSelection({ selectedIndex: cardIndex, isConfirming: false });
+    console.log('[CLIENT] Card selected for judge review:', cardIndex);
+  };
+  
+  // Funzione per confermare la selezione del giudice
+  const handleJudgeConfirm = () => {
+    if (judgeSelection.selectedIndex === null) return;
+    
+    console.log('[CLIENT] Judge confirming selection of cardIndex:', judgeSelection.selectedIndex);
+    console.log('[CLIENT] Current gameData.playedCards for judge:', JSON.stringify(gameData.playedCards));
+    
+    if (gameData.playedCards && gameData.playedCards[judgeSelection.selectedIndex]) {
+      console.log('[CLIENT] Selected card content:', JSON.stringify(gameData.playedCards[judgeSelection.selectedIndex]));
+    }
+    
+    setJudgeSelection(prev => ({ ...prev, isConfirming: true }));
+    
     socket.emit('judge-select', {
       roomCode,
-      cardIndex
+      cardIndex: judgeSelection.selectedIndex
     });
+  };
+  
+  // Funzione per annullare la selezione
+  const handleJudgeCancel = () => {
+    setJudgeSelection({ selectedIndex: null, isConfirming: false });
   };
   
   const handleLeaveGame = () => {
@@ -143,7 +171,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   const handleNextRound = () => {
     if (gameData.roundStatus !== 'roundEnd' || !isCurrentPlayerJudge()) return;
     
-    socket.emit('start-new-round', { roomCode }); // MODIFICATO: da 'next-round' a 'start-new-round'
+    socket.emit('start-new-round', { roomCode });
   };
   
   const isCurrentPlayerJudge = () => {
@@ -171,6 +199,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     
     if (gameData.roundStatus === 'judging') {
       if (isCurrentPlayerJudge()) {
+        if (judgeSelection.selectedIndex !== null) {
+          return 'Carta selezionata! Conferma la tua scelta o seleziona un\'altra carta.';
+        }
         return 'Sei il giudice. Scegli la carta bianca più divertente.';
       }
       return 'Il giudice sta scegliendo la carta vincente...';
@@ -195,7 +226,6 @@ const Game = ({ roomCode, nickname, setGameState }) => {
 
   return (
     <div className="container mx-auto px-4 py-6 flex flex-col min-h-screen relative">
-      {/* Adjusted positioning for ThemeToggle and Esci button */}
       <div className="absolute top-4 right-4 flex items-center space-x-2">
         <ThemeToggle />
         <button 
@@ -206,11 +236,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         </button>
       </div>
       
-      <div className="flex justify-between items-center mb-4 pt-16"> {/* Added pt-16 to prevent overlap with absolute positioned elements */}
+      <div className="flex justify-between items-center mb-4 pt-16">
         <h1 className="text-2xl font-bold">Carte Senza Umanità</h1>
         <div>
           <span className="mr-4">Stanza: {roomCode}</span>
-          {/* Esci button moved to top right with ThemeToggle */}
         </div>
       </div>
       
@@ -250,19 +279,57 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           {gameData.roundStatus === 'judging' && (
             <div>
               <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
-              {/* Log l'array delle carte giocate quando vengono renderizzate per il giudice */}
               {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {gameData.playedCards.map((playedCardObject, index) => ( // Renamed 'cardText' to 'playedCardObject'
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                {gameData.playedCards.map((playedCardObject, index) => (
                   <Card 
                     key={index}
                     type="white" 
-                    text={playedCardObject.card} // CHANGED: Pass the 'card' property of the object
-                    onClick={isCurrentPlayerJudge() ? () => handleJudgeSelect(index) : undefined}
-                    isSelectable={isCurrentPlayerJudge()} 
+                    text={playedCardObject.card}
+                    onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
+                    isSelectable={isCurrentPlayerJudge()}
+                    isSelected={judgeSelection.selectedIndex === index}
+                    isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
                   />
                 ))}
               </div>
+              
+              {/* Pannello di controllo per il giudice */}
+              {isCurrentPlayerJudge() && (
+                <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                  {judgeSelection.selectedIndex !== null ? (
+                    <div className="flex flex-col items-center space-y-3">
+                      <p className="text-center font-medium">
+                        Hai selezionato la carta #{judgeSelection.selectedIndex + 1}
+                      </p>
+                      <div className="flex space-x-3">
+                        <button 
+                          onClick={handleJudgeConfirm}
+                          disabled={judgeSelection.isConfirming}
+                          className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                            judgeSelection.isConfirming 
+                              ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                              : 'bg-green-600 hover:bg-green-700 text-white'
+                          }`}
+                        >
+                          {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma Scelta'}
+                        </button>
+                        <button 
+                          onClick={handleJudgeCancel}
+                          disabled={judgeSelection.isConfirming}
+                          className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50"
+                        >
+                          Annulla
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-center text-gray-600 dark:text-gray-300">
+                      Clicca su una carta per selezionarla
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
           
@@ -271,14 +338,13 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               <h2 className="text-lg font-medium mb-2">Carta Vincente</h2>
               <div className="flex flex-col items-center">
                 <p className="mb-2 text-center">
-                  {/* Trova il nickname del vincitore del round */} 
                   <span className="font-bold">
                     {gameData.players.find(p => p.id === gameData.roundWinner)?.nickname || 'Giocatore Sconosciuto'}
                   </span> ha vinto questo round!
                 </p>
                 <Card 
                   type="white" 
-                  text={gameData.winningCardText} // USA LA NUOVA PROPRIETÀ
+                  text={gameData.winningCardText}
                   isWinner={true}
                 />
                 
@@ -332,7 +398,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                     <Card 
                       key={index}
                       type="white" 
-                      text={card} // MODIFICATO DA card.text A card
+                      text={card}
                       onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
                       selected={gameData.selectedCard === index}
                     />
@@ -340,13 +406,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
               ) : (
                 <p className="text-gray-500 dark:text-gray-400">
-                  {/* Message when hand is empty */}
                   Nessuna carta in mano. Attendi la distribuzione.
                 </p>
               )}
             </div>
           )}
-          {/* REMOVED DUPLICATE HAND RENDERING BLOCK */}
         </div>
       </div>
     </div>
