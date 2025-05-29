@@ -182,10 +182,16 @@ export class Room {
   }
   
   getPlayedCards() {
-    // Restituisci le carte giocate in ordine casuale per non rivelare chi ha giocato cosa
-    return this.shufflePlayedCards(); // shufflePlayedCards returns a shuffled copy of this.playedCards
+    // Se siamo in fase di giudizio o il round è finito, usa l'ordine già mescolato
+    if (this.shuffledPlayedCards && (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd')) {
+      console.log(`[Room ${this.roomCode}] Returning cached shuffled cards:`, JSON.stringify(this.shuffledPlayedCards));
+      return this.shuffledPlayedCards;
+    }
+    
+    // Altrimenti restituisci le carte in ordine originale (per debug o altri scopi)
+    return [...this.playedCards];
   }
-  
+
   shufflePlayedCards() {
     console.log(`[SERVER Room ${this.roomCode}] shufflePlayedCards: Original playedCards before shuffle:`, JSON.stringify(this.playedCards));
     const cards = [...this.playedCards]; // Each element is { playerId, card }
@@ -197,10 +203,21 @@ export class Room {
     console.log(`[SERVER Room ${this.roomCode}] shufflePlayedCards: Shuffled cards:`, JSON.stringify(cards));
     return cards; // Returns an array of { playerId, card }
   }
-  
+
   setRoundStatus(status) {
     this.roundStatus = status;
     console.log(`[Room ${this.roomCode}] Round status set to: ${status}`);
+    
+    // Quando inizia la fase di giudizio, mescola le carte una sola volta
+    if (status === 'judging') {
+      this.shuffledPlayedCards = this.shufflePlayedCards();
+      console.log(`[Room ${this.roomCode}] Cards shuffled for judging phase:`, JSON.stringify(this.shuffledPlayedCards));
+    }
+    
+    // Reset quando inizia un nuovo round
+    if (status === 'playing') {
+      this.shuffledPlayedCards = null;
+    }
   }
 
   awardPointToPlayer(playerId) {
@@ -235,9 +252,9 @@ export class Room {
       return { success: false, error: 'Non è il momento di giudicare (controllo interno Room).' };
     }
 
-    // Get the list of cards as displayed to the judge (shuffled)
-    const displayedPlayedCards = this.getPlayedCards(); // this calls shufflePlayedCards which now has logs
-    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: displayedPlayedCards (shuffled for judge):`, JSON.stringify(displayedPlayedCards));
+    // Usa le carte mescolate memorizzate invece di chiamare getPlayedCards() che rimescolerebbe
+    const displayedPlayedCards = this.shuffledPlayedCards || this.playedCards;
+    console.log(`[SERVER Room ${this.roomCode}] processJudgeSelection: displayedPlayedCards (cached shuffled):`, JSON.stringify(displayedPlayedCards));
 
     if (selectedCardIndex < 0 || selectedCardIndex >= displayedPlayedCards.length) {
       console.error(`[SERVER Room ${this.roomCode}] processJudgeSelection: Invalid selectedCardIndex: ${selectedCardIndex} for displayedPlayedCards length: ${displayedPlayedCards.length}`);
