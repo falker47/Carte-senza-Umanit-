@@ -419,47 +419,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
               </div>
               
-              {/* Indicatore di scroll */}
-              <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />
-                </svg>
-                Scorri per vedere tutte le carte
-              </div>
-              
-              {/* Contenitore scrollabile per le carte - VERSIONE FINALE */}
-              <div className="flex-1 relative">
-                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 300px)' }}>
-                  <div className="space-y-3 pr-2">
-                    {gameData.hand && gameData.hand.length > 0 ? (
-                      gameData.hand.map((card, index) => (
-                        <Card 
-                          key={index}
-                          type="white" 
-                          text={card}
-                          onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
-                          isSelectable={!gameData.hasPlayed}
-                          isSelected={handSelection.selectedIndex === index}
-                          isPending={handSelection.selectedIndex === index && handSelection.isConfirming}
-                        />
-                      ))
-                    ) : (
-                      <p className="text-gray-500 dark:text-gray-400">
-                        Nessuna carta in mano. Attendi la distribuzione.
-                      </p>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Gradiente condizionale */}
-                {gameData.hand && gameData.hand.length > 3 && (
-                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none opacity-75"></div>
-                )}
-              </div>
-              
-              {/* Pannello di controllo per la selezione della carta */}
+              {/* Pannello di controllo per la selezione della carta - SPOSTATO IN ALTO */}
               {handSelection.selectedIndex !== null && !gameData.hasPlayed && (
-                <div className="mt-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                   <div className="flex flex-col items-center space-y-3">
                     <p className="text-center font-medium text-sm">
                       Carta #{handSelection.selectedIndex + 1} selezionata
@@ -487,6 +449,44 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   </div>
                 </div>
               )}
+              
+              {/* Indicatore di scroll */}
+              <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />
+                </svg>
+                Scorri per vedere tutte le carte
+              </div>
+              
+              {/* Contenitore scrollabile per le carte */}
+              <div className="flex-1 relative">
+                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                  <div className="space-y-3 pr-2">
+                    {gameData.hand && gameData.hand.length > 0 ? (
+                      gameData.hand.map((card, index) => (
+                        <Card 
+                          key={index}
+                          type="white" 
+                          text={card}
+                          onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
+                          isSelectable={!gameData.hasPlayed}
+                          isSelected={handSelection.selectedIndex === index}
+                          isPending={handSelection.selectedIndex === index && handSelection.isConfirming}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400">
+                        Nessuna carta in mano. Attendi la distribuzione.
+                      </p>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Gradiente condizionale */}
+                {gameData.hand && gameData.hand.length > 3 && (
+                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none opacity-75"></div>
+                )}
+              </div>
             </div>
           )}
         </div>
