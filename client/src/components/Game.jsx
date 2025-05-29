@@ -131,6 +131,48 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     setHandSelection({ selectedIndex: null, isConfirming: false });
   };
   
+  // FUNZIONE MANCANTE - Gestione selezione carta del giudice
+  const handleJudgeCardSelect = (cardIndex) => {
+    console.log('handleJudgeCardSelect chiamata con cardIndex:', cardIndex);
+    console.log('gameData.roundStatus:', gameData.roundStatus);
+    console.log('isCurrentPlayerJudge():', isCurrentPlayerJudge());
+    
+    if (gameData.roundStatus !== 'judging') {
+      console.log('Non è il momento di giudicare');
+      return;
+    }
+    
+    if (!isCurrentPlayerJudge()) {
+      console.log('Il giocatore non è il giudice');
+      return;
+    }
+    
+    console.log('Carta del giudice selezionata:', cardIndex);
+    setJudgeSelection({
+      selectedIndex: cardIndex,
+      isConfirming: false
+    });
+  };
+  
+  // Funzione per confermare la selezione del giudice
+  const handleJudgeConfirm = () => {
+    if (judgeSelection.selectedIndex === null || judgeSelection.isConfirming) {
+      return;
+    }
+    
+    setJudgeSelection(prev => ({ ...prev, isConfirming: true }));
+    
+    socket.emit('judge-select', {
+      roomCode,
+      cardIndex: judgeSelection.selectedIndex
+    });
+  };
+  
+  // Funzione per annullare la selezione del giudice
+  const handleJudgeCancel = () => {
+    setJudgeSelection({ selectedIndex: null, isConfirming: false });
+  };
+  
   const handleCardPlay = () => {
     console.log('handleCardPlay chiamata');
     console.log('gameData.selectedCard:', gameData.selectedCard);
