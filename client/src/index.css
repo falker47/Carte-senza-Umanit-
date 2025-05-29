@@ -190,3 +190,26 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Stili per il footer mobile - assicura che sia sempre visibile */
+@media (max-width: 1023px) {
+  .mobile-footer-visible {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 60 !important; /* Più alto del pannello mobile (z-50) */
+    transform: none !important;
+  }
+  
+  /* Spazio per il footer quando c'è il pannello mobile */
+  .mobile-game-content {
+    padding-bottom: 140px !important; /* Spazio per footer + pannello mobile */
+  }
+  
+  /* Posiziona il pannello mobile sopra il contenuto ma sotto il footer */
+  .mobile-control-panel {
+    bottom: 40px !important; /* Altezza del footer */
+    z-index: 50 !important;
+  }
+}

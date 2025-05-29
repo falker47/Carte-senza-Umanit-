@@ -429,7 +429,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   
                   {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO CON DIMENSIONI FISSE */}
                   {isCurrentPlayerJudge() && (
-                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed" style={{ minHeight: '120px' }}>
+                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed hidden lg:block" style={{ minHeight: '120px' }}>
                       <div className="flex flex-col items-center justify-center h-full space-y-3">
                         {judgeSelection.selectedIndex !== null ? (
                           <>
@@ -524,7 +524,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               </div>
               
               {/* Pannello di controllo per la selezione della carta - SEMPRE VISIBILE SU PC/TABLET CON DIMENSIONI FISSE */}
-              <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed" style={{ minHeight: '120px' }}>
+              <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed hidden lg:block" style={{ minHeight: '120px' }}>
                 <div className="flex flex-col items-center justify-center h-full space-y-3">
                   {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
                     <>

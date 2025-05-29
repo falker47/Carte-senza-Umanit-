@@ -127,7 +127,7 @@ const App = () => {
           <main className="flex-grow pb-16"> {/* Aggiunto pb-16 per il footer fisso */}
             {renderContent()}
           </main>
-          <AppFooter />
+          <AppFooter /> {/* <-- ADD THE FOOTER COMPONENT HERE */}
         </div>
       </SocketProvider>
     </ThemeProvider>
