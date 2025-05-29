@@ -311,23 +311,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             <div>
               <h2 className="text-lg font-medium mb-2">Carte Giocate</h2>
               {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {gameData.playedCards.map((playedCardObject, index) => (
-                  <Card 
-                    key={index}
-                    type="white" 
-                    text={playedCardObject.card}
-                    onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
-                    isSelectable={isCurrentPlayerJudge()}
-                    isSelected={judgeSelection.selectedIndex === index}
-                    isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
-                  />
-                ))}
-              </div>
               
-              {/* Pannello di controllo per il giudice */}
+              {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO */}
               {isCurrentPlayerJudge() && (
-                <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                   {judgeSelection.selectedIndex !== null ? (
                     <div className="flex flex-col items-center space-y-3">
                       <p className="text-center font-medium">
@@ -361,6 +348,20 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   )}
                 </div>
               )}
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {gameData.playedCards.map((playedCardObject, index) => (
+                  <Card 
+                    key={index}
+                    type="white" 
+                    text={playedCardObject.card}
+                    onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
+                    isSelectable={isCurrentPlayerJudge()}
+                    isSelected={judgeSelection.selectedIndex === index}
+                    isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
+                  />
+                ))}
+              </div>
             </div>
           )}
           
@@ -419,36 +420,50 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
               </div>
               
-              {/* Pannello di controllo per la selezione della carta - SPOSTATO IN ALTO */}
-              {handSelection.selectedIndex !== null && !gameData.hasPlayed && (
-                <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                  <div className="flex flex-col items-center space-y-3">
-                    <p className="text-center font-medium text-sm">
-                      Carta #{handSelection.selectedIndex + 1} selezionata
-                    </p>
-                    <div className="flex space-x-2">
-                      <button 
-                        onClick={handleCardConfirm}
-                        disabled={handSelection.isConfirming}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
-                          handSelection.isConfirming 
-                            ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                            : 'bg-green-600 hover:bg-green-700 text-white'
-                        }`}
-                      >
-                        {handSelection.isConfirming ? 'Giocando...' : 'Gioca Carta'}
-                      </button>
-                      <button 
-                        onClick={handleCardCancel}
-                        disabled={handSelection.isConfirming}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
-                      >
-                        Annulla
-                      </button>
+              {/* Pannello di controllo per la selezione della carta - SEMPRE VISIBILE SU PC/TABLET */}
+              <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="flex flex-col items-center space-y-3">
+                  {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
+                    <>
+                      <p className="text-center font-medium text-sm">
+                        Carta #{handSelection.selectedIndex + 1} selezionata
+                      </p>
+                      <div className="flex space-x-2">
+                        <button 
+                          onClick={handleCardConfirm}
+                          disabled={handSelection.isConfirming}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                            handSelection.isConfirming 
+                              ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                              : 'bg-green-600 hover:bg-green-700 text-white'
+                          }`}
+                        >
+                          {handSelection.isConfirming ? 'Giocando...' : 'Gioca Carta'}
+                        </button>
+                        <button 
+                          onClick={handleCardCancel}
+                          disabled={handSelection.isConfirming}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                        >
+                          Annulla
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center">
+                      {gameData.hasPlayed ? (
+                        <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                          ✓ Carta giocata! Attendi gli altri giocatori
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          Seleziona una carta dalla tua mano
+                        </p>
+                      )}
                     </div>
-                  </div>
+                  )}
                 </div>
-              )}
+              </div>
               
               {/* Indicatore di scroll */}
               <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
@@ -460,7 +475,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               
               {/* Contenitore scrollabile per le carte */}
               <div className="flex-1 relative">
-                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 400px)' }}>
                   <div className="space-y-3 pr-2">
                     {gameData.hand && gameData.hand.length > 0 ? (
                       gameData.hand.map((card, index) => (
