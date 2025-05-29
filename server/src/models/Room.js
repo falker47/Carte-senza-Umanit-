@@ -19,6 +19,7 @@ export class Room {
     this.roundWinner = null; // playerId of the winner of the current round
     this.gameWinner = null; // player object of the game winner
     this.gameOver = false;
+    this.shuffledPlayedCards = null; // Aggiungi questa proprietà per memorizzare l'ordine mescolato
   }
 
   isFull() {
@@ -181,6 +182,22 @@ export class Room {
     return shuffled;
   }
   
+  setRoundStatus(status) {
+    this.roundStatus = status;
+    console.log(`[Room ${this.roomCode}] Round status set to: ${status}`);
+    
+    // Quando inizia la fase di giudizio, mescola le carte una sola volta
+    if (status === 'judging') {
+      this.shuffledPlayedCards = this.shufflePlayedCards();
+      console.log(`[Room ${this.roomCode}] Cards shuffled for judging phase:`, JSON.stringify(this.shuffledPlayedCards));
+    }
+    
+    // Reset quando inizia un nuovo round
+    if (status === 'playing') {
+      this.shuffledPlayedCards = null;
+    }
+  }
+
   getPlayedCards() {
     // Se siamo in fase di giudizio o il round è finito, usa l'ordine già mescolato
     if (this.shuffledPlayedCards && (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd')) {
@@ -202,22 +219,6 @@ export class Room {
     }
     console.log(`[SERVER Room ${this.roomCode}] shufflePlayedCards: Shuffled cards:`, JSON.stringify(cards));
     return cards; // Returns an array of { playerId, card }
-  }
-
-  setRoundStatus(status) {
-    this.roundStatus = status;
-    console.log(`[Room ${this.roomCode}] Round status set to: ${status}`);
-    
-    // Quando inizia la fase di giudizio, mescola le carte una sola volta
-    if (status === 'judging') {
-      this.shuffledPlayedCards = this.shufflePlayedCards();
-      console.log(`[Room ${this.roomCode}] Cards shuffled for judging phase:`, JSON.stringify(this.shuffledPlayedCards));
-    }
-    
-    // Reset quando inizia un nuovo round
-    if (status === 'playing') {
-      this.shuffledPlayedCards = null;
-    }
   }
 
   awardPointToPlayer(playerId) {
