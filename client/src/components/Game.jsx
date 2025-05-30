@@ -409,6 +409,22 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             </div>
           ) : (
             <>
+              {/* Banner Giudice */}
+              {isCurrentPlayerJudge() && (
+                <div className="mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg shadow-lg border-2 border-yellow-400">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className="text-xl">⚖️</span>
+                    <span className="font-bold text-base lg:text-lg">
+                      Sei il GIUDICE di questo turno!
+                    </span>
+                    <span className="text-xl">⚖️</span>
+                  </div>
+                  <p className="text-center text-sm mt-2 opacity-90">
+                    Attendi che tutti i giocatori giochino le loro carte, poi scegli quella vincente
+                  </p>
+                </div>
+              )}
+              
               {/* Mostra la carta nera solo se il gioco non è finito */}
               {gameData.blackCard && (
                 <div className="mb-4">

@@ -14,11 +14,10 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
   const cardClasses = `
     ${type === 'black' ? 'bg-black text-white' : 'bg-white text-gray-800'}
     ${isWinner ? 'border-4 border-green-500 shadow-green-500/50 shadow-xl' : 'border-2 border-gray-300'}
-    ${isSelected ? 'ring-4 ring-blue-500 shadow-blue-500/50 shadow-xl border-blue-400' : ''}
-    ${isPending ? 'ring-4 ring-yellow-500 shadow-yellow-500/50 shadow-xl border-yellow-400 animate-pulse' : ''}
-    ${isSelectable && type === 'white' ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105' : ''}
+    ${isSelected ? 'border-4 border-blue-500 shadow-blue-500/50 shadow-lg' : ''}
+    ${isPending ? 'border-4 border-yellow-500 shadow-yellow-500/50 shadow-lg animate-pulse' : ''}
+    ${isSelectable && type === 'white' ? 'cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out' : ''}
     p-3 rounded-lg shadow-lg min-h-[140px] max-h-[200px] flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
-    ${isSelected || isPending ? 'transform scale-105' : ''}
   `;
 
   const textClasses = `
