@@ -124,7 +124,7 @@ const App = () => {
     <ThemeProvider value={{ darkMode, toggleTheme }}>
       <SocketProvider value={socket}>
         <div className="min-h-screen bg-texture text-gray-900 dark:text-white transition-colors duration-200 flex flex-col">
-          <main className="flex-grow pb-16"> {/* Aggiunto pb-16 per il footer fisso */}
+          <main className="flex-grow pb-0"> {/* Ridotto da pb-16 a pb-0 per eliminare lo spazio eccessivo */}
             {renderContent()}
           </main>
           <AppFooter /> {/* <-- ADD THE FOOTER COMPONENT HERE */}
