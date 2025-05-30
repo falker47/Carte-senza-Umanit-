@@ -65,7 +65,7 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                   )}
                   {/* Tag "Giudice" - dopo il tag "Tu" se entrambi presenti */}
                   {isJudge && (
-                    <span className="ml-2 text-xs bg-yellow-500 text-white px-2 py-1 rounded-full font-medium">
+                    <span className="ml-2 text-xs text-white px-2 py-1 rounded-full font-medium" style={{backgroundColor: '#db571a'}}>
                       Giudice
                     </span>
                   )}
