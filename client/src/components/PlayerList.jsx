@@ -23,16 +23,6 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
     }
   };
 
-  // Funzione per ottenere lo stile della posizione
-  const getPositionStyle = (position) => {
-    switch (position) {
-      case 1: return 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg';
-      case 2: return 'bg-gradient-to-r from-gray-300 to-gray-500 text-white shadow-md';
-      case 3: return 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md';
-      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
-    }
-  };
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
       <h2 className="text-lg font-medium mb-4 flex items-center">
@@ -54,12 +44,11 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                 ${position <= 3 ? 'shadow-md' : 'shadow-sm'}
               `}
             >
-              {/* Posizione */}
-              <div className={`
-                flex items-center justify-center w-10 h-10 rounded-full font-bold text-sm mr-3
-                ${getPositionStyle(position)}
-              `}>
-                {position <= 3 ? getPositionIcon(position) : position}
+              {/* Posizione - solo emoji/numero senza sfondo */}
+              <div className="flex items-center justify-center w-10 h-10 mr-3 text-2xl font-bold">
+                {position <= 3 ? getPositionIcon(position) : (
+                  <span className="text-lg text-gray-600 dark:text-gray-400">{position}°</span>
+                )}
               </div>
               
               {/* Informazioni giocatore */}
@@ -68,14 +57,21 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                   <span className={`font-medium ${position === 1 ? 'text-yellow-600 dark:text-yellow-400' : ''}`}>
                     {player.nickname}
                   </span>
+                  {/* Tag "Tu" */}
                   {isCurrentPlayer && (
                     <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-1 rounded-full font-medium">
                       Tu
                     </span>
                   )}
+                  {/* Tag "Giudice" - dopo il tag "Tu" se entrambi presenti */}
+                  {isJudge && (
+                    <span className="ml-2 text-xs bg-yellow-500 text-white px-2 py-1 rounded-full font-medium">
+                      Giudice
+                    </span>
+                  )}
                 </div>
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   {/* Punteggio */}
                   <div className={`
                     flex items-center px-3 py-1 rounded-full text-sm font-bold
@@ -86,13 +82,6 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                   `}>
                     {score} pt
                   </div>
-                  
-                  {/* Tag Giudice */}
-                  {isJudge && (
-                    <span className="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full font-medium flex items-center">
-                      ⚖️ Giudice
-                    </span>
-                  )}
                 </div>
               </div>
               
