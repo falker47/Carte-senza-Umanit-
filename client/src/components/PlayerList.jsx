@@ -29,9 +29,9 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
         🏆 <span className="ml-2">Classifica ({players.length})</span>
       </h2>
       
-      {/* Container scrollabile con altezza fissa e padding interno per evitare contenuto tagliato */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-        <div className="space-y-2 pr-2">
+      {/* Container scrollabile con padding su tutti i lati per evitare taglio */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent px-1">
+        <div className="space-y-2 px-1 py-1">
           {sortedPlayers.map((player, index) => {
             const position = index + 1;
             const isCurrentPlayer = player.nickname === nickname;
