@@ -205,13 +205,15 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
                   <select
                     id="maxPoints"
                     className="input w-full"
-                    value={gameSettings.maxPoints}
+                    value={[3, 5, 7, 10].includes(gameSettings.maxPoints) ? gameSettings.maxPoints : 'custom'}
                     onChange={(e) => handleSettingChange('maxPoints', e.target.value)}
                   >
                     {[3, 5, 7, 10].map(value => (
                       <option key={value} value={value}>{value}</option>
                     ))}
-                    <option value="custom">Custom</option>
+                    <option value="custom">
+                      {[3, 5, 7, 10].includes(gameSettings.maxPoints) ? 'Custom' : `Custom (${gameSettings.maxPoints})`}
+                    </option>
                   </select>
                 ) : (
                   <div className="flex gap-2">

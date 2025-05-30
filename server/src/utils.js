@@ -1,11 +1,28 @@
-// Genera un codice stanza casuale di 6 caratteri
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let paroleItaliane = null;
+
+// Genera un codice stanza casuale con parola italiana di 5 lettere
 export const generateRoomCode = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Solo lettere
-  let result = '';
-  for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  if (!paroleItaliane) {
+    try {
+      const filePath = path.join(__dirname, '..', 'data', 'parole.json');
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      paroleItaliane = JSON.parse(fileContent);
+      console.log(`Caricate ${paroleItaliane.length} parole italiane per i codici stanza`);
+    } catch (error) {
+      console.error('Errore nel caricamento delle parole italiane:', error);
+      // Fallback a generazione semplice
+      return Math.floor(1000 + Math.random() * 9000).toString();
+    }
   }
-  return result;
+  
+  return paroleItaliane[Math.floor(Math.random() * paroleItaliane.length)];
 };
 
 // Mescola un array usando l'algoritmo Fisher-Yates
