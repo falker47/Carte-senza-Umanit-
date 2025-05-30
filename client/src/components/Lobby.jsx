@@ -122,7 +122,7 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
 
       <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-fade-in">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Lobby</h1>
+          <h1 className="text-2xl font-bold">CARTE SENZA UMANITÀ</h1>
           <div className="flex items-center space-x-2">
             {roomCode ? (
               <>
