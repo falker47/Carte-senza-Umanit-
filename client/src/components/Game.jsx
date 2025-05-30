@@ -668,8 +668,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       
       {/* Footer sticky per mobile - pannello di controllo giudice */}
       {isCurrentPlayerJudge() && gameData.roundStatus === 'judging' && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-3 z-50">
-          <div className="control-panel-fixed" style={{ minHeight: '50px' }}>
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-2 z-50">
+          <div className="control-panel-fixed" style={{ minHeight: '40px' }}>
             <div className="flex flex-col items-center justify-center h-full">
               {judgeSelection.selectedIndex !== null ? (
                 <div className="flex space-x-2">
