@@ -12,6 +12,8 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
     maxPlayers: 10,
     handSize: 7
   });
+  const [customPoints, setCustomPoints] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
   const socket = useSocket();
 
   useEffect(() => {
@@ -108,10 +110,34 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   };
 
   const handleSettingChange = (setting, value) => {
+    if (setting === 'maxPoints' && value === 'custom') {
+      setShowCustomInput(true);
+      return;
+    }
+    
     setGameSettings(prev => ({
       ...prev,
       [setting]: parseInt(value, 10)
     }));
+    
+    if (setting === 'maxPoints' && value !== 'custom') {
+      setShowCustomInput(false);
+      setCustomPoints('');
+    }
+  };
+
+  const handleCustomPointsSubmit = () => {
+    const points = parseInt(customPoints, 10);
+    if (points && points > 0 && points <= 50) {
+      setGameSettings(prev => ({
+        ...prev,
+        maxPoints: points
+      }));
+      setShowCustomInput(false);
+      setCustomPoints('');
+    } else {
+      setError('Inserisci un numero valido tra 1 e 50');
+    }
   };
 
   return (
@@ -172,32 +198,49 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
         {isHost && (
           <div className="mb-6">
             <h2 className="text-lg font-medium mb-3">Impostazioni</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="maxPoints" className="block text-sm font-medium mb-2">Punti per vincere</label>
-                <select
-                  id="maxPoints"
-                  className="input w-full"
-                  value={gameSettings.maxPoints}
-                  onChange={(e) => handleSettingChange('maxPoints', e.target.value)}
-                >
-                  {[3, 5, 7, 10, 15].map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="maxPlayers" className="block text-sm font-medium mb-2">Giocatori max</label>
-                <select
-                  id="maxPlayers"
-                  className="input w-full"
-                  value={gameSettings.maxPlayers}
-                  onChange={(e) => handleSettingChange('maxPlayers', e.target.value)}
-                >
-                  {[4, 6, 8, 10].map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
-                </select>
+                {!showCustomInput ? (
+                  <select
+                    id="maxPoints"
+                    className="input w-full"
+                    value={gameSettings.maxPoints}
+                    onChange={(e) => handleSettingChange('maxPoints', e.target.value)}
+                  >
+                    {[3, 5, 7, 10].map(value => (
+                      <option key={value} value={value}>{value}</option>
+                    ))}
+                    <option value="custom">Custom</option>
+                  </select>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      className="input flex-1"
+                      placeholder="Inserisci punti"
+                      value={customPoints}
+                      onChange={(e) => setCustomPoints(e.target.value)}
+                      min="1"
+                      max="50"
+                    />
+                    <button
+                      onClick={handleCustomPointsSubmit}
+                      className="btn btn-primary px-3"
+                    >
+                      OK
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowCustomInput(false);
+                        setCustomPoints('');
+                      }}
+                      className="btn btn-secondary px-3"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
               <div>
                 <label htmlFor="handSize" className="block text-sm font-medium mb-2">Carte in mano</label>
@@ -216,21 +259,20 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
           </div>
         )}
 
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <button
             onClick={handleLeaveRoom}
             className="btn btn-secondary"
           >
-            Esci dalla stanza
+            ESCI DALLA STANZA
           </button>
-
           {isHost && (
             <button
               onClick={handleStartGame}
               className="btn btn-primary"
               disabled={players.length < 3}
             >
-              Inizia Partita
+              INIZIA PARTITA
             </button>
           )}
         </div>
