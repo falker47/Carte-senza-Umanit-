@@ -54,13 +54,61 @@ const App = () => {
       console.error('❌ Errore di connessione Socket.io:', error.message, 'URL:', serverUrl);
     });
 
+    // Modifica la gestione della disconnessione
     newSocket.on('disconnect', (reason) => {
       console.log('Disconnesso dal server:', reason);
-      // Potresti voler gestire la logica di riconnessione o lo stato UI qui
+      
+      // Salva lo stato della partita nel localStorage per la riconnessione
+      const currentGame = {
+        roomCode: localStorage.getItem('currentRoomCode'),
+        nickname: localStorage.getItem('currentNickname'),
+        isInGame: localStorage.getItem('isInGame') === 'true'
+      };
+      
+      if (currentGame.roomCode && currentGame.nickname && currentGame.isInGame) {
+        localStorage.setItem('pendingReconnection', JSON.stringify(currentGame));
+      }
     });
 
     newSocket.on('reconnect', (attemptNumber) => {
       console.log('Riconnesso dopo', attemptNumber, 'tentativi');
+      
+      // Tenta di riconnettersi alla partita se c'era una partita in corso
+      const pendingReconnection = localStorage.getItem('pendingReconnection');
+      if (pendingReconnection) {
+        const gameData = JSON.parse(pendingReconnection);
+        
+        console.log('Tentativo di riconnessione alla partita:', gameData);
+        newSocket.emit('reconnect-to-game', {
+          nickname: gameData.nickname,
+          roomCode: gameData.roomCode
+        });
+        
+        localStorage.removeItem('pendingReconnection');
+      }
+    });
+
+    // Aggiungi gestori per la riconnessione
+    newSocket.on('reconnected-to-game', () => {
+      console.log('Riconnesso alla partita con successo!');
+      // Il client dovrebbe già essere nella vista Game.jsx
+    });
+
+    newSocket.on('reconnection-failed', ({ message }) => {
+      console.log('Riconnessione fallita:', message);
+      // Reindirizza alla home
+      localStorage.removeItem('currentRoomCode');
+      localStorage.removeItem('currentNickname');
+      localStorage.removeItem('isInGame');
+    });
+
+    newSocket.on('game-terminated', ({ reason, hostLeft }) => {
+      alert(`Partita terminata: ${reason}`);
+      // Reindirizza alla home
+      localStorage.removeItem('currentRoomCode');
+      localStorage.removeItem('currentNickname');
+      localStorage.removeItem('isInGame');
+      window.location.reload();
     });
 
     newSocket.on('reconnect_error', (error) => {

@@ -199,39 +199,87 @@ export class GameManager {
     }
   }
 
+  // Aggiungi questo metodo alla classe GameManager
+  reconnectPlayer(newSocketId, nickname, roomCode) {
+    const upperCaseRoomCode = roomCode.toUpperCase();
+    
+    if (!this.rooms[upperCaseRoomCode]) {
+      return { success: false, error: 'Stanza non trovata' };
+    }
+    
+    const room = this.rooms[upperCaseRoomCode];
+    
+    // Cerca un giocatore con lo stesso nickname
+    const existingPlayer = room.players.find(p => p.nickname === nickname);
+    
+    if (!existingPlayer) {
+      return { success: false, error: 'Giocatore non trovato nella partita' };
+    }
+    
+    // Aggiorna l'ID socket del giocatore
+    existingPlayer.id = newSocketId;
+    this.playerRooms[newSocketId] = upperCaseRoomCode;
+    
+    return {
+      success: true,
+      gameState: room.gameStarted ? room.getGameState() : null,
+      hand: existingPlayer.hand,
+      isGameStarted: room.gameStarted
+    };
+  }
+  
+  // Modifica il metodo handleDisconnect per gestire disconnessioni temporanee
   handleDisconnect(playerId) {
     const roomCode = this.playerRooms[playerId];
     if (!roomCode || !this.rooms[roomCode]) return [];
-
+  
     const room = this.rooms[roomCode];
-    const isHost = room.isHost(playerId);
-    const isGameStarted = room.gameStarted;
-
-    // Rimuovi il giocatore dalla stanza
-    room.removePlayer(playerId);
+    const player = room.players.find(p => p.id === playerId);
+    
+    if (!player) return [];
+    
+    // Invece di rimuovere immediatamente, marca il giocatore come disconnesso
+    player.disconnected = true;
+    player.disconnectedAt = Date.now();
+    
+    // Rimuovi dalla mappa playerRooms
     delete this.playerRooms[playerId];
-
-    // Se l'host è uscito o non ci sono abbastanza giocatori, termina il gioco
-    if (isHost || (isGameStarted && room.getPlayerCount() < 3)) {
-      // Se l'host è uscito, elimina la stanza
-      if (isHost) {
-        delete this.rooms[roomCode];
-      }
-
-      return [{
-        roomCode,
-        players: room.getPlayers(),
-        isGameOver: true,
-        hostLeft: isHost
-      }];
-    }
-
-    // Altrimenti, aggiorna la lista dei giocatori
+    
+    // Imposta un timeout per rimuovere definitivamente il giocatore dopo 30 secondi
+    setTimeout(() => {
+      this.handlePlayerTimeout(roomCode, player.nickname);
+    }, 30000); // 30 secondi di grazia
+    
     return [{
       roomCode,
       players: room.getPlayers(),
       isGameOver: false,
-      hostLeft: false
+      hostLeft: false,
+      playerDisconnected: player.nickname
     }];
+  }
+  
+  // Nuovo metodo per gestire il timeout
+  handlePlayerTimeout(roomCode, nickname) {
+    if (!this.rooms[roomCode]) return;
+    
+    const room = this.rooms[roomCode];
+    const player = room.players.find(p => p.nickname === nickname);
+    
+    // Se il giocatore è ancora disconnesso, rimuovilo definitivamente
+    if (player && player.disconnected) {
+      const isHost = room.isHost(player.id);
+      const isGameStarted = room.gameStarted;
+      
+      room.removePlayer(player.id);
+      
+      // Gestisci la rimozione come prima
+      if (isHost || (isGameStarted && room.getPlayerCount() < 3)) {
+        if (isHost) {
+          delete this.rooms[roomCode];
+        }
+        // Notifica che il gioco è terminato
+      }
+    }
   }
 }

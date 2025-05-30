@@ -194,9 +194,25 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     }));
   };
   
+  // Aggiungi questo useEffect per salvare lo stato
+  useEffect(() => {
+    if (roomCode && gameData?.players) {
+      const currentPlayer = gameData.players.find(p => p.id === socket?.id);
+      if (currentPlayer) {
+        localStorage.setItem('currentRoomCode', roomCode);
+        localStorage.setItem('currentNickname', currentPlayer.nickname);
+        localStorage.setItem('isInGame', 'true');
+      }
+    }
+  }, [roomCode, gameData, socket]);
+  
+  // Pulisci il localStorage quando si esce dal gioco
   const handleLeaveGame = () => {
+    localStorage.removeItem('currentRoomCode');
+    localStorage.removeItem('currentNickname');
+    localStorage.removeItem('isInGame');
     socket.emit('leave-room', { roomCode });
-    setGameState('home');
+    onLeave();
   };
   
   const handleNextRound = () => {
@@ -283,7 +299,14 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             nickname={nickname}
           />
           
-          <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <Leaderboard 
+            players={gameData.players} 
+            currentJudge={gameData.currentJudge}
+            nickname={nickname}
+          />
+          
+          {/* RIMUOVI QUESTA INTERNA SEZIONE */}
+          {/* <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <h2 className="text-lg font-medium mb-2">Stato del gioco</h2>
             <p className="text-gray-700 dark:text-gray-300 mb-2">
               <strong>Giudice:</strong> {getJudgeName()}
@@ -291,7 +314,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded">
               <p className="text-blue-800 dark:text-blue-200">{getStatusMessage()}</p>
             </div>
-          </div>
+          </div> */}
         </div>
         
         {/* Colonna centrale - Carta nera e carte giocate */}
