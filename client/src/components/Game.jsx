@@ -551,34 +551,29 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
                 
                 {/* Pannello di controllo compatto */}
-                <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '80px' }}>
-                  <div className="flex flex-col items-center justify-center h-full space-y-2">
+                <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '60px' }}>
+                  <div className="flex flex-col items-center justify-center h-full">
                     {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
-                      <>
-                        <p className="text-center font-medium text-sm">
-                          Carta #{handSelection.selectedIndex + 1} selezionata
-                        </p>
-                        <div className="flex space-x-2">
-                          <button 
-                            onClick={handleCardConfirm}
-                            disabled={handSelection.isConfirming}
-                            className={`px-3 py-1.5 rounded-lg font-medium transition-all text-sm ${
-                              handSelection.isConfirming 
-                                ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                                : 'bg-green-600 hover:bg-green-700 text-white'
-                            }`}
-                          >
-                            {handSelection.isConfirming ? 'Giocando...' : 'Gioca'}
-                          </button>
-                          <button 
-                            onClick={handleCardCancel}
-                            disabled={handSelection.isConfirming}
-                            className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
-                          >
-                            Annulla
-                          </button>
-                        </div>
-                      </>
+                      <div className="flex space-x-2">
+                        <button 
+                          onClick={handleCardConfirm}
+                          disabled={handSelection.isConfirming}
+                          className={`px-3 py-1.5 rounded-lg font-medium transition-all text-sm ${
+                            handSelection.isConfirming 
+                              ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                              : 'bg-blue-500 hover:bg-blue-600 text-white'
+                          }`}
+                        >
+                          {handSelection.isConfirming ? 'Confermando...' : 'Conferma'}
+                        </button>
+                        <button 
+                          onClick={handleCardCancel}
+                          disabled={handSelection.isConfirming}
+                          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                        >
+                          Annulla
+                        </button>
+                      </div>
                     ) : (
                       <div className="text-center">
                         {gameData.hasPlayed ? (
@@ -633,34 +628,29 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       {/* Footer sticky per mobile - pannello di controllo carte */}
       {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50">
-          <div className="control-panel-fixed" style={{ minHeight: '80px' }}>
-            <div className="flex flex-col items-center justify-center h-full space-y-2">
+          <div className="control-panel-fixed" style={{ minHeight: '60px' }}>
+            <div className="flex flex-col items-center justify-center h-full">
               {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
-                <>
-                  <p className="text-center font-medium text-sm">
-                    Carta #{handSelection.selectedIndex + 1} selezionata
-                  </p>
-                  <div className="flex space-x-2">
-                    <button 
-                      onClick={handleCardConfirm}
-                      disabled={handSelection.isConfirming}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
-                        handSelection.isConfirming 
-                          ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                          : 'bg-green-600 hover:bg-green-700 text-white'
-                      }`}
-                    >
-                      {handSelection.isConfirming ? 'Giocando...' : 'Gioca Carta'}
-                    </button>
-                    <button 
-                      onClick={handleCardCancel}
-                      disabled={handSelection.isConfirming}
-                      className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
-                    >
-                      Annulla
-                    </button>
-                  </div>
-                </>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={handleCardConfirm}
+                    disabled={handSelection.isConfirming}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                      handSelection.isConfirming 
+                        ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                  >
+                    {handSelection.isConfirming ? 'Confermando...' : 'Conferma'}
+                  </button>
+                  <button 
+                    onClick={handleCardCancel}
+                    disabled={handSelection.isConfirming}
+                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                  >
+                    Annulla
+                  </button>
+                </div>
               ) : (
                 <div className="text-center">
                   {gameData.hasPlayed ? (
@@ -682,34 +672,29 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       {/* Footer sticky per mobile - pannello di controllo giudice */}
       {isCurrentPlayerJudge() && gameData.roundStatus === 'judging' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50">
-          <div className="control-panel-fixed" style={{ minHeight: '80px' }}>
-            <div className="flex flex-col items-center justify-center h-full space-y-2">
+          <div className="control-panel-fixed" style={{ minHeight: '60px' }}>
+            <div className="flex flex-col items-center justify-center h-full">
               {judgeSelection.selectedIndex !== null ? (
-                <>
-                  <p className="text-center font-medium text-sm">
-                    Carta #{judgeSelection.selectedIndex + 1} selezionata
-                  </p>
-                  <div className="flex space-x-2">
-                    <button 
-                      onClick={handleJudgeConfirm}
-                      disabled={judgeSelection.isConfirming}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
-                        judgeSelection.isConfirming 
-                          ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                          : 'bg-green-600 hover:bg-green-700 text-white'
-                      }`}
-                    >
-                      {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma Scelta'}
-                    </button>
-                    <button 
-                      onClick={handleJudgeCancel}
-                      disabled={judgeSelection.isConfirming}
-                      className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
-                    >
-                      Annulla
-                    </button>
-                  </div>
-                </>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={handleJudgeConfirm}
+                    disabled={judgeSelection.isConfirming}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                      judgeSelection.isConfirming 
+                        ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                  >
+                    {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma'}
+                  </button>
+                  <button 
+                    onClick={handleJudgeCancel}
+                    disabled={judgeSelection.isConfirming}
+                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                  >
+                    Annulla
+                  </button>
+                </div>
               ) : (
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-300">
