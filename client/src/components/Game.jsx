@@ -257,20 +257,25 @@ const Game = ({ roomCode, nickname, setGameState }) => {
 
   return (
     <div className="container mx-auto px-4 py-6 flex flex-col min-h-screen relative">
-      <div className="absolute top-4 right-4 flex items-center space-x-2">
-        <ThemeToggle />
-        <button 
-          onClick={handleLeaveGame}
-          className="btn btn-secondary py-1 px-3 text-sm"
-        >
-          Esci
-        </button>
-      </div>
-      
-      <div className="flex justify-between items-center mb-4 pt-16">
-        <h1 className="text-2xl font-bold">Carte Senza Umanità</h1>
-        <div>
-          <span className="mr-4">Stanza: {roomCode}</span>
+      {/* Header unificato con tutti gli elementi sulla stessa riga */}
+      <div className="flex items-center justify-between mb-4 py-2 flex-wrap gap-2">
+        {/* Lato sinistro: Codice stanza e Titolo */}
+        <div className="flex items-center space-x-4 flex-1 min-w-0">
+          <div className="flex items-center">
+            <span className="text-sm font-medium whitespace-nowrap">Stanza: {roomCode}</span>
+          </div>
+          <h1 className="text-xl lg:text-2xl font-bold truncate">Carte Senza Umanità</h1>
+        </div>
+        
+        {/* Lato destro: Theme toggle e Esci */}
+        <div className="flex items-center space-x-2 flex-shrink-0">
+          <ThemeToggle />
+          <button 
+            onClick={handleLeaveGame}
+            className="btn btn-secondary py-1 px-3 text-sm whitespace-nowrap"
+          >
+            Esci
+          </button>
         </div>
       </div>
       
