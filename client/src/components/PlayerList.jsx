@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PlayerList = ({ players, currentJudge, nickname }) => {
+const PlayerList = ({ players, currentJudge, nickname, maxPoints }) => {
   if (!players || players.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 mb-4 h-64">
@@ -25,8 +25,15 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 mb-4 h-64 flex flex-col">
-      <h2 className="text-base font-medium mb-2 flex items-center flex-shrink-0">
-        🏆 <span className="ml-2">Classifica ({players.length})</span>
+      <h2 className="text-base font-medium mb-2 flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center">
+          🏆 <span className="ml-2">Classifica ({players.length})</span>
+        </div>
+        {maxPoints && (
+          <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full font-medium">
+            Per vincere: {maxPoints} pt
+          </span>
+        )}
       </h2>
       
       {/* Container scrollabile con padding su tutti i lati per evitare taglio */}

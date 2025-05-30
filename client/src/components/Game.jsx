@@ -296,6 +296,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             players={gameData.players} 
             currentJudge={gameData.currentJudge} 
             nickname={nickname}
+            maxPoints={gameData.maxPoints}
           />
         </div>
         
