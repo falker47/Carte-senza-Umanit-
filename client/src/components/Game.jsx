@@ -285,7 +285,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       </div>
       
       {/* Layout principale con griglia responsive ottimizzata */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 h-full">
+      <div className={`grid grid-cols-1 gap-4 lg:gap-6 h-full ${
+        isCurrentPlayerJudge() 
+          ? 'lg:grid-cols-3' 
+          : 'lg:grid-cols-4'
+      }`}>
         {/* Colonna sinistra - Lista giocatori (più compatta) */}
         <div className="lg:col-span-1 order-1 lg:order-1">
           <PlayerList 
@@ -296,7 +300,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         </div>
         
         {/* Colonna centrale - Contenuto principale del gioco (più spazio) */}
-        <div className="lg:col-span-2 order-2 lg:order-2">
+        <div className={`order-2 lg:order-2 ${
+          isCurrentPlayerJudge() 
+            ? 'lg:col-span-2' 
+            : 'lg:col-span-2'
+        }`}>
           {gameData.gameWinner ? (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center relative overflow-hidden">
               {/* Effetto confetti con CSS - ottimizzato per mobile */}
@@ -531,82 +539,84 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         </div>
         
         {/* Colonna destra - Mano del giocatore ottimizzata */}
-        <div className="lg:col-span-1 order-3 flex flex-col">
-          {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
-            <div className="flex flex-col h-full">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-medium">La tua mano</h2>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {gameData.hand?.length || 0} carte
+        {!isCurrentPlayerJudge() && (
+          <div className="lg:col-span-1 order-3 flex flex-col">
+            {gameData.roundStatus === 'playing' && (
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="text-lg font-medium">La tua mano</h2>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {gameData.hand?.length || 0} carte
+                  </div>
                 </div>
-              </div>
-              
-              {/* Pannello di controllo compatto */}
-              <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '80px' }}>
-                <div className="flex flex-col items-center justify-center h-full space-y-2">
-                  {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
-                    <>
-                      <p className="text-center font-medium text-sm">
-                        Carta #{handSelection.selectedIndex + 1} selezionata
-                      </p>
-                      <div className="flex space-x-2">
-                        <button 
-                          onClick={handleCardConfirm}
-                          disabled={handSelection.isConfirming}
-                          className={`px-3 py-1.5 rounded-lg font-medium transition-all text-sm ${
-                            handSelection.isConfirming 
-                              ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                              : 'bg-green-600 hover:bg-green-700 text-white'
-                          }`}
-                        >
-                          {handSelection.isConfirming ? 'Giocando...' : 'Gioca'}
-                        </button>
-                        <button 
-                          onClick={handleCardCancel}
-                          disabled={handSelection.isConfirming}
-                          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
-                        >
-                          Annulla
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-center">
-                      {gameData.hasPlayed ? (
-                        <p className="text-sm text-green-600 dark:text-green-400 font-medium">
-                          ✓ Carta giocata!
+                
+                {/* Pannello di controllo compatto */}
+                <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '80px' }}>
+                  <div className="flex flex-col items-center justify-center h-full space-y-2">
+                    {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
+                      <>
+                        <p className="text-center font-medium text-sm">
+                          Carta #{handSelection.selectedIndex + 1} selezionata
                         </p>
+                        <div className="flex space-x-2">
+                          <button 
+                            onClick={handleCardConfirm}
+                            disabled={handSelection.isConfirming}
+                            className={`px-3 py-1.5 rounded-lg font-medium transition-all text-sm ${
+                              handSelection.isConfirming 
+                                ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                                : 'bg-green-600 hover:bg-green-700 text-white'
+                            }`}
+                          >
+                            {handSelection.isConfirming ? 'Giocando...' : 'Gioca'}
+                          </button>
+                          <button 
+                            onClick={handleCardCancel}
+                            disabled={handSelection.isConfirming}
+                            className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                          >
+                            Annulla
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-center">
+                        {gameData.hasPlayed ? (
+                          <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                            ✓ Carta giocata!
+                          </p>
+                        ) : (
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Seleziona una carta
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Contenitore carte ottimizzato */}
+                <div className="flex-1 relative">
+                  <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                    <div className="space-y-2 pr-1">
+                      {gameData.hand && gameData.hand.length > 0 ? (
+                        gameData.hand.map((card, index) => (
+                          <Card 
+                            key={index}
+                            type="white" 
+                            text={card}
+                            onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
+                            isSelectable={!gameData.hasPlayed}
+                            isSelected={handSelection.selectedIndex === index}
+                            isPending={handSelection.selectedIndex === index && handSelection.isConfirming}
+                          />
+                        ))
                       ) : (
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          Seleziona una carta
+                        <p className="text-gray-500 dark:text-gray-400 text-sm">
+                          Nessuna carta in mano. Attendi la distribuzione.
                         </p>
                       )}
                     </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Contenitore carte ottimizzato */}
-              <div className="flex-1 relative">
-                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
-                  <div className="space-y-2 pr-1">
-                    {gameData.hand && gameData.hand.length > 0 ? (
-                      gameData.hand.map((card, index) => (
-                        <Card 
-                          key={index}
-                          type="white" 
-                          text={card}
-                          onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
-                          isSelectable={!gameData.hasPlayed}
-                          isSelected={handSelection.selectedIndex === index}
-                          isPending={handSelection.selectedIndex === index && handSelection.isConfirming}
-                        />
-                      ))
-                    ) : (
-                      <p className="text-gray-500 dark:text-gray-400 text-sm">
-                        Nessuna carta in mano. Attendi la distribuzione.
-                      </p>
-                    )}
                   </div>
                 </div>
                 
@@ -615,9 +625,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   <div className="absolute bottom-4 left-0 right-1 h-6 card-container-gradient pointer-events-none opacity-75"></div>
                 )}
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
       
       {/* Footer sticky per mobile - pannello di controllo carte */}
