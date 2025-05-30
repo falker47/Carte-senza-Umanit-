@@ -277,7 +277,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       {/* Layout principale con griglia responsive ottimizzata */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 h-full">
         {/* Colonna sinistra - Lista giocatori (più compatta) */}
-        <div className="lg:col-span-1 order-2 lg:order-1">
+        <div className="lg:col-span-1 order-1 lg:order-1">
           <PlayerList 
             players={gameData.players} 
             currentJudge={gameData.currentJudge} 
@@ -286,7 +286,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         </div>
         
         {/* Colonna centrale - Contenuto principale del gioco (più spazio) */}
-        <div className="lg:col-span-2 order-1 lg:order-2">
+        <div className="lg:col-span-2 order-2 lg:order-2">
           {gameData.gameWinner ? (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center relative overflow-hidden">
               {/* Effetto confetti con CSS - ottimizzato per mobile */}
@@ -401,13 +401,15 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             <>
               {/* Mostra la carta nera solo se il gioco non è finito */}
               {gameData.blackCard && (
-                <div className="mb-6">
-                  <h2 className="text-lg font-medium mb-2">Carta Nera</h2>
-                  <Card 
-                    type="black" 
-                    text={gameData.blackCard.text} 
-                    blanks={gameData.blackCard.blanks}
-                  />
+                <div className="mb-4">
+                  <h2 className="text-lg font-medium mb-3">Carta Nera</h2>
+                  <div className="max-w-md mx-auto">
+                    <Card 
+                      type="black" 
+                      text={gameData.blackCard.text} 
+                      blanks={gameData.blackCard.blanks}
+                    />
+                  </div>
                 </div>
               )}
               
