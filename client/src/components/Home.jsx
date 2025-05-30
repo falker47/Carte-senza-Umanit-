@@ -128,7 +128,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
       </div>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
         <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white tracking-tight">
-          CARTE SENZA UMANITÀ
+          🃏 CARTE SENZA UMANITÀ
         </h1>
         <p className="text-center text-gray-600 dark:text-gray-300 mb-10 text-lg font-medium">
           Un gioco per persone orribili
@@ -164,7 +164,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
           onClick={handleCreateRoom}
           disabled={isConnecting || !socket?.connected}
         >
-          {isConnecting ? 'CONNESSIONE IN CORSO...' : 'CREA NUOVA STANZA'}
+          {isConnecting ? '⏳ CONNESSIONE IN CORSO...' : '🚀 CREA NUOVA STANZA'}
         </button>
 
         <div className="my-8 flex items-center">
@@ -196,7 +196,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             onClick={handleJoinRoom}
             disabled={isConnecting || !socket?.connected}
           >
-            ENTRA NELLA STANZA
+            🎯 ENTRA NELLA STANZA
           </button>
         </div>
       </div>
