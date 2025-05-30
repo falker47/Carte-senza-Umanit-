@@ -3,7 +3,7 @@ import React from 'react';
 const AppFooter = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="sticky bottom-0 text-center py-4 mt-auto text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 z-40">
+    <footer className="text-center py-4 mt-auto text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
       <p>
         Carte Senza Umanità &copy; {currentYear} - 
         <a 

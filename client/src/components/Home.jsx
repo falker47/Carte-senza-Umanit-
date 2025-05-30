@@ -126,11 +126,11 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-xl rounded-xl p-8">
-        <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+        <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white tracking-tight">
           CARTE SENZA UMANITÀ
         </h1>
-        <p className="text-center text-gray-600 dark:text-gray-300 mb-10">
+        <p className="text-center text-gray-600 dark:text-gray-300 mb-10 text-lg font-medium">
           Un gioco per persone orribili
         </p>
 
@@ -142,8 +142,8 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         )}
 
         <div className="mb-6">
-          <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            NICKNAME
+          <label htmlFor="nickname" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+            👤 NICKNAME
           </label>
           <input
             type="text"
@@ -151,15 +151,15 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             value={localNickname}
             onChange={(e) => setLocalNickname(e.target.value)}
             placeholder="Il tuo soprannome"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600"
+            className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500"
           />
         </div>
 
         <button
-          className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+          className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
             isConnecting || !socket?.connected
               ? 'bg-gray-400 cursor-not-allowed text-gray-700'
-              : 'bg-blue-600 hover:bg-blue-700 text-white' // MODIFICATO QUI
+              : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-blue-500/25'
           }`}
           onClick={handleCreateRoom}
           disabled={isConnecting || !socket?.connected}
@@ -168,30 +168,30 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         </button>
 
         <div className="my-8 flex items-center">
-          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
-          <span className="mx-4 text-gray-500 dark:text-gray-400">oppure</span>
-          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
+          <hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-600" />
+          <span className="mx-6 text-gray-500 dark:text-gray-400 font-semibold bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600">oppure</span>
+          <hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-600" />
         </div>
 
         <div>
-          <label htmlFor="roomCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            CODICE STANZA
+          <label htmlFor="roomCode" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+            🔑 CODICE STANZA
           </label>
           <input
             type="text"
             id="roomCode"
             value={localRoomCode}
-            onChange={(e) => setLocalRoomCode(e.target.value.toUpperCase())} // Converti in maiuscolo all'inserimento
-            placeholder="Inserisci il codice"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 mb-4"
-            maxLength={6} // Opzionale: se il codice ha lunghezza fissa
-            style={{ textTransform: 'uppercase' }} // Visualizza sempre in maiuscolo
+            onChange={(e) => setLocalRoomCode(e.target.value.toUpperCase())}
+            placeholder="INSERISCI IL CODICE"
+            className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 mb-4 transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500 text-center font-mono text-lg tracking-widest"
+            maxLength={6}
+            style={{ textTransform: 'uppercase' }}
           />
           <button
-             className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+             className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
               isConnecting || !socket?.connected
                 ? 'bg-gray-400 cursor-not-allowed text-gray-700'
-                : 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-green-600 hover:bg-green-700 text-white hover:shadow-green-500/25'
             }`}
             onClick={handleJoinRoom}
             disabled={isConnecting || !socket?.connected}
