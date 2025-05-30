@@ -454,8 +454,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
                   
                   {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO CON DIMENSIONI FISSE */}
-
-                  Dalla foto2 invece vedo che tra il footer e la/le componenti più in basso c'è un bel po' di spazio vuoto non necessario. riesci a sistemare anche quello?                  {isCurrentPlayerJudge() && (
+                  {isCurrentPlayerJudge() && (
                     <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-2 rounded-lg control-panel-fixed !hidden lg:!block">
                       <div className="flex items-center justify-center">
                         {judgeSelection.selectedIndex !== null ? (
@@ -617,11 +616,6 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                     <div className="absolute bottom-0 left-0 right-1 h-4 card-container-gradient pointer-events-none"></div>
                   )}
                 </div>
-                
-                {/* Gradiente di fade ottimizzato */}
-                {gameData.hand && gameData.hand.length > 4 && (
-                  <div className="absolute bottom-4 left-0 right-1 h-6 card-container-gradient pointer-events-none opacity-75"></div>
-                )}
               </div>
             )}
           </div>

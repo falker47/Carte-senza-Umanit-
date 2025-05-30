@@ -209,7 +209,7 @@
 
 /* Assicura che i banner abbiano dimensioni consistenti */
 .control-panel-fixed {
-  min-height: 120px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
