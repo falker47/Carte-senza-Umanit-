@@ -274,21 +274,19 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-grow">
-        {/* Colonna sinistra - Giocatori e stato */}
-        <div className="lg:col-span-1">
+      {/* Layout principale con griglia responsive ottimizzata */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 h-full">
+        {/* Colonna sinistra - Lista giocatori (più compatta) */}
+        <div className="lg:col-span-1 order-2 lg:order-1">
           <PlayerList 
             players={gameData.players} 
-            currentJudge={gameData.currentJudge}
+            currentJudge={gameData.currentJudge} 
             nickname={nickname}
           />
-          
-          {/* Rimossa la div "Stato del gioco" - non necessaria */}
         </div>
         
-        {/* Colonna centrale - Carta nera e carte giocate */}
-        <div className="lg:col-span-2">
-          {/* Schermata di vittoria elaborata */}
+        {/* Colonna centrale - Contenuto principale del gioco (più spazio) */}
+        <div className="lg:col-span-2 order-1 lg:order-2">
           {gameData.gameWinner ? (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center relative overflow-hidden">
               {/* Effetto confetti con CSS - ottimizzato per mobile */}
@@ -504,8 +502,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           )}
         </div>
         
-        {/* Colonna destra - Mano del giocatore con contenitore scrollabile */}
-        <div className="lg:col-span-1 flex flex-col">
+        {/* Colonna destra - Mano del giocatore ottimizzata */}
+        <div className="lg:col-span-1 order-3 flex flex-col">
           {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
             <div className="flex flex-col h-full">
               <div className="flex justify-between items-center mb-2">
@@ -515,9 +513,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
               </div>
               
-              {/* Pannello di controllo per la selezione della carta - SEMPRE VISIBILE SU PC/TABLET CON DIMENSIONI FISSE */}
-              <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed !hidden lg:!block" style={{ minHeight: '120px' }}>
-                <div className="flex flex-col items-center justify-center h-full space-y-3">
+              {/* Pannello di controllo compatto */}
+              <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '80px' }}>
+                <div className="flex flex-col items-center justify-center h-full space-y-2">
                   {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
                     <>
                       <p className="text-center font-medium text-sm">
@@ -527,18 +525,18 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                         <button 
                           onClick={handleCardConfirm}
                           disabled={handSelection.isConfirming}
-                          className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+                          className={`px-3 py-1.5 rounded-lg font-medium transition-all text-sm ${
                             handSelection.isConfirming 
                               ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
                               : 'bg-green-600 hover:bg-green-700 text-white'
                           }`}
                         >
-                          {handSelection.isConfirming ? 'Giocando...' : 'Gioca Carta'}
+                          {handSelection.isConfirming ? 'Giocando...' : 'Gioca'}
                         </button>
                         <button 
                           onClick={handleCardCancel}
                           disabled={handSelection.isConfirming}
-                          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
+                          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 text-sm"
                         >
                           Annulla
                         </button>
@@ -548,11 +546,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                     <div className="text-center">
                       {gameData.hasPlayed ? (
                         <p className="text-sm text-green-600 dark:text-green-400 font-medium">
-                          ✓ Carta giocata! Attendi gli altri giocatori
+                          ✓ Carta giocata!
                         </p>
                       ) : (
                         <p className="text-sm text-gray-600 dark:text-gray-300">
-                          Seleziona una carta dalla tua mano
+                          Seleziona una carta
                         </p>
                       )}
                     </div>
@@ -560,18 +558,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
               </div>
               
-              {/* Indicatore di scroll */}
-              <div className="text-xs text-gray-400 dark:text-gray-500 mb-2 flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />
-                </svg>
-                Scorri per vedere tutte le carte
-              </div>
-              
-              {/* Contenitore scrollabile per le carte */}
+              {/* Contenitore carte ottimizzato */}
               <div className="flex-1 relative">
-                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 400px)' }}>
-                  <div className="space-y-3 pr-2">
+                <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                  <div className="space-y-2 pr-1">
                     {gameData.hand && gameData.hand.length > 0 ? (
                       gameData.hand.map((card, index) => (
                         <Card 
@@ -585,16 +575,16 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                         />
                       ))
                     ) : (
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
                         Nessuna carta in mano. Attendi la distribuzione.
                       </p>
                     )}
                   </div>
                 </div>
                 
-                {/* Gradiente corretto - allineato con il contenuto delle carte */}
-                {gameData.hand && gameData.hand.length > 3 && (
-                  <div className="absolute bottom-4 left-0 right-2 h-8 card-container-gradient pointer-events-none opacity-75"></div>
+                {/* Gradiente di fade ottimizzato */}
+                {gameData.hand && gameData.hand.length > 4 && (
+                  <div className="absolute bottom-4 left-0 right-1 h-6 card-container-gradient pointer-events-none opacity-75"></div>
                 )}
               </div>
             </div>

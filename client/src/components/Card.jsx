@@ -17,12 +17,12 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
     ${isSelected ? 'ring-4 ring-blue-500 shadow-blue-500/50 shadow-xl border-blue-400' : ''}
     ${isPending ? 'ring-4 ring-yellow-500 shadow-yellow-500/50 shadow-xl border-yellow-400 animate-pulse' : ''}
     ${isSelectable && type === 'white' ? 'cursor-pointer hover:ring-2 hover:ring-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105' : ''}
-    p-4 rounded-lg shadow-lg h-64 flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
+    p-3 rounded-lg shadow-lg min-h-[140px] max-h-[200px] flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
     ${isSelected || isPending ? 'transform scale-105' : ''}
   `;
 
   const textClasses = `
-    text-lg font-bold
+    text-sm md:text-base font-semibold leading-tight
     ${type === 'black' ? 'leading-relaxed' : ''}
   `;
 
@@ -30,36 +30,36 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
 
   return (
     <div className={cardClasses} onClick={onClick}>
-      <div className="flex-grow">
+      <div className="flex-grow flex items-center">
         <div className={textClasses} dangerouslySetInnerHTML={{ __html: displayText }} />
       </div>
       
       {/* Indicatore di stato per le carte selezionate */}
       {isSelected && !isPending && (
-        <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+        <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
           ✓
         </div>
       )}
       
       {isPending && (
-        <div className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+        <div className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
           ⏳
         </div>
       )}
       
       {isWinner && (
-        <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+        <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
           🏆
         </div>
       )}
       
       {type === 'white' && (
-        <div className="absolute bottom-2 right-2 text-xs text-gray-500 font-bold">
+        <div className="absolute bottom-1 right-2 text-xs text-gray-400 font-medium">
           Carte Senza Umanità ®
         </div>
       )}
       {type === 'black' && (
-        <div className="absolute bottom-2 right-2 text-xs text-gray-400 font-bold">
+        <div className="absolute bottom-1 right-2 text-xs text-gray-300 font-medium">
           Carte Senza Umanità ®
         </div>
       )}
