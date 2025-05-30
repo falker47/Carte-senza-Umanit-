@@ -258,13 +258,18 @@ const Game = ({ roomCode, nickname, setGameState }) => {
   return (
     <div className="container mx-auto px-4 py-6 flex flex-col min-h-screen relative">
       {/* Header unificato con tutti gli elementi sulla stessa riga */}
-      <div className="flex items-center justify-between mb-4 py-2 flex-wrap gap-2">
-        {/* Lato sinistro: Codice stanza e Titolo */}
-        <div className="flex items-center space-x-4 flex-1 min-w-0">
-          <div className="flex items-center">
-            <span className="text-sm font-medium whitespace-nowrap">Stanza: {roomCode}</span>
-          </div>
-          <h1 className="text-xl lg:text-2xl font-bold truncate">Carte Senza Umanità</h1>
+      <div className="flex items-center justify-between mb-4 py-2 gap-2">
+        {/* Lato sinistro: Codice stanza */}
+        <div className="flex items-center flex-shrink-0">
+          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Stanza: {roomCode}</span>
+        </div>
+        
+        {/* Centro: Titolo */}
+        <div className="flex-1 flex justify-center min-w-0">
+          <h1 className="text-base sm:text-xl lg:text-2xl font-bold text-center">
+            <span className="hidden sm:inline">Carte Senza Umanità</span>
+            <span className="sm:hidden">CSU</span>
+          </h1>
         </div>
         
         {/* Lato destro: Theme toggle e Esci */}
@@ -272,7 +277,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           <ThemeToggle />
           <button 
             onClick={handleLeaveGame}
-            className="btn btn-secondary py-1 px-3 text-sm whitespace-nowrap"
+            className="btn btn-secondary py-1 px-2 sm:px-3 text-xs sm:text-sm whitespace-nowrap"
           >
             Esci
           </button>

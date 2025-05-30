@@ -29,9 +29,9 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
         🏆 <span className="ml-2">Classifica ({players.length})</span>
       </h2>
       
-      {/* Container scrollabile con altezza fissa */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent pr-1">
-        <div className="space-y-2">
+      {/* Container scrollabile con altezza fissa e padding interno per evitare contenuto tagliato */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+        <div className="space-y-2 pr-2">
           {sortedPlayers.map((player, index) => {
             const position = index + 1;
             const isCurrentPlayer = player.nickname === nickname;
@@ -48,33 +48,33 @@ const PlayerList = ({ players, currentJudge, nickname }) => {
                 `}
               >
                 {/* Posizione - solo emoji/numero senza sfondo */}
-                <div className="flex items-center justify-center w-8 h-8 mr-2 text-lg font-bold">
+                <div className="flex items-center justify-center w-8 h-8 mr-2 text-lg font-bold flex-shrink-0">
                   {position <= 3 ? getPositionIcon(position) : (
                     <span className="text-sm text-gray-600 dark:text-gray-400">{position}°</span>
                   )}
                 </div>
                 
                 {/* Informazioni giocatore */}
-                <div className="flex-1 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <span className={`font-medium text-sm ${position === 1 ? 'text-yellow-600 dark:text-yellow-400' : ''}`}>
+                <div className="flex-1 flex items-center justify-between min-w-0">
+                  <div className="flex items-center min-w-0 flex-1">
+                    <span className={`font-medium text-sm truncate ${position === 1 ? 'text-yellow-600 dark:text-yellow-400' : ''}`}>
                       {player.nickname}
                     </span>
                     {/* Tag "Tu" */}
                     {isCurrentPlayer && (
-                      <span className="ml-1 text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">
+                      <span className="ml-1 text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium flex-shrink-0">
                         Tu
                       </span>
                     )}
                     {/* Tag "Giudice" - dopo il tag "Tu" se entrambi presenti */}
                     {isJudge && (
-                      <span className="ml-1 text-xs text-white px-1.5 py-0.5 rounded-full font-medium" style={{backgroundColor: '#db571a'}}>
+                      <span className="ml-1 text-xs text-white px-1.5 py-0.5 rounded-full font-medium flex-shrink-0" style={{backgroundColor: '#db571a'}}>
                         Giudice
                       </span>
                     )}
                   </div>
                   
-                  <div className="flex items-center">
+                  <div className="flex items-center flex-shrink-0 ml-2">
                     {/* Punteggio */}
                     <div className={`
                       flex items-center px-2 py-0.5 rounded-full text-xs font-bold
