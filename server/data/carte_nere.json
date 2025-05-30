@@ -679,5 +679,25 @@
   {
     "text": "____ ? È uno dei pochi piaceri della vita!",
     "blanks": 1
+  },
+  {
+    "text": "____ ? Mi sembra una di quelle stronzate create con l'AI.",
+    "blanks": 1
+  },
+  {
+    "text": "ChatGPT mi ha consigliato di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ti giuro che non so neanch'io che ci faccia ____ nella nostra camera da letto.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mondo sarebbe un posto assai migliore senza ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mondo sarebbe un posto assai peggiore senza ____.",
+    "blanks": 1
   }
 ]
