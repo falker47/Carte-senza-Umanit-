@@ -283,15 +283,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             nickname={nickname}
           />
           
-          <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-            <h2 className="text-lg font-medium mb-2">Stato del gioco</h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-2">
-              <strong>Giudice:</strong> {getJudgeName()}
-            </p>
-            <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded">
-              <p className="text-blue-800 dark:text-blue-200">{getStatusMessage()}</p>
-            </div>
-          </div>
+          {/* Rimossa la div "Stato del gioco" - non necessaria */}
         </div>
         
         {/* Colonna centrale - Carta nera e carte giocate */}
