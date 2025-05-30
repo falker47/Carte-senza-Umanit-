@@ -419,15 +419,15 @@ const Game = ({ roomCode, nickname, setGameState }) => {
             <>
               {/* Banner Giudice */}
               {isCurrentPlayerJudge() && (
-                <div className="mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg shadow-lg border-2 border-yellow-400">
+                <div className="mb-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-2 rounded-lg shadow-lg border-2 border-yellow-400">
                   <div className="flex items-center justify-center space-x-2">
-                    <span className="text-xl">⚖️</span>
-                    <span className="font-bold text-base lg:text-lg">
+                    <span className="text-lg">⚖️</span>
+                    <span className="font-bold text-sm lg:text-base">
                       Sei il GIUDICE di questo turno!
                     </span>
-                    <span className="text-xl">⚖️</span>
+                    <span className="text-lg">⚖️</span>
                   </div>
-                  <p className="text-center text-sm mt-2 opacity-90">
+                  <p className="text-center text-xs mt-1 opacity-90">
                     Attendi che tutti i giocatori giochino le loro carte, poi scegli quella vincente
                   </p>
                 </div>
@@ -455,13 +455,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   
                   {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO CON DIMENSIONI FISSE */}
                   {isCurrentPlayerJudge() && (
-                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg control-panel-fixed !hidden lg:!block" style={{ minHeight: '120px' }}>
-                      <div className="flex flex-col items-center justify-center h-full space-y-3">
+                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg control-panel-fixed !hidden lg:!block" style={{ minHeight: '80px' }}>
+                      <div className="flex flex-col items-center justify-center h-full space-y-2">
                         {judgeSelection.selectedIndex !== null ? (
                           <>
-                            <p className="text-center font-medium">
-                              Hai selezionato la carta #{judgeSelection.selectedIndex + 1}
-                            </p>
                             <div className="flex space-x-3">
                               <button 
                                 onClick={handleJudgeConfirm}
@@ -469,10 +466,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                                 className={`px-6 py-2 rounded-lg font-medium transition-all ${
                                   judgeSelection.isConfirming 
                                     ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
-                                    : 'bg-green-600 hover:bg-green-700 text-white'
+                                    : 'bg-blue-500 hover:bg-blue-600 text-white'
                                 }`}
                               >
-                                {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma Scelta'}
+                                {judgeSelection.isConfirming ? 'Confermando...' : 'Conferma'}
                               </button>
                               <button 
                                 onClick={handleJudgeCancel}
@@ -551,7 +548,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 </div>
                 
                 {/* Pannello di controllo compatto */}
-                <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg !hidden lg:!block" style={{ minHeight: '60px' }}>
+                <div className="mb-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-lg !hidden lg:!block" style={{ minHeight: '50px' }}>
                   <div className="flex flex-col items-center justify-center h-full">
                     {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
                       <div className="flex space-x-2">
@@ -627,8 +624,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       
       {/* Footer sticky per mobile - pannello di controllo carte */}
       {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50">
-          <div className="control-panel-fixed" style={{ minHeight: '60px' }}>
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-3 z-50">
+          <div className="control-panel-fixed" style={{ minHeight: '50px' }}>
             <div className="flex flex-col items-center justify-center h-full">
               {handSelection.selectedIndex !== null && !gameData.hasPlayed ? (
                 <div className="flex space-x-2">
@@ -671,8 +668,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       
       {/* Footer sticky per mobile - pannello di controllo giudice */}
       {isCurrentPlayerJudge() && gameData.roundStatus === 'judging' && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50">
-          <div className="control-panel-fixed" style={{ minHeight: '60px' }}>
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-3 z-50">
+          <div className="control-panel-fixed" style={{ minHeight: '50px' }}>
             <div className="flex flex-col items-center justify-center h-full">
               {judgeSelection.selectedIndex !== null ? (
                 <div className="flex space-x-2">
