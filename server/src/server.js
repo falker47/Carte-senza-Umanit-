@@ -246,78 +246,82 @@ io.on('connection', (socket) => {
   // Altri gestori di eventi socket...
 
   // Gestione disconnessione
+  // Gestione disconnessione
   socket.on('disconnect', () => {
-    console.log(`Client disconnesso: ${socket.id}`);
-    
-    // Gestisci la disconnessione usando il GameManager esistente
-    const disconnectionResults = gameManager.handleDisconnect(socket.id);
-    
-    disconnectionResults.forEach(result => {
-      if (result.isGameOver) {
-        // Notifica tutti i giocatori che il gioco è terminato
-        io.to(result.roomCode).emit('game-terminated', {
-          reason: result.hostLeft ? 'Host disconnesso' : 'Troppi pochi giocatori',
-          hostLeft: result.hostLeft
-        });
-      } else {
-        // Aggiorna la lista dei giocatori per i rimanenti
-        io.to(result.roomCode).emit('room-players', {
-          players: result.players,
-          host: gameManager.rooms[result.roomCode]?.hostId,
-          code: result.roomCode
-        });
-        
-        // Se il gioco era in corso, aggiorna lo stato
-        if (gameManager.rooms[result.roomCode]?.gameStarted) {
-          const gameState = gameManager.getGameState(result.roomCode);
-          if (gameState) {
-            io.to(result.roomCode).emit('game-update', gameState);
-          }
-        }
-      }
-    });
+  console.log(`Client disconnesso: ${socket.id}`);
+  
+  // Gestisci la disconnessione usando il GameManager esistente
+  const disconnectionResults = gameManager.handleDisconnect(socket.id);
+  
+  disconnectionResults.forEach(result => {
+  if (result.isGameOver) {
+  // Notifica tutti i giocatori che il gioco è terminato
+  io.to(result.roomCode).emit('game-terminated', {
+  reason: result.hostLeft ? 'Host disconnesso' : 'Troppi pochi giocatori',
+  hostLeft: result.hostLeft
   });
-});
+  } else {
+  // Aggiorna la lista dei giocatori per i rimanenti
+  io.to(result.roomCode).emit('room-players', {
+  players: result.players,
+  host: gameManager.rooms[result.roomCode]?.hostId,
+  code: result.roomCode
+  });
+  
+  // Se il gioco era in corso, aggiorna lo stato
+  if (gameManager.rooms[result.roomCode]?.gameStarted) {
+  const gameState = gameManager.getGameState(result.roomCode);
+  if (gameState) {
+  io.to(result.roomCode).emit('game-update', gameState);
+  }
+  }
+  }
+  });
+  });
 
-// Modifica la porta per usare quella assegnata da Render
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Server in ascolto sulla porta ${PORT}`);
-});
-
-// Aggiungi questa route dopo le altre route API
-app.get('/', (req, res) => {
-  res.send('Server Carte Senza Umanità funzionante. Utilizza il client per giocare.');
-});
-
-// Aggiungi questo nuovo gestore dopo gli altri
-socket.on('reconnect-to-game', ({ nickname, roomCode }) => {
+  // Aggiungi il gestore di riconnessione QUI, DENTRO il blocco io.on('connection')
+  socket.on('reconnect-to-game', ({ nickname, roomCode }) => {
   console.log(`Tentativo di riconnessione: ${nickname} alla stanza ${roomCode}`);
   
   const result = gameManager.reconnectPlayer(socket.id, nickname, roomCode);
   
   if (result.success) {
-    socket.join(roomCode.toUpperCase());
-    
-    // Invia lo stato attuale del gioco
-    if (result.isGameStarted && result.gameState) {
-      socket.emit('game-update', result.gameState);
-      socket.emit('update-hand', result.hand);
-      socket.emit('reconnected-to-game');
-    } else {
-      // Se il gioco non è ancora iniziato, invia la lista dei giocatori
-      const players = gameManager.getPlayersInRoom(roomCode.toUpperCase());
-      const hostId = gameManager.rooms[roomCode.toUpperCase()].hostId;
-      
-      socket.emit('room-players', {
-        players,
-        host: hostId,
-        code: roomCode.toUpperCase()
-      });
-    }
-    
-    console.log(`${nickname} riconnesso con successo alla stanza ${roomCode}`);
+  socket.join(roomCode.toUpperCase());
+  
+  // Invia lo stato attuale del gioco
+  if (result.isGameStarted && result.gameState) {
+  socket.emit('game-update', result.gameState);
+  socket.emit('update-hand', result.hand);
+  socket.emit('reconnected-to-game');
   } else {
-    socket.emit('reconnection-failed', { message: result.error });
+  // Se il gioco non è ancora iniziato, invia la lista dei giocatori
+  const players = gameManager.getPlayersInRoom(roomCode.toUpperCase());
+  const hostId = gameManager.rooms[roomCode.toUpperCase()].hostId;
+  
+  socket.emit('room-players', {
+  players,
+  host: hostId,
+  code: roomCode.toUpperCase()
+  });
   }
-});
+  
+  console.log(`${nickname} riconnesso con successo alla stanza ${roomCode}`);
+  } else {
+  socket.emit('reconnection-failed', { message: result.error });
+  }
+  });
+
+  }); // QUESTA è la chiusura del blocco io.on('connection')
+
+  // Modifica la porta per usare quella assegnata da Render
+  const PORT = process.env.PORT || 3001;
+  server.listen(PORT, () => {
+  console.log(`Server in ascolto sulla porta ${PORT}`);
+  });
+  
+  // Aggiungi questa route dopo le altre route API
+  app.get('/', (req, res) => {
+  res.send('Server Carte Senza Umanità funzionante. Utilizza il client per giocare.');
+  });
+  
+  // RIMUOVI TUTTO IL CODICE socket.on('reconnect-to-game') CHE È STATO INSERITO QUI FUORI
