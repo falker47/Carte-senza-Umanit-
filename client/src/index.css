@@ -97,15 +97,6 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.7);
 }
-
-/* Gradiente per il fade delle carte */
-.card-container-gradient {
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.9), transparent);
-}
-
-.dark .card-container-gradient {
-  background: linear-gradient(to top, rgba(31, 41, 55, 0.9), transparent);
-}
   
   .input {
     @apply px-4 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cah-black dark:bg-gray-800 dark:border-gray-700 dark:text-white;

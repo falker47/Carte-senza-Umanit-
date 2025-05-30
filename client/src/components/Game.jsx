@@ -454,9 +454,10 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   {console.log('[CLIENT] Rendering playedCards for judge:', JSON.stringify(gameData.playedCards))}
                   
                   {/* Pannello di controllo per il giudice - SPOSTATO IN ALTO CON DIMENSIONI FISSE */}
-                  {isCurrentPlayerJudge() && (
-                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg control-panel-fixed !hidden lg:!block" style={{ minHeight: '80px' }}>
-                      <div className="flex flex-col items-center justify-center h-full space-y-2">
+
+                  Dalla foto2 invece vedo che tra il footer e la/le componenti più in basso c'è un bel po' di spazio vuoto non necessario. riesci a sistemare anche quello?                  {isCurrentPlayerJudge() && (
+                    <div className="mb-4 bg-gray-100 dark:bg-gray-700 p-2 rounded-lg control-panel-fixed !hidden lg:!block">
+                      <div className="flex items-center justify-center">
                         {judgeSelection.selectedIndex !== null ? (
                           <>
                             <div className="flex space-x-3">
@@ -481,7 +482,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                             </div>
                           </>
                         ) : (
-                          <p className="text-center text-gray-600 dark:text-gray-300">
+                          <p className="text-center text-gray-600 dark:text-gray-300 py-2">
                             Clicca su una carta per selezionarla
                           </p>
                         )}
@@ -589,8 +590,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                 
                 {/* Contenitore carte ottimizzato */}
                 <div className="flex-1 relative">
-                  <div className="h-full overflow-y-auto custom-scrollbar pb-4" style={{ maxHeight: 'calc(100vh - 350px)' }}>
-                    <div className="space-y-2 pr-1">
+                  <div className="h-full overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                    <div className="space-y-2 pr-1 pb-2">
                       {gameData.hand && gameData.hand.length > 0 ? (
                         gameData.hand.map((card, index) => (
                           <Card 
@@ -610,6 +611,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                       )}
                     </div>
                   </div>
+                  
+                  {/* Gradiente di fade ottimizzato - posizionato correttamente */}
+                  {gameData.hand && gameData.hand.length > 4 && (
+                    <div className="absolute bottom-0 left-0 right-1 h-4 card-container-gradient pointer-events-none"></div>
+                  )}
                 </div>
                 
                 {/* Gradiente di fade ottimizzato */}
