@@ -242,9 +242,36 @@ io.on('connection', (socket) => {
   // Altri gestori di eventi socket...
 
   // Gestione disconnessione
-  socket.on('disconnect', () => {
-    console.log(`Client disconnesso: ${socket.id}`);
-    // Logica per gestire l'uscita del giocatore dalle stanze
+  // Gestione uscita volontaria dalla stanza
+  socket.on('leave-room', ({ roomCode }) => {
+    console.log(`Giocatore ${socket.id} sta uscendo dalla stanza ${roomCode}`);
+    
+    // Rimuovi il giocatore dalla stanza socket.io
+    socket.leave(roomCode);
+    
+    // Gestisci la disconnessione logica
+    const updates = gameManager.handleDisconnect(socket.id);
+    
+    // Invia aggiornamenti a tutte le stanze interessate
+    updates.forEach(update => {
+      if (update.isGameOver) {
+        io.to(update.roomCode).emit('game-over', {
+          reason: update.hostLeft ? 'Host ha lasciato la stanza' : 'Troppi pochi giocatori'
+        });
+      } else {
+        const room = gameManager.rooms[update.roomCode];
+        if (room) {
+          io.to(update.roomCode).emit('room-players', {
+            players: update.players,
+            host: room.hostId,
+            code: update.roomCode
+          });
+        }
+      }
+    });
+    
+    // Conferma al giocatore che è uscito
+    socket.emit('left-room');
   });
 });
 

@@ -252,7 +252,7 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
                   value={gameSettings.handSize}
                   onChange={(e) => handleSettingChange('handSize', e.target.value)}
                 >
-                  {[5, 7, 10].map(value => (
+                  {[7, 10, 12].map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
                 </select>
