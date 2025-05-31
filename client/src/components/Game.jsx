@@ -490,7 +490,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                     </div>
                   )}
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-wrap justify-center gap-4">
                     {gameData.playedCards.map((playedCardObject, index) => (
                       <Card 
                         key={index}
@@ -500,6 +500,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                         isSelectable={isCurrentPlayerJudge()}
                         isSelected={judgeSelection.selectedIndex === index}
                         isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
+                        isJudging={true}
                       />
                     ))}
                   </div>

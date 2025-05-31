@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending }) {
+function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending, isJudging }) {
   console.log(`Card component received text:`, text);
 
   const formatText = (text) => {
@@ -17,7 +17,7 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
     ${isSelected ? 'border-4 border-blue-500 shadow-blue-500/50 shadow-lg' : ''}
     ${isPending ? 'border-4 border-yellow-500 shadow-yellow-500/50 shadow-lg animate-pulse' : ''}
     ${isSelectable && type === 'white' ? 'cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out' : ''}
-    p-3 rounded-lg shadow-lg min-h-[140px] max-h-[200px] flex flex-col justify-between relative text-left w-full break-words whitespace-pre-wrap
+    p-3 rounded-lg shadow-lg min-h-[140px] max-h-[200px] flex flex-col justify-between relative text-left ${isJudging ? 'w-80 max-w-sm mx-auto' : 'w-full'} break-words whitespace-pre-wrap
   `;
 
   const textClasses = `
