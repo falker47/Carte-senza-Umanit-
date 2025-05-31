@@ -27,12 +27,10 @@ const corsOptions = {
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? "https://carte-senza-umanit.onrender.com"  // URL corretto del client
-      : "*",
-    methods: ["GET", "POST"],
+      ? 'https://carte-senza-umanit.onrender.com'  // URL corretto del client
+      : '*',
     credentials: true
   },
-  // Aggiungi queste opzioni per migliorare la stabilità
   pingTimeout: 60000,
   pingInterval: 25000,
   transports: ['websocket', 'polling']
