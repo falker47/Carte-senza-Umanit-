@@ -17,16 +17,17 @@ app.use(express.json());
 const server = http.createServer(app);
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://carte-senza-umanit.onrender.com'  // URL del client
+    ? 'https://carte-senza-umanit.onrender.com'  // URL corretto del client
     : 'http://localhost:5173',
   methods: ['GET', 'POST'],
   credentials: true
 };
-// Modifica la configurazione CORS per accettare il dominio del client in produzione
+
+// Modifica anche la configurazione Socket.IO
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? "https://carte-senza-umanit.onrender.com"  // Questo DEVE essere l'URL del CLIENT
+      ? "https://carte-senza-umanit.onrender.com"  // URL corretto del client
       : "*",
     methods: ["GET", "POST"],
     credentials: true
