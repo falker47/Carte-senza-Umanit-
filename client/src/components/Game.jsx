@@ -520,6 +520,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                       type="white" 
                       text={gameData.winningCardText}
                       isWinner={true}
+                      isJudging={true}
                     />
                     
                     {isCurrentPlayerJudge() && (
