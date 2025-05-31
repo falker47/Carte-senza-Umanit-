@@ -78,7 +78,16 @@ io.on('connection', (socket) => {
       
       const players = gameManager.getPlayersInRoom(roomCode);
       const hostId = gameManager.rooms[roomCode].hostId;
-      io.to(roomCode).emit('room-players', {
+      
+      // Invia lo stato della stanza al nuovo giocatore immediatamente
+      socket.emit('room-players', {
+        players,
+        host: hostId,
+        code: roomCode
+      });
+      
+      // Poi invia l'aggiornamento a tutti gli altri nella stanza
+      socket.to(roomCode).emit('room-players', {
         players,
         host: hostId,
         code: roomCode
@@ -249,25 +258,30 @@ io.on('connection', (socket) => {
     // Rimuovi il giocatore dalla stanza socket.io
     socket.leave(roomCode);
     
-    // Gestisci la disconnessione logica
-    const updates = gameManager.handleDisconnect(socket.id);
-    
-    // Invia aggiornamenti a tutte le stanze interessate
-    updates.forEach(update => {
-      if (update.isGameOver) {
-        io.to(update.roomCode).emit('game-over', {
-          reason: update.hostLeft ? 'Host ha lasciato la stanza' : 'Troppi pochi giocatori'
-        });
-      } else {
-        const room = gameManager.rooms[update.roomCode];
-        if (room) {
-          io.to(update.roomCode).emit('room-players', {
-            players: update.players,
-            host: room.hostId,
-            code: update.roomCode
+    // Gestione disconnessione improvvisa
+    socket.on('disconnect', () => {
+      console.log(`Client disconnesso: ${socket.id}`);
+      
+      // Gestisci la disconnessione logica
+      const updates = gameManager.handleDisconnect(socket.id);
+      
+      // Invia aggiornamenti a tutte le stanze interessate
+      updates.forEach(update => {
+        if (update.isGameOver) {
+          io.to(update.roomCode).emit('game-over', {
+            reason: update.hostLeft ? 'Host ha lasciato la stanza' : 'Troppi pochi giocatori'
           });
+        } else {
+          const room = gameManager.rooms[update.roomCode];
+          if (room) {
+            io.to(update.roomCode).emit('room-players', {
+              players: update.players,
+              host: room.hostId,
+              code: update.roomCode
+            });
+          }
         }
-      }
+      });
     });
     
     // Conferma al giocatore che è uscito
