@@ -1,9 +1,5 @@
 [
   {
-    "text": "Il nuovo programma di Rai 1: '_____ con le stelle'.",
-    "blanks": 1
-  },
-  {
     "text": "Cosa mi ha fatto licenziare dal mio ultimo lavoro? _____.",
     "blanks": 1
   },
@@ -699,5 +695,54 @@
   {
     "text": "Il mondo sarebbe un posto assai peggiore senza ____.",
     "blanks": 1
+  },
+  {
+    "text": "Il nuovo piatto di Masterchef: _____ al _____.",
+    "blanks": 2
+  },
+  {
+    "text": "Il segreto di una buona relazione è _____ e _____.",
+    "blanks": 2
+  },
+  {
+    "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
+    "blanks": 2
+  },
+  
+  {
+    "text": "Esatto, ho sconfitto ____! Mi chiedi come? ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Non ho mai capito ____, finchè non ho incontrato ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Nel nuovo thriller di Jordan Peele, una giovane famiglia scopre che ____ è stato ____ per tutto il tempo.",
+    "blanks": 2
+  },
+  {
+    "text": "____ + ____ = ____.",
+    "blanks": 3
+  },
+  {
+    "text": "Per il mio prossimo trucco di magia, tirerò fuori ____ da ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Step 1: ____. Step 2: ____. Step 3: Profitto.",
+    "blanks": 2
+  },
+  {
+    "text": "Ed il premio Nobel per ____ va a ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Dicevano che ero pazzo! Dicevano che non potevo mettere ____ dentro ____. Si sbagliavano!.",
+    "blanks": 2
+  },
+  {
+    "text": "Sky cinema presenta “____: la storia di ____.”",
+    "blanks": 2
   }
 ]
