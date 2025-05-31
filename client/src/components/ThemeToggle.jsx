@@ -1,32 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useTheme } from '../hooks/useTheme';
 
 const ThemeToggle = () => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Controlla se il tema scuro è già impostato
-    const isDarkMode = localStorage.getItem('darkMode') === 'true' || 
-                      window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(isDarkMode);
-    
-    // Applica il tema
-    applyTheme(isDarkMode);
-  }, []);
-
-  const toggleTheme = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    applyTheme(newDarkMode);
-    localStorage.setItem('darkMode', newDarkMode.toString());
-  };
-
-  const applyTheme = (isDark) => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
+  const { darkMode, toggleTheme } = useTheme();
 
   return (
     <button 
