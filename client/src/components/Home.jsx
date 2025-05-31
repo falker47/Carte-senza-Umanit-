@@ -120,6 +120,26 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
       }
     }, 100);
   };
+  
+  // Nuova funzione per gestire la pressione del tasto invio
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      
+      // Se il nickname è compilato ma non il codice stanza, crea una stanza
+      if (localNickname.trim() && !localRoomCode.trim()) {
+        handleCreateRoom();
+      }
+      // Se sia nickname che codice stanza sono compilati, prova a collegarsi
+      else if (localNickname.trim() && localRoomCode.trim()) {
+        handleJoinRoom();
+      }
+      // Se il nickname non è compilato, mostra errore
+      else if (!localNickname.trim()) {
+        setError('Inserisci un nickname per continuare');
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
@@ -150,6 +170,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             id="nickname"
             value={localNickname}
             onChange={(e) => setLocalNickname(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="Il tuo soprannome"
             className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500"
           />
@@ -182,6 +203,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
             id="roomCode"
             value={localRoomCode}
             onChange={(e) => setLocalRoomCode(e.target.value.toUpperCase())}
+            onKeyPress={handleKeyPress}
             placeholder="INSERISCI IL CODICE"
             className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white text-gray-900 placeholder-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 mb-4 transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500 text-center font-mono text-lg tracking-widest"
             maxLength={6}
