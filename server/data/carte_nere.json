@@ -8,307 +8,35 @@
     "blanks": 1
   },
   {
-    "text": "Il nuovo slogan della Nutella: '_____'.",
-    "blanks": 1
+    "text": "Il nuovo piatto di Masterchef: _____ al _____.",
+    "blanks": 2
   },
   {
-    "text": "Il mio medico mi ha consigliato di evitare _____.",
-    "blanks": 1
+    "text": "Il segreto di una buona relazione è _____ e _____.",
+    "blanks": 2
   },
   {
-    "text": "La nonna si è incuriosita quando ha visto _____ nel mio telefono.",
-    "blanks": 1
+    "text": "Ho perso il mio lavoro a causa di _____ e _____.",
+    "blanks": 2
   },
   {
-    "text": "Il nuovo trend su TikTok: _____.",
-    "blanks": 1
+    "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
+    "blanks": 2
   },
   {
-    "text": "Benvenuti nella mia live Twitch! Sono _____ e oggi rispondo alle vostre domande controverse.",
-    "blanks": 1
+    "text": "La ricetta perfetta per il disastro: _____, _____ e _____.",
+    "blanks": 3
   },
   {
-    "text": "La cosa peggiore da dire a un funerale: '_____'.",
-    "blanks": 1
+    "text": "I tre ingredienti segreti della felicità sono _____, _____ e _____.",
+    "blanks": 3
   },
   {
-    "text": "Il mio professore di matematica è stato licenziato per _____.",
-    "blanks": 1
+    "text": "Il triangolo amoroso più assurdo: _____, _____ e _____.",
+    "blanks": 3
   },
   {
-    "text": "La mia tecnica di rimorchio preferita è _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il segreto della nonna per una buona pasta è _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Non avrei mai pensato che _____ potesse essere così divertente.",
-    "blanks": 1
-  },
-  {
-    "text": "Il nuovo film di Checco Zalone: '_____'.",
-    "blanks": 1
-  },
-  {
-    "text": "La cosa più strana che ho trovato nella borsa di mia madre: _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il mio vicino di casa è stato arrestato per _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il nuovo superpotere di Superman: _____.",
-    "blanks": 1
-  },
-  {
-    "text": "La vera ragione per cui l'Italia non va avanti: _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Nulla è più pericoloso di _____.",
-    "blanks": 1
-  },
-  {
-    "text": "Nel magico mondo di Teletabbilandia, i teletubbies giocano con ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il cadavere di Mike Bongiorno è stato trovato in una posizione particolare, probabilmente stava ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Allora siamo d'accordo, per il compleanno di Giovanna il regalo sarà ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Usando la tua macchina del tempo, incontri il te stesso del passato. Cosa fai?",
-    "blanks": 1
-  },
-  {
-    "text": "Goduria è: ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il trauma che bloccò la mia crescita fu ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Quando manca internet mi consolo con ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Sei in casa da solo , fai ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Una festa non può essere chiamata tale senza ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Dopo aver starnutito è buona norma ____.",
-    "blanks": 1
-  },
-  {
-    "text": "La nuova bolla papale invita tutti i credenti a ____.",
-    "blanks": 1
-  },
-  {
-    "text": "ti servono almeno 500 euro per ____.",
-    "blanks": 1
-  },
-  {
-    "text": "La nuova moda giapponese prevede ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Toglietemi tutto, ma non il mio ____.",
-    "blanks": 1
-  },
-  {
-    "text": "La colazione ideale: pane, latte e ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Ho un pò di tempo libero, penso che mi dedicherò a ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Se dovessi sterilizzare un cane userei ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Oltre ai soldi, quello che ti rende più felice è ____.",
-    "blanks": 1
-  },
-  {
-    "text": "____ è un interessante alternativa alle sigarette",
-    "blanks": 1
-  },
-  {
-    "text": "Se tornassi indietro nel tempo ecco cosa farei: ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il metodo contraccettivo più sicuro è ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il giorno del mio compleanno vorrei ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Che mondo sarebbe senza ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Secondo ricerche approfondite, è sicuro che una delle cause della fine del mondo sarà ____.",
-    "blanks": 1
-  },
-  {
-    "text": "I miei genitori mi minacciano avvertendomi che se verrò bocciato dovranno ____.",
-    "blanks": 1
-  },
-  {
-    "text": "La prima cosa che farò dopo essermi sposato sarà ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Era una giornata noiosa come tante altre, quando all'improvviso ____.",
-    "blanks": 1
-  },
-  {
-    "text": "L'Italia è uno Stato rinomato per ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Al fine di guadagnare molto denaro ho deciso di investire in ____.",
-    "blanks": 1
-  },
-  {
-    "text": "A volte sogno di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Gli alieni invaderanno la Terra per colpa di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Da grandi poteri derivano grandi ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Siamo tutti qui riuniti per celebrare ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Recenti studi hanno dimostrato che ____ previene la formazione del cancro.",
-    "blanks": 1
-  },
-  {
-    "text": "Ho scoperto che il/la mio/a compagno/a ama ____. Disgustoso!",
-    "blanks": 1
-  },
-  {
-    "text": "*toc toc* Chi è? ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Ho superato momenti difficili grazie a ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Dopo pranzo passo il mio tempo a ____.",
-    "blanks": 1
-  },
-  {
-    "text": "____: lo facciamo tutti, ma nessuno lo ammette.",
-    "blanks": 1
-  },   
-  {
-    "text": "Venderei la mia dignità in cambio di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Qual è la soluzione migliore per smettere di fumare?",
-    "blanks": 1
-  },
-  {
-    "text": "Cosa fare in caso di difficoltà?",
-    "blanks": 1
-  },
-  {
-    "text": "Salve, sono Troy McClure. Sicuramente mi ricorderete per ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il vicino di casa ti rincorre chiedendo ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Non si può morire prima di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Per un ottimo cocktail ci vuole ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Parto per un lungo viaggio insieme a ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Per vivere più a lungo ed in salute hai deciso di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Ho allontanato i testimoni di Geova con ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Stasera mi annoio così ho deciso di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Sei sbronzo marcio e ti viene una gran voglia di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Nelle notti di luna piena mi trasformo in ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Dov'è finito il panetto di burro nel frigorifero? L'ho usato per ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Un ____ non si nega a nessuno.",
-    "blanks": 1
-  },
-  {
-    "text": "Il mio sogno erotico proibito? Decisamente ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Per il suo novantesimo compleanno, ho regalato a mia nonna ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Non sono mai stato capace di ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Per resuscitare Gesù ci vuole ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il mondo sarebbe un posto assai migliore senza ____.",
-    "blanks": 1
-  },
-  {
-    "text": "Il mondo sarebbe un posto assai peggiore senza ____.",
-    "blanks": 1
+    "text": "La combo definitiva per rovinare una festa: _____, _____ e _____.",
+    "blanks": 3
   }
 ]
