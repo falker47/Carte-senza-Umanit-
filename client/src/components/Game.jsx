@@ -495,7 +495,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                       <Card 
                         key={index}
                         type="white" 
-                        text={playedCardObject.card}
+                        text={Array.isArray(playedCardObject.cards) ? playedCardObject.cards.map(card => card.text || card).join(' / ') : (playedCardObject.card?.text || playedCardObject.card)}
                         onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
                         isSelectable={isCurrentPlayerJudge()}
                         isSelected={judgeSelection.selectedIndex === index}

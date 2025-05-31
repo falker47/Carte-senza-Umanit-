@@ -316,11 +316,13 @@ export class Room {
         playerId: winnerId,
         nickname: winnerPlayer.nickname,
         score: winnerPlayer.score,
-        cardPlayed: winningSubmission.card // This is the actual card object/text
+        cardPlayed: Array.isArray(winningSubmission.cards) ? 
+          winningSubmission.cards.map(card => card.text || card).join(' / ') : 
+          (winningSubmission.card?.text || winningSubmission.card)
       },
       gameOver: this.gameOver,
       gameWinner: gameWinner,
-      gameState: this.getGameState() // Return updated game state
+      gameState: this.getGameState()
     };
   }
 
@@ -386,13 +388,15 @@ export class Room {
     let winningCardText = null;
     // Trova il testo della carta vincente se il round è terminato e c'è un vincitore del round
     if (this.roundStatus === 'roundEnd' && this.roundWinner) {
-      // this.playedCards contiene gli oggetti { playerId, card } originali, non ancora mescolati per il giudizio.
-      // È importante recuperare la carta da this.playedCards originale per assicurarsi che sia quella corretta.
       const originalWinningSubmission = this.playedCards.find(pc => pc.playerId === this.roundWinner);
       if (originalWinningSubmission) {
-        winningCardText = originalWinningSubmission.card;
+        // Gestisci sia carte singole che multiple
+        if (Array.isArray(originalWinningSubmission.cards)) {
+          winningCardText = originalWinningSubmission.cards.map(card => card.text || card).join(' / ');
+        } else {
+          winningCardText = originalWinningSubmission.card?.text || originalWinningSubmission.card;
+        }
       } else {
-        // Log di fallback se non troviamo la carta, anche se non dovrebbe succedere
         console.warn(`[Room ${this.roomCode}] Non è stato possibile trovare la carta vincente originale per il vincitore del round ${this.roundWinner} in this.playedCards.`);
       }
     }
