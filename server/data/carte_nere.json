@@ -8,35 +8,696 @@
     "blanks": 1
   },
   {
-    "text": "Il nuovo piatto di Masterchef: _____ al _____.",
-    "blanks": 2
+    "text": "Il nuovo slogan della Nutella: '_____'.",
+    "blanks": 1
   },
   {
-    "text": "Il segreto di una buona relazione è _____ e _____.",
-    "blanks": 2
+    "text": "Il mio medico mi ha consigliato di evitare _____.",
+    "blanks": 1
   },
   {
-    "text": "Ho perso il mio lavoro a causa di _____ e _____.",
-    "blanks": 2
+    "text": "La nonna si è incuriosita quando ha visto _____ nel mio telefono.",
+    "blanks": 1
   },
   {
-    "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
-    "blanks": 2
+    "text": "Il nuovo trend su TikTok: _____.",
+    "blanks": 1
   },
   {
-    "text": "La ricetta perfetta per il disastro: _____, _____ e _____.",
-    "blanks": 3
+    "text": "Benvenuti nella mia live Twitch! Sono _____ e oggi rispondo alle vostre domande controverse.",
+    "blanks": 1
   },
   {
-    "text": "I tre ingredienti segreti della felicità sono _____, _____ e _____.",
-    "blanks": 3
+    "text": "La cosa peggiore da dire a un funerale: '_____'.",
+    "blanks": 1
   },
   {
-    "text": "Il triangolo amoroso più assurdo: _____, _____ e _____.",
-    "blanks": 3
+    "text": "Il mio professore di matematica è stato licenziato per _____.",
+    "blanks": 1
   },
   {
-    "text": "La combo definitiva per rovinare una festa: _____, _____ e _____.",
-    "blanks": 3
+    "text": "La mia tecnica di rimorchio preferita è _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il segreto della nonna per una buona pasta è _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Non avrei mai pensato che _____ potesse essere così divertente.",
+    "blanks": 1
+  },
+  {
+    "text": "Il nuovo film di Checco Zalone: '_____'.",
+    "blanks": 1
+  },
+  {
+    "text": "La cosa più strana che ho trovato nella borsa di mia madre: _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mio vicino di casa è stato arrestato per _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il nuovo superpotere di Superman: _____.",
+    "blanks": 1
+  },
+  {
+    "text": "La vera ragione per cui l'Italia non va avanti: _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Nulla è più pericoloso di _____.",
+    "blanks": 1
+  },
+  {
+    "text": "Nel magico mondo di Teletabbilandia, i teletubbies giocano con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il cadavere di Mike Bongiorno è stato trovato in una posizione particolare, probabilmente stava ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Allora siamo d'accordo, per il compleanno di Giovanna il regalo sarà ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Usando la tua macchina del tempo, incontri il te stesso del passato. Cosa fai?",
+    "blanks": 1
+  },
+  {
+    "text": "Goduria è: ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il trauma che bloccò la mia crescita fu ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Quando manca internet mi consolo con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sei in casa da solo , fai ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Una festa non può essere chiamata tale senza ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Dopo aver starnutito è buona norma ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La nuova bolla papale invita tutti i credenti a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "ti servono almeno 500 euro per ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La nuova moda giapponese prevede ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Toglietemi tutto, ma non il mio ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La colazione ideale: pane, latte e ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho un pò di tempo libero, penso che mi dedicherò a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Se dovessi sterilizzare un cane userei ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Oltre ai soldi, quello che ti rende più felice è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____ è un interessante alternativa alle sigarette",
+    "blanks": 1
+  },
+  {
+    "text": "Se tornassi indietro nel tempo ecco cosa farei: ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il metodo contraccettivo più sicuro è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il giorno del mio compleanno vorrei ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Che mondo sarebbe senza ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Secondo ricerche approfondite, è sicuro che una delle cause della fine del mondo sarà ____.",
+    "blanks": 1
+  },
+  {
+    "text": "I miei genitori mi minacciano avvertendomi che se verrò bocciato dovranno ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La prima cosa che farò dopo essermi sposato sarà ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Era una giornata noiosa come tante altre, quando all'improvviso ____.",
+    "blanks": 1
+  },
+  {
+    "text": "L'Italia è uno Stato rinomato per ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Al fine di guadagnare molto denaro ho deciso di investire in ____.",
+    "blanks": 1
+  },
+  {
+    "text": "A volte sogno di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Gli alieni invaderanno la Terra per colpa di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Da grandi poteri derivano grandi ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Siamo tutti qui riuniti per celebrare ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Recenti studi hanno dimostrato che ____ previene la formazione del cancro.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho scoperto che il/la mio/a compagno/a ama ____. Disgustoso!",
+    "blanks": 1
+  },
+  {
+    "text": "*toc toc* Chi è? ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho superato momenti difficili grazie a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Dopo pranzo passo il mio tempo a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____: lo facciamo tutti, ma nessuno lo ammette.",
+    "blanks": 1
+  },   
+  {
+    "text": "Venderei la mia dignità in cambio di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Qual è la soluzione migliore per smettere di fumare?",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa fare in caso di difficoltà?",
+    "blanks": 1
+  },
+  {
+    "text": "Salve, sono Troy McClure. Sicuramente mi ricorderete per ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il vicino di casa ti rincorre chiedendo ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Non si può morire prima di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Per un ottimo cocktail ci vuole ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Parto per un lungo viaggio insieme a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Per vivere più a lungo ed in salute hai deciso di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho allontanato i testimoni di Geova con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Stasera mi annoio così ho deciso di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sei sbronzo marcio e ti viene una gran voglia di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Nelle notti di luna piena mi trasformo in ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Dov'è finito il panetto di burro nel frigorifero? L'ho usato per ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Un ____ non si nega a nessuno.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mio sogno erotico proibito? Decisamente ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Per il suo novantesimo compleanno, ho regalato a mia nonna ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Non sono mai stato capace di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Per resuscitare Gesù ci vuole ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Quando vincerò il Nobel per la Pace, ringrazierò ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Solo ____ dura per sempre.",
+    "blanks": 1
+  },
+  {
+    "text": "I vegetariani mangiano anche ____ quando nessuno li guarda.",
+    "blanks": 1
+  },
+  {
+    "text": "Quando sei sul cesso ti viene spesso in mente ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Di notte ho paura che da sotto il letto sbuchi ____.",
+    "blanks": 1
+  },
+  {
+    "text": "In caso di emergenza, ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Nel mio cibo cinese da asporto ho trovato ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho perso il lavoro perché in ufficio ho portato ____.",
+    "blanks": 1
+  },
+  {
+    "text": "L'ultima impresa di Ercole è stata sconfiggere ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Non capirai il significato della vita finché non conoscerai le gioie che porta ____.",
+    "blanks": 1
+  },
+  
+  {
+    "text": "____: solo così si può ottenere la pace nel mondo.",
+    "blanks": 1
+  },
+  {
+    "text": "Nel mio quaderno delle elementari ho trovato ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Mi sento realizzato grazie a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "In questo momento riesco solamente a pensare a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "L'attività preferita di Federica Pellegrini quando non nuota?",
+    "blanks": 1
+  },
+  {
+    "text": "Una cosa completamente inutile? ____.",
+    "blanks": 1
+  },   
+  {
+    "text": "Adoro il profumo del ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Alza la cornetta, ____ ti aspetta!",
+    "blanks": 1
+  },
+  {
+    "text": "Ho un disperato bisogno di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sin da piccolo sono stato educato a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____, ecco come potrei punire mio figlio!",
+    "blanks": 1
+  },
+  {
+    "text": "Il vero significato del Natale è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La mia prima parola è stata ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Come tutti sanno, l'unico modo per uccidere Dracula è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Fra tutte le cose che so fare, di sicuro, quella che mi riesce meglio è ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Guarda che ____ non è per niente una cosa di cui vantarsi, quindi finiscila che sei patetico.",
+    "blanks": 1
+  },
+  {
+    "text": "Mia madre è insuperabile per quanto riguarda ____ .",
+    "blanks": 1
+  },
+  {
+    "text": " ____ ? A mani basse la mia attività preferita!",
+    "blanks": 1
+  },
+  {
+    "text": "La mia crush delle medie? Senza dubbio ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Vi presentiamo Calcio X-treme! Esattamente come il calcio ma con ____!",
+    "blanks": 1
+  },
+  {
+    "text": "Qual è il piacere nascosto di Batman?",
+    "blanks": 1
+  },
+  {
+    "text": "Le linee guida di Ryanair ora proibiscono ____ sull'aereo.",
+    "blanks": 1
+  },
+  {
+    "text": "Amico non andare in bagno. C'è ____ lì dentro!",
+    "blanks": 1
+  },
+  {
+    "text": "Come ho perso la verginità?",
+    "blanks": 1
+  },
+  {
+    "text": "È un peccato che di questi tempi i ragazzini si immischino con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____? Scommetto che uno non ti basta.",
+    "blanks": 1
+  },
+  {
+    "text": "Ragazzi, non servono droghe per sballarsi. A me basta ____ per essere felice.",
+    "blanks": 1
+  },
+  {
+    "text": "Nel nuovo “original film” di Disney Channel, Hannah Montana se la dovrà vedere per la prima volta con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Qual è il mio super potere segreto?",
+    "blanks": 1
+  },
+  {
+    "text": "Mi faccio una settimana detox. Solo succo di kale e ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Quando il faraone non lo ascoltò, Mosè scagliò sull’Egitto la piaga dei ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Per una volta, solo una, vorrei sentirti dire “Grazie mamma. Grazie per ____.”",
+    "blanks": 1
+  },
+  {
+    "text": "Papà perché la mamma piange?",
+    "blanks": 1
+  },
+  {
+    "text": "Il 50% dei matrimoni terminano con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Italiani! Prima che questa decade volga al termine manderemo ____ sulla luna!",
+    "blanks": 1
+  },
+  {
+    "text": "Questa stagione alla Scala, l’opera teatrale esistenzialista di Samuel Beckett: 'Aspettando ____.'",
+    "blanks": 1
+  },
+  {
+    "text": "La vita degli indiani d’America cambiò per sempre quando l’uomo bianco portò loro ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa sta usando Teachers for America come motivazione per spingere i ragazzi a dare il massimo?",
+    "blanks": 1
+  },
+  {
+    "text": "Al posto del carbone, la befana adesso porta ____ ai bambini cattivi.",
+    "blanks": 1
+  },
+  {
+    "text": "Ai bianchi piace ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Perché sento male dappertutto?",
+    "blanks": 1
+  },
+  {
+    "text": "Una romantica cena al lume di candela non sarebbe completa senza ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ho appena visto questo video sconvolgente! Per favore retwittatelo! #basta____.",
+    "blanks": 1
+  },
+  {
+    "text": "Consiglio divertente! Quando il vostro uomo vi chiede del sesso orale, sorprendetelo invece con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "L’escursione è stata completamente rovinata da ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Qual è il migliore amico di una donna?",
+    "blanks": 1
+  },
+  {
+    "text": "Quando sarò presidente, creerò il ministero di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa mi stanno nascondendo i miei genitori?",
+    "blanks": 1
+  },
+  {
+    "text": "Cara Abbey, sto avendo dei problemi con ____ e vorrei un tuo consiglio.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa riesce sempre a ravvivare un party?",
+    "blanks": 1
+  },
+  {
+    "text": "Se ti piace ____ POTRESTI ESSERE UN TERRONE.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa ha reso il mio primo bacio così imbarazzante?",
+    "blanks": 1
+  },
+  {
+    "text": "Salve e benvenuti da Cracco, volete iniziare la serata con ____?",
+    "blanks": 1
+  },
+  {
+    "text": "Ho 99 problemi ma ____ non è uno di questi.",
+    "blanks": 1
+  },
+  {
+    "text": "Il nuovo reality show di Real Time vede partecipare dodici single supersexy convivere con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa potrebbe trovare la nonna disgustoso ma stranamente affascinante?",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa ha posto fine alla mia relazione?",
+    "blanks": 1
+  },
+  {
+    "text": "Cos'è quel suono?",
+    "blanks": 1
+  },
+  {
+    "text": "Uhm, hey ragazzi, so che è stata una mia idea ma inizio ad avere dei dubbi riguardo a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Perché sono appiccicoso?",
+    "blanks": 1
+  },
+  {
+    "text": "Durante il sesso mi piace pensare a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Cos'è questo odore?",
+    "blanks": 1
+  },
+  {
+    "text": "Questo è il modo in cui il mondo finisce. Non con un'esplosione, ma con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "In arrivo a Broadway questa stagione, ____: il musical.",
+    "blanks": 1
+  },
+  {
+    "text": "Ecco la chiesa, ecco il campanile, apri le porte e trovi ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ma prima che la uccida, Mr. Bond, lasciate che vi mostri ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Un recente studio dimostra come gli italiani fcciano il 50% di sesso in meno dopo essere stati esposti a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Adesso su Sky sport: i mondiali di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Quando sarò miliardario, ergerò una statua di 50 metri per commemorare ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Gli storici militari ricordano Alessandro Magno per il suo brillante uso di ____ nella battaglia contro i persiani.",
+    "blanks": 1
+  },
+  {
+    "text": "La nuova FIAT Freemont. Con lo spazio per portare ____ dovunque tu voglia.",
+    "blanks": 1
+  },
+  {
+    "text": "Bene, mi scuserete signori, ma ho un appuntamento con ____.",
+    "blanks": 1
+  },
+  {
+    "text": "La medicina alternativa sta sperimentando i poteri curativi di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Oggi a LIVE - Non è la d’Urso, “Aiuto! Mio figlio è ____”",
+    "blanks": 1
+  },
+  {
+    "text": "Ce la farò a realizzare i miei sogni, ma ho bisogno dell'aiuto di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Bevo per dimenticare ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sono Bruno Barbieri e quando non preparo piatti stellati adoro ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Cosa rende la vita degna di essere vissuta?",
+    "blanks": 1
+  },
+  {
+    "text": "Essendo la mamma di cinque turbolenti ragazzi, non sono estranea a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "★☆☆☆☆ SCONSIGLIATISSIMO! Ho trovato ____ nella mia pasta!!",
+    "blanks": 1
+  },
+  {
+    "text": "Signor e signora Rossi, vi chiamiamo perché siamo preoccupati per Maria. Siete sicuri che vostra figlia sia ____?",
+    "blanks": 1
+  },
+  {
+    "text": "Se non puoi stare con la persona che ami, allora ama ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Sponsorizzato da Birra Moretti, la birra ufficiale di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____ ? È uno dei pochi piaceri della vita!",
+    "blanks": 1
+  },
+  {
+    "text": "____ ? Mi sembra una di quelle stronzate create con l'AI.",
+    "blanks": 1
+  },
+  {
+    "text": "ChatGPT mi ha consigliato di ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Ti giuro che non so neanch'io che ci faccia ____ nella nostra camera da letto.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mondo sarebbe un posto assai migliore senza ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il mondo sarebbe un posto assai peggiore senza ____.",
+    "blanks": 1
   }
 ]
