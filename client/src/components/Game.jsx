@@ -491,18 +491,30 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                   )}
                   
                   <div className="flex flex-wrap justify-center gap-4">
-                    {gameData.playedCards.map((playedCardObject, index) => (
-                      <Card 
-                        key={index}
-                        type="white" 
-                        text={Array.isArray(playedCardObject.cards) ? playedCardObject.cards.map(card => card.text || card).join(' / ') : (playedCardObject.card?.text || playedCardObject.card)}
-                        onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
-                        isSelectable={isCurrentPlayerJudge()}
-                        isSelected={judgeSelection.selectedIndex === index}
-                        isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
-                        isJudging={true}
-                      />
-                    ))}
+                    {gameData.playedCards.map((playedCardObject, index) => {
+                      // Gestisci la struttura delle carte
+                      let cardText = '';
+                      if (Array.isArray(playedCardObject.cards)) {
+                        // Carte multiple - ogni carta è una stringa
+                        cardText = playedCardObject.cards.join(' / ');
+                      } else if (playedCardObject.card) {
+                        // Carta singola - può essere stringa o oggetto
+                        cardText = typeof playedCardObject.card === 'string' ? playedCardObject.card : playedCardObject.card.text;
+                      }
+                      
+                      return (
+                        <Card 
+                          key={index}
+                          type="white" 
+                          text={cardText}
+                          onClick={isCurrentPlayerJudge() ? () => handleJudgeCardSelect(index) : undefined}
+                          isSelectable={isCurrentPlayerJudge()}
+                          isSelected={judgeSelection.selectedIndex === index}
+                          isPending={judgeSelection.selectedIndex === index && judgeSelection.isConfirming}
+                          isJudging={true}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               )}

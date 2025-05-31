@@ -317,8 +317,8 @@ export class Room {
         nickname: winnerPlayer.nickname,
         score: winnerPlayer.score,
         cardPlayed: Array.isArray(winningSubmission.cards) ? 
-          winningSubmission.cards.map(card => card.text || card).join(' / ') : 
-          (winningSubmission.card?.text || winningSubmission.card)
+          winningSubmission.cards.join(' / ') : 
+          winningSubmission.card
       },
       gameOver: this.gameOver,
       gameWinner: gameWinner,
@@ -386,18 +386,15 @@ export class Room {
   
   getGameState() {
     let winningCardText = null;
-    // Trova il testo della carta vincente se il round è terminato e c'è un vincitore del round
     if (this.roundStatus === 'roundEnd' && this.roundWinner) {
       const originalWinningSubmission = this.playedCards.find(pc => pc.playerId === this.roundWinner);
       if (originalWinningSubmission) {
-        // Gestisci sia carte singole che multiple
+        // Le carte sono stringhe semplici
         if (Array.isArray(originalWinningSubmission.cards)) {
-          winningCardText = originalWinningSubmission.cards.map(card => card.text || card).join(' / ');
+          winningCardText = originalWinningSubmission.cards.join(' / ');
         } else {
-          winningCardText = originalWinningSubmission.card?.text || originalWinningSubmission.card;
+          winningCardText = originalWinningSubmission.card;
         }
-      } else {
-        console.warn(`[Room ${this.roomCode}] Non è stato possibile trovare la carta vincente originale per il vincitore del round ${this.roundWinner} in this.playedCards.`);
       }
     }
   
@@ -415,9 +412,15 @@ export class Room {
       roundStatus: this.roundStatus, // Use the actual roundStatus property
       // Invia le carte giocate (mescolate) solo se si sta giudicando o il round è finito.
       // Per la visualizzazione della carta vincente, useremo winningCardText.
-      playedCards: (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd') ? this.getPlayedCards() : [], 
-      roundWinner: this.roundWinner, // Questo rimane l'ID del giocatore vincitore del round
-      winningCardText: winningCardText, // NUOVA PROPRIETÀ
+      playedCards: (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd') ? 
+        this.getPlayedCards().map(pc => ({
+          playerId: pc.playerId,
+          cards: pc.cards || [pc.card], // Assicura che sia sempre un array
+          // Per retrocompatibilità con carte singole
+          card: Array.isArray(pc.cards) ? pc.cards.join(' / ') : pc.card
+        })) : [],
+      roundWinner: this.roundWinner,
+      winningCardText: winningCardText,
       gameOver: this.gameOver,
       gameWinner: this.gameWinner,
       // You might want to send player hands only to the specific player
