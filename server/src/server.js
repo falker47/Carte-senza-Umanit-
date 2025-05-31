@@ -125,14 +125,14 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('play-card', ({ roomCode, cardIndex }) => {
-    const room = gameManager.rooms[roomCode]; // Get the room instance
+  socket.on('play-card', ({ roomCode, cardIndices }) => {
+    const room = gameManager.rooms[roomCode];
     if (!room) {
       socket.emit('error', { message: 'Stanza non trovata durante play-card' });
       return;
     }
 
-    const result = gameManager.playWhiteCard(roomCode, socket.id, cardIndex); 
+    const result = gameManager.playWhiteCard(roomCode, socket.id, cardIndices); 
     if (result.success) {
       // Send updated hand to the player who played
       const player = room.players.find(p => p.id === socket.id);
@@ -145,18 +145,15 @@ io.on('connection', (socket) => {
       const allPlayed = room.allPlayersPlayed(); 
       console.log(`Room ${roomCode}: allPlayersPlayed() returned ${allPlayed}`); 
       
-      let gameStateForUpdate = room.getGameState(); // Get current game state
+      let gameStateForUpdate = room.getGameState();
 
       if (allPlayed) {
-        room.setRoundStatus('judging'); // <--- IMPORTANT: Update server-side room state
+        room.setRoundStatus('judging');
         console.log(`Room ${roomCode}: All players played, server-side roundStatus set to judging.`);
-        // Refresh gameStateForUpdate to include the new roundStatus and playedCards for judging
         gameStateForUpdate = room.getGameState(); 
-        // Ensure playedCards are included for the 'judging' state update
         gameStateForUpdate.playedCards = room.getPlayedCards(); 
       }
       
-      // Emit game-update with the potentially modified gameStateForUpdate
       io.to(roomCode).emit('game-update', gameStateForUpdate);
       console.log(`Room ${roomCode}: Emesso game-update dopo play-card. Stato:`, gameStateForUpdate.roundStatus);
 

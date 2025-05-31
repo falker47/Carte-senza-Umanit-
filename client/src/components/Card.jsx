@@ -1,6 +1,49 @@
 import React from 'react';
 
-function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending, isJudging }) {
+function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending, isJudging, cards }) {
+  // Se abbiamo un array di carte (per il giudizio), mostralo come gruppo
+  if (cards && Array.isArray(cards)) {
+    return (
+      <div 
+        className={`
+          ${isSelected ? 'border-4 border-blue-500 shadow-blue-500/50 shadow-lg' : 'border-2 border-gray-300'}
+          ${isPending ? 'border-4 border-yellow-500 shadow-yellow-500/50 shadow-lg animate-pulse' : ''}
+          ${isSelectable ? 'cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out' : ''}
+          p-3 rounded-lg shadow-lg min-h-[140px] flex flex-col justify-between relative ${isJudging ? 'w-80 max-w-sm mx-auto' : 'w-full'}
+        `}
+        onClick={onClick}
+      >
+        <div className="space-y-2">
+          {cards.map((card, index) => (
+            <div key={index} className="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm font-medium">
+              {card}
+            </div>
+          ))}
+        </div>
+        
+        {/* Indicatori di stato */}
+        {isSelected && !isPending && (
+          <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+            ✓
+          </div>
+        )}
+        
+        {isPending && (
+          <div className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+            ⏳
+          </div>
+        )}
+        
+        {isWinner && (
+          <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+            👑
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Logica esistente per carte singole
   console.log(`Card component received text:`, text);
 
   const formatText = (text) => {

@@ -83,7 +83,7 @@ export class GameManager {
     return this.rooms[roomCode].getGameState();
   }
 
-  playWhiteCard(roomCode, playerId, cardIndex) {
+  playWhiteCard(roomCode, playerId, cardIndices) {
     // Verifica se la stanza esiste
     if (!this.rooms[roomCode]) {
       return { success: false, error: 'Stanza non trovata' };
@@ -99,8 +99,8 @@ export class GameManager {
       return { success: false, error: 'Il giudice non può giocare carte' };
     }
 
-    // Gioca la carta
-    return this.rooms[roomCode].playCard(playerId, cardIndex);
+    // Gioca le carte
+    return this.rooms[roomCode].playCard(playerId, cardIndices);
   }
 
   allPlayersPlayed(roomCode) {

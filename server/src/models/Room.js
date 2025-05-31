@@ -118,7 +118,7 @@ export class Room {
     });
   }
 
-  playCard(playerId, cardIndex) {
+  playCard(playerId, cardIndices) {
     // Trova il giocatore
     const playerIndex = this.players.findIndex(player => player.id === playerId);
     if (playerIndex === -1) {
@@ -127,24 +127,49 @@ export class Room {
 
     // Verifica se il giocatore ha già giocato
     if (this.playedCards.some(card => card.playerId === playerId)) {
-      return { success: false, error: 'Hai già giocato una carta in questo turno' };
+      return { success: false, error: 'Hai già giocato le tue carte in questo turno' };
     }
 
-    // Verifica se l'indice della carta è valido
-    if (cardIndex < 0 || cardIndex >= this.players[playerIndex].hand.length) {
-      return { success: false, error: 'Indice carta non valido' };
+    // Supporta sia singola carta (retrocompatibilità) che array di carte
+    const indices = Array.isArray(cardIndices) ? cardIndices : [cardIndices];
+    
+    // Verifica che il numero di carte corrisponda ai blanks della carta nera
+    const requiredCards = this.currentBlackCard ? this.currentBlackCard.blanks : 1;
+    if (indices.length !== requiredCards) {
+      return { success: false, error: `Devi giocare esattamente ${requiredCards} carta${requiredCards > 1 ? 'e' : ''}` };
     }
 
-    // Gioca la carta
-    const card = this.players[playerIndex].hand[cardIndex];
-    this.playedCards.push({ playerId, card });
+    // Verifica che tutti gli indici siano validi e unici
+    const playerHand = this.players[playerIndex].hand;
+    for (let i = 0; i < indices.length; i++) {
+      if (indices[i] < 0 || indices[i] >= playerHand.length) {
+        return { success: false, error: 'Indice carta non valido' };
+      }
+      // Verifica duplicati
+      if (indices.indexOf(indices[i]) !== i) {
+        return { success: false, error: 'Non puoi giocare la stessa carta più volte' };
+      }
+    }
 
-    // Rimuovi la carta dalla mano del giocatore
-    this.players[playerIndex].hand.splice(cardIndex, 1);
+    // Ordina gli indici in ordine decrescente per rimuovere le carte senza alterare gli indici
+    const sortedIndices = [...indices].sort((a, b) => b - a);
+    
+    // Estrai le carte dalla mano
+    const cards = [];
+    for (const index of sortedIndices) {
+      cards.unshift(playerHand[index]); // unshift per mantenere l'ordine originale
+      playerHand.splice(index, 1);
+    }
 
-    // Aggiungi una nuova carta alla mano del giocatore
-    if (this.whiteCards.length > 0) {
-      this.players[playerIndex].hand.push(this.whiteCards.pop());
+    // Aggiungi le carte giocate
+    this.playedCards.push({ playerId, cards });
+
+    // Aggiungi nuove carte alla mano del giocatore
+    const cardsToAdd = Math.min(requiredCards, this.whiteCards.length);
+    for (let i = 0; i < cardsToAdd; i++) {
+      if (this.whiteCards.length > 0) {
+        this.players[playerIndex].hand.push(this.whiteCards.pop());
+      }
     }
 
     return { success: true };
@@ -167,7 +192,7 @@ export class Room {
     // Escludi il giudice dal conteggio
     const nonJudgePlayers = this.players.filter((_, index) => index !== this.judgeIndex);
     
-    // Verifica se tutti i giocatori (tranne il giudice) hanno giocato una carta
+    // Verifica se tutti i giocatori (tranne il giudice) hanno giocato le loro carte
     return nonJudgePlayers.every(player => 
       this.playedCards.some(card => card.playerId === player.id)
     );

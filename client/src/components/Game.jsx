@@ -24,9 +24,9 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     isConfirming: false
   });
   
-  // Nuovo stato per la selezione delle carte della mano
+  // Nuovo stato per la selezione multipla delle carte
   const [handSelection, setHandSelection] = useState({
-    selectedIndex: null,
+    selectedIndices: [],
     isConfirming: false
   });
   
