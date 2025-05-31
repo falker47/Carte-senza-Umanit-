@@ -151,17 +151,23 @@ export class Room {
       }
     }
 
-    // Ordina gli indici in ordine decrescente per rimuovere le carte senza alterare gli indici
-    const sortedIndices = [...indices].sort((a, b) => b - a);
-    
-    // Estrai le carte dalla mano
+    // MODIFICA: Estrai le carte mantenendo l'ordine di selezione
     const cards = [];
+    const cardsToRemove = [];
+    
+    // Prima estrai le carte nell'ordine di selezione
+    for (const index of indices) {
+      cards.push(playerHand[index]);
+      cardsToRemove.push(index);
+    }
+    
+    // Poi rimuovi le carte dalla mano in ordine decrescente per non alterare gli indici
+    const sortedIndices = [...cardsToRemove].sort((a, b) => b - a);
     for (const index of sortedIndices) {
-      cards.unshift(playerHand[index]); // unshift per mantenere l'ordine originale
       playerHand.splice(index, 1);
     }
 
-    // Aggiungi le carte giocate
+    // Aggiungi le carte giocate (ora nell'ordine di selezione)
     this.playedCards.push({ playerId, cards });
 
     // Aggiungi nuove carte alla mano del giocatore
