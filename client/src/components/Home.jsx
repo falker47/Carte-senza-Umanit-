@@ -101,24 +101,58 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
       setError('Inserisci un nickname per continuare');
       return;
     }
-
-    const upperCaseLocalRoomCode = localRoomCode.toUpperCase(); // Converti in maiuscolo
-
+  
+    const upperCaseLocalRoomCode = localRoomCode.toUpperCase();
+  
     if (!upperCaseLocalRoomCode.trim()) {
       setError('Inserisci un codice stanza per continuare');
       return;
     }
-
-    setNickname(localNickname);
-    setRoomCode(upperCaseLocalRoomCode); // Imposta il codice in maiuscolo
-    setGameState('lobby');
-
-    // Il socket verrà creato in App.jsx e gestirà l'ingresso nella stanza
-    setTimeout(() => {
-      if (socket) {
-        socket.emit('join-room', { nickname: localNickname, roomCode: upperCaseLocalRoomCode }); // Invia il codice in maiuscolo
-      }
-    }, 100);
+  
+    if (!socket) {
+      setError('Connessione al server non disponibile. Riprova.');
+      return;
+    }
+  
+    if (!socket.connected) {
+      setError('Connessione al server in corso. Attendi un momento e riprova.');
+      return;
+    }
+  
+    setError(''); // Pulisci errori precedenti
+    
+    console.log('Emetto join-room con nickname:', localNickname, 'e codice:', upperCaseLocalRoomCode);
+    
+    // Timeout per gestire mancate risposte del server
+    const timeout = setTimeout(() => {
+      socket.off('room-players', handleRoomJoined);
+      socket.off('error', handleJoinError);
+      setError('Timeout nell\'accesso alla stanza. Riprova.');
+    }, 10000); // 10 secondi di timeout
+    
+    // Gestisci l'accesso riuscito alla stanza
+    const handleRoomJoined = ({ players, host, code }) => {
+      console.log('Accesso riuscito alla stanza:', code);
+      clearTimeout(timeout);
+      setNickname(localNickname);
+      setRoomCode(upperCaseLocalRoomCode);
+      setGameState('lobby');
+      socket.off('room-players', handleRoomJoined);
+      socket.off('error', handleJoinError);
+    };
+    
+    // Gestisci errori del server (incluso stanza non trovata)
+    const handleJoinError = ({ message }) => {
+      console.error('Errore dal server:', message);
+      clearTimeout(timeout);
+      setError(message);
+      socket.off('room-players', handleRoomJoined);
+      socket.off('error', handleJoinError);
+    };
+    
+    socket.on('room-players', handleRoomJoined);
+    socket.on('error', handleJoinError);
+    socket.emit('join-room', { nickname: localNickname, roomCode: upperCaseLocalRoomCode });
   };
   
   // Nuova funzione per gestire la pressione del tasto invio
