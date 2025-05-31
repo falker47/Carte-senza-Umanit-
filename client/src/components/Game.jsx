@@ -111,7 +111,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     
     socket.emit('play-card', {
       roomCode,
-      cardIndex: handSelection.selectedIndex
+      cardIndices: [handSelection.selectedIndex] // Cambiato da cardIndex a cardIndices (array)
     });
     
     setGameData(prev => ({
