@@ -592,7 +592,7 @@ const [handSelection, setHandSelection] = useState({
                         if (selectedCount === 0) {
                           return (
                             <p className="text-gray-600 dark:text-gray-400 text-sm text-center">
-                              Seleziona {requiredCards} carta{requiredCards > 1 ? 'e' : ''} per giocare
+                              Seleziona {requiredCards} {requiredCards > 1 ? 'carte' : 'carta'} per giocare
                             </p>
                           );
                         } else if (selectedCount < requiredCards) {
@@ -678,7 +678,7 @@ const [handSelection, setHandSelection] = useState({
         )}
       </div>
       
-      {/* Footer sticky per mobile - pannello di controllo carte */}
+      {/* Footer sticky per mobile - pannello di controllo carte
       {!isCurrentPlayerJudge() && gameData.roundStatus === 'playing' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-3 z-50">
           <div className="control-panel-fixed" style={{ minHeight: '50px' }}>
@@ -720,7 +720,7 @@ const [handSelection, setHandSelection] = useState({
             </div>
           </div>
         </div>
-      )}
+      )} */}
       
       {/* Footer sticky per mobile - pannello di controllo giudice */}
       {isCurrentPlayerJudge() && gameData.roundStatus === 'judging' && (
