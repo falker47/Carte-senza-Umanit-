@@ -222,7 +222,7 @@
   {
     "text": "____: lo facciamo tutti, ma nessuno lo ammette.",
     "blanks": 1
-  },   
+  },
   {
     "text": "Venderei la mia dignità in cambio di ____.",
     "blanks": 1
@@ -339,7 +339,6 @@
     "text": "Non capirai il significato della vita finché non conoscerai le gioie che porta ____.",
     "blanks": 1
   },
-  
   {
     "text": "____: solo così si può ottenere la pace nel mondo.",
     "blanks": 1
@@ -363,7 +362,7 @@
   {
     "text": "Una cosa completamente inutile? ____.",
     "blanks": 1
-  },   
+  },
   {
     "text": "Adoro il profumo del ____.",
     "blanks": 1
@@ -697,6 +696,39 @@
     "blanks": 1
   },
   {
+    "text": "Gli italiani? Pizza, spaghetti e ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____ sarà una nuova disciplina olimpica.",
+    "blanks": 1
+  },
+  {
+    "text": "Il lupo perde il pelo ma non il ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Guardi il cielo e, vedendo una stella cadente esprimi un desiderio. 'Vorrei ____'",
+    "blanks": 1
+  },
+  {
+    "text": "Mangerei un ____, piuttosto che mangiare da tua mamma.",
+    "blanks": 1
+  },
+  
+  {
+    "text": "Mentre gli USA e la Russia gareggiavano per la conquista della Luna, Il messico ha investito milioni di pesos in ____.",
+    "blanks": 1
+  },
+  {
+    "text": "____? C’è un app per quello.",
+    "blanks": 1
+  },
+  {
+    "text": "Fra 1.000 anni, quando le banconote saranno soltanto un ricordo lontano, ____ sarà il nostro denaro.",
+    "blanks": 1
+  },
+  {
     "text": "Il nuovo piatto di Masterchef: _____ al _____.",
     "blanks": 2
   },
@@ -708,7 +740,6 @@
     "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
     "blanks": 2
   },
-  
   {
     "text": "Esatto, ho sconfitto ____! Mi chiedi come? ____.",
     "blanks": 2
@@ -720,10 +751,6 @@
   {
     "text": "Nel nuovo thriller di Jordan Peele, una giovane famiglia scopre che ____ è stato ____ per tutto il tempo.",
     "blanks": 2
-  },
-  {
-    "text": "____ + ____ = ____.",
-    "blanks": 3
   },
   {
     "text": "Per il mio prossimo trucco di magia, tirerò fuori ____ da ____.",
@@ -744,5 +771,74 @@
   {
     "text": "Sky cinema presenta “____: la storia di ____.”",
     "blanks": 2
+  },
+  {
+    "text": "____ si sta evolvendo. Congratulazioni, si è evoluto in ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Per far funzionare un ____, abbiamo bisogno di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Gli antichi romani usavano ____ prima di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "La piaga del ____ sarà sconfitta grazie al ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Ordina subito ____ per ricevere in regalo ____!",
+    "blanks": 2
+  },
+  {
+    "text": "Mi piace l’idea di ____, ma non posso perchè sono ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Fissai ____ intensamente negli occhi e mi sentii ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Ho acquisito il potere di ____ dopo essere stato morso da ____.",
+    "blanks": 2
+  },
+  {
+    "text": "____ è morto/a di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Salve, sono ____ il creatore di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "L’eroe accumulò tutto il suo potere grazie a ____, e distrusse il re malvagio con la sua arma leggendaria: ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Se ho accanto a ____ ciò significa che ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Ogni volta che ascolto in tv la voce di ____, mi vien voglia di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Voci dicono che il piatto preferito di Vladimir Putin è ____ ripieno di ____.",
+    "blanks": 2
+  },
+  {
+    "text": "In un mondo senza ____, il nostro unico conforto è ____.",
+    "blanks": 2
+  },
+  
+  {
+    "text": "Componi un Haiku.",
+    "blanks": 3
+  },
+  {
+    "text": "____ + ____ = ____.",
+    "blanks": 3
   }
 ]
