@@ -17,7 +17,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://carte-senza-umanit.onrender.com'  // URL corretto del client
+    ? 'https://carte-senza-umanita.onrender.com'  // URL aggiornato del client
     : 'http://localhost:5173',
   methods: ['GET', 'POST'],
   credentials: true
@@ -27,7 +27,7 @@ const corsOptions = {
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? 'https://carte-senza-umanit.onrender.com'  // URL corretto del client
+      ? 'https://carte-senza-umanita.onrender.com'  // URL aggiornato del client
       : '*',
     credentials: true
   },
