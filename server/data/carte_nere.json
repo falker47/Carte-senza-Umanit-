@@ -20,15 +20,11 @@
     "blanks": 1
   },
   {
-    "text": "Benvenuti nella mia live Twitch! Sono _____ e oggi rispondo alle vostre domande controverse.",
-    "blanks": 1
-  },
-  {
     "text": "La cosa peggiore da dire a un funerale: '_____'.",
     "blanks": 1
   },
   {
-    "text": "Il mio professore di matematica è stato licenziato per _____.",
+    "text": "Il mio professore di matematica è stato licenziato. A quanto pare _____ non è tollerato dalla direzione scolastica.",
     "blanks": 1
   },
   {
@@ -52,7 +48,7 @@
     "blanks": 1
   },
   {
-    "text": "Il mio vicino di casa è stato arrestato per _____.",
+    "text": "Il mio vicino di casa è stato arrestato per _____. Poteva capitare anche a me...",
     "blanks": 1
   },
   {
@@ -832,7 +828,18 @@
     "text": "In un mondo senza ____, il nostro unico conforto è ____.",
     "blanks": 2
   },
-  
+  {
+    "text": "____? ____, ecco cosa meriterebbe!",
+    "blanks": 2
+  },
+  {
+    "text": "Pronto polizia? Ci sono ____ e ____ in casa mia, ho bisogno di aiuto!",
+    "blanks": 2
+  },
+  {
+    "text": "Nella serata più memorabile della mia vita ero con ____. È cominciata con ____ ed è inevitabilmente terminata con ____.",
+    "blanks": 3
+  },
   {
     "text": "Componi un Haiku.",
     "blanks": 3
