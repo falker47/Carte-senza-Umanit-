@@ -188,15 +188,15 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         <ThemeToggle />
       </div>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
-        <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white tracking-tight">
+        <h1 className="text-5xl font-extrabold text-center mb-1 text-gray-800 dark:text-white tracking-tight">
           CARTE SENZA UMANITÀ
         </h1>
-        <p className="text-center text-gray-600 dark:text-gray-300 mb-6 text-lg font-medium">
+        <p className="text-center text-gray-600 dark:text-gray-300 mb-5 text-lg font-medium">
           Un gioco per persone orribili
         </p>
         
         {/* Pulsante Regole */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <button
             onClick={() => setShowRules(true)}
             className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium"
@@ -209,13 +209,13 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5" role="alert">
             <strong className="font-bold">Errore: </strong>
             <span className="block sm:inline">{error}</span>
           </div>
         )}
 
-        <div className="mb-6">
+        <div className="mb-5">
           <label htmlFor="nickname" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
             👤 NICKNAME
           </label>
@@ -242,7 +242,7 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
           {isConnecting ? 'CONNESSIONE IN CORSO...' : 'CREA NUOVA STANZA'}
         </button>
 
-        <div className="my-8 flex items-center">
+        <div className="my-6 flex items-center">
           <hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-600" />
           <span className="mx-6 text-gray-500 dark:text-gray-400 font-semibold bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600">oppure</span>
           <hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-600" />
