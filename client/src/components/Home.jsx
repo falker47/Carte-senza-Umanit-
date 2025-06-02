@@ -184,10 +184,15 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="absolute top-4 right-4">
+      <div className="hidden lg:block absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm relative">
+        {/* ThemeToggle per mobile - in alto a destra dentro la div */}
+        <div className="lg:hidden absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
+        
         <h1 className="text-5xl font-extrabold text-center mb-1 text-gray-800 dark:text-white tracking-tight">
           CARTE SENZA UMANITÀ
         </h1>
