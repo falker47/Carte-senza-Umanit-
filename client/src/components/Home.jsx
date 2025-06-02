@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import { useTheme } from '../hooks/useTheme';
 import ThemeToggle from './ThemeToggle';
+import Rules from './Rules';
 
 const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
   const [localNickname, setLocalNickname] = useState(nickname || '');
   const [localRoomCode, setLocalRoomCode] = useState('');
   const [error, setError] = useState('');
   const [isConnecting, setIsConnecting] = useState(true);
+  const [showRules, setShowRules] = useState(false);
   const socket = useSocket();
   
   // Aggiungi questo useEffect per monitorare lo stato della connessione
@@ -175,6 +177,11 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
     }
   };
 
+  // Aggiungi questa condizione di rendering all'inizio del return
+  if (showRules) {
+    return <Rules onBack={() => setShowRules(false)} />;
+  }
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
       <div className="absolute top-4 right-4">
@@ -184,9 +191,22 @@ const Home = ({ setNickname, setRoomCode, setGameState, nickname }) => {
         <h1 className="text-5xl font-extrabold text-center mb-2 text-gray-800 dark:text-white tracking-tight">
           CARTE SENZA UMANITÀ
         </h1>
-        <p className="text-center text-gray-600 dark:text-gray-300 mb-10 text-lg font-medium">
+        <p className="text-center text-gray-600 dark:text-gray-300 mb-6 text-lg font-medium">
           Un gioco per persone orribili
         </p>
+        
+        {/* Pulsante Regole */}
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setShowRules(true)}
+            className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>📋 Come si gioca?</span>
+          </button>
+        </div>
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
