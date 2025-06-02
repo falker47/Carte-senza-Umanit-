@@ -4,7 +4,7 @@ import ThemeToggle from './ThemeToggle';
 const Rules = ({ onBack }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm relative">
+      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm relative" style={{padding: '27px'}}>
         {/* Container sticky per i controlli in alto */}
         <div className="sticky top-0 flex justify-between items-center mb-4 bg-white dark:bg-gray-800 py-2 z-10">
           <ThemeToggle />
