@@ -4,27 +4,27 @@ import ThemeToggle from './ThemeToggle';
 const Rules = ({ onBack }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-      
-      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={onBack}
-            className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="font-medium">Torna alla Home</span>
-          </button>
-          
+      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm relative">
+        {/* Pulsante di ritorno in alto a destra */}
+        <button
+          onClick={onBack}
+          className="absolute top-4 right-4 p-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        {/* ThemeToggle spostato più a sinistra per evitare sovrapposizioni */}
+        <div className="absolute top-4 left-4">
+          <ThemeToggle />
+        </div>
+        
+        {/* Titolo centrato */}
+        <div className="text-center mb-8 mt-4">
           <h1 className="text-3xl font-extrabold text-gray-800 dark:text-white">
             📋 REGOLE DEL GIOCO
           </h1>
-          
-          <div className="w-24"></div> {/* Spacer per centrare il titolo */}
         </div>
 
         <div className="space-y-8 text-gray-700 dark:text-gray-300">
@@ -113,23 +113,11 @@ const Rules = ({ onBack }) => {
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
               💡 <span className="ml-2">Consigli per Giocare</span>
             </h2>
-            <ul className="space-y-2 text-lg">
-              <li className="flex items-start">
-                <span className="text-yellow-500 mr-2">💡</span>
-                Non sempre la risposta più ovvia è quella vincente
-              </li>
-              <li className="flex items-start">
-                <span className="text-yellow-500 mr-2">💡</span>
-                Conosci il tuo pubblico: adatta le tue scelte al senso dell'umorismo del giudice
-              </li>
-              <li className="flex items-start">
-                <span className="text-yellow-500 mr-2">💡</span>
-                A volte le combinazioni più assurde sono quelle che fanno ridere di più
-              </li>
-              <li className="flex items-start">
-                <span className="text-yellow-500 mr-2">💡</span>
-                Ricorda: è solo un gioco, divertitevi!
-              </li>
+            <ul className="space-y-2 text-lg list-disc list-inside">
+              <li>Non sempre la risposta più ovvia è quella vincente</li>
+              <li>Conosci il tuo pubblico: adatta le tue scelte al senso dell'umorismo del giudice</li>
+              <li>A volte le combinazioni più assurde sono quelle che fanno ridere di più</li>
+              <li>Ricorda: è solo un gioco, divertitevi!</li>
             </ul>
           </section>
 
