@@ -141,13 +141,19 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
-      <div className="absolute top-4 right-4">
+    <div className="container mx-auto p-2 lg:p-4 py-8 flex flex-col items-center min-h-screen">
+      {/* ThemeToggle per desktop */}
+      <div className="absolute top-4 right-4 hidden lg:block">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-fade-in">
-        <div className="flex justify-between items-center mb-6">
+      <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-fade-in relative">
+        {/* ThemeToggle per mobile */}
+        <div className="absolute top-1 right-1 lg:hidden">
+          <ThemeToggle />
+        </div>
+        
+        <div className="flex justify-between items-center mb-6 mt-4 lg:mt-0">
           <h1 className="text-2xl font-bold">CARTE SENZA UMANITÀ</h1>
           <div className="flex items-center space-x-2">
             {roomCode ? (
