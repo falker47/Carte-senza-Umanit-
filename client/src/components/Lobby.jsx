@@ -10,7 +10,7 @@ const Lobby = ({ roomCode, nickname, setGameState, setRoomCode }) => {
   const [gameSettings, setGameSettings] = useState({
     maxPoints: 5,
     maxPlayers: 10,
-    handSize: 7
+    handSize: 10  // Modificato da 7 a 10
   });
   const [customPoints, setCustomPoints] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);

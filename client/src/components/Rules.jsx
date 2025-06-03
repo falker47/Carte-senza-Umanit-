@@ -26,6 +26,18 @@ const Rules = ({ onBack }) => {
         </div>
 
         <div className="space-y-8 text-gray-700 dark:text-gray-300">
+          {/* Avvertenze - SPOSTATO ALL'INIZIO */}
+          <section className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
+            <h2 className="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-4 flex items-center">
+              ⚠️ <span className="ml-2">Avvertenze</span>
+            </h2>
+            <p className="text-yellow-700 dark:text-yellow-300 leading-relaxed">
+              Questo gioco contiene contenuti per adulti e umorismo nero. È destinato a un pubblico 
+              maturo e dovrebbe essere giocato solo tra persone che si conoscono bene e condividono 
+              lo stesso senso dell'umorismo. Rispettate sempre i limiti degli altri giocatori.
+            </p>
+          </section>
+          
           {/* Obiettivo del gioco */}
           <section>
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
@@ -46,7 +58,7 @@ const Rules = ({ onBack }) => {
             <ul className="space-y-2 text-lg">
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                Ogni giocatore riceve 10 carte bianche
+                Ogni giocatore riceve un delle carte bianche (di default 10)
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
@@ -100,7 +112,7 @@ const Rules = ({ onBack }) => {
               🏆 <span className="ml-2">Come si Vince</span>
             </h2>
             <p className="text-lg leading-relaxed">
-              Il primo giocatore a raggiungere il numero di punti stabilito (di default 7 punti) 
+              Il primo giocatore a raggiungere il numero di punti stabilito (di default 5 punti) 
               vince la partita. Il numero di punti necessari per vincere può essere modificato 
               nelle impostazioni della stanza.
             </p>
@@ -117,18 +129,6 @@ const Rules = ({ onBack }) => {
               <li>A volte le combinazioni più assurde sono quelle che fanno ridere di più</li>
               <li>Ricorda: è solo un gioco, divertitevi!</li>
             </ul>
-          </section>
-
-          {/* Avvertenze */}
-          <section className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
-            <h2 className="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-4 flex items-center">
-              ⚠️ <span className="ml-2">Avvertenze</span>
-            </h2>
-            <p className="text-yellow-700 dark:text-yellow-300 leading-relaxed">
-              Questo gioco contiene contenuti per adulti e umorismo nero. È destinato a un pubblico 
-              maturo e dovrebbe essere giocato solo tra persone che si conoscono bene e condividono 
-              lo stesso senso dell'umorismo. Rispettate sempre i limiti degli altri giocatori.
-            </p>
           </section>
         </div>
       </div>

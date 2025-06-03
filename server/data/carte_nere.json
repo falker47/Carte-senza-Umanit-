@@ -1,66 +1,66 @@
 [
   {
-    "text": "Cosa mi ha fatto licenziare dal mio ultimo lavoro? _____.",
+    "text": "Cosa mi ha fatto licenziare dal mio ultimo lavoro? ____.",
     "blanks": 1
   },
   {
-    "text": "Il nuovo slogan della Nutella: '_____'.",
+    "text": "Il nuovo slogan della Nutella: '____'.",
     "blanks": 1
   },
   {
-    "text": "Il mio medico mi ha consigliato di evitare _____.",
+    "text": "Il mio medico mi ha consigliato di evitare ____.",
     "blanks": 1
   },
   {
-    "text": "La nonna si è incuriosita quando ha visto _____ sul mio telefono.",
+    "text": "La nonna si è incuriosita quando ha visto ____ sul mio telefono.",
     "blanks": 1
   },
   {
-    "text": "Il nuovo trend su TikTok: _____.",
+    "text": "Il nuovo trend su TikTok: ____.",
     "blanks": 1
   },
   {
-    "text": "La cosa peggiore da dire a un funerale: '_____'.",
+    "text": "La cosa peggiore da dire a un funerale: '____'.",
     "blanks": 1
   },
   {
-    "text": "Il mio professore di matematica è stato licenziato. A quanto pare _____ non è tollerato dalla direzione scolastica.",
+    "text": "Il mio professore di matematica è stato licenziato. A quanto pare ____ non è tollerato dalla direzione scolastica.",
     "blanks": 1
   },
   {
-    "text": "La mia tecnica di rimorchio preferita è _____.",
+    "text": "La mia tecnica di rimorchio preferita è ____.",
     "blanks": 1
   },
   {
-    "text": "Il segreto della nonna per una buona pasta è _____.",
+    "text": "Il segreto della nonna per una buona pasta è ____.",
     "blanks": 1
   },
   {
-    "text": "Non avrei mai pensato che _____ potesse essere così divertente.",
+    "text": "Non avrei mai pensato che ____ potesse essere così divertente.",
     "blanks": 1
   },
   {
-    "text": "Il nuovo film di Checco Zalone: '_____'.",
+    "text": "Il nuovo film di Checco Zalone: '____'.",
     "blanks": 1
   },
   {
-    "text": "La cosa più strana che ho trovato nella borsa di mia madre: _____.",
+    "text": "La cosa più strana che ho trovato nella borsa di mia madre: ____.",
     "blanks": 1
   },
   {
-    "text": "Il mio vicino di casa è stato arrestato per _____. Poteva capitare anche a me...",
+    "text": "Il mio vicino di casa è stato arrestato per ____. Poteva capitare anche a me...",
     "blanks": 1
   },
   {
-    "text": "Il nuovo superpotere di Superman: _____.",
+    "text": "Il nuovo superpotere di Superman: ____.",
     "blanks": 1
   },
   {
-    "text": "La vera ragione per cui l'Italia non va avanti: _____.",
+    "text": "La vera ragione per cui l'Italia non va avanti: ____.",
     "blanks": 1
   },
   {
-    "text": "Nulla è più pericoloso di _____.",
+    "text": "Nulla è più pericoloso di ____.",
     "blanks": 1
   },
   {
@@ -552,6 +552,10 @@
     "blanks": 1
   },
   {
+    "text": "Dopo ____ sabato, non pensavo di vederti a messa stamattina.",
+    "blanks": 1
+  },
+  {
     "text": "Il nuovo reality show di Real Time vede partecipare dodici single supersexy convivere con ____.",
     "blanks": 1
   },
@@ -724,16 +728,41 @@
     "text": "Fra 1.000 anni, quando le banconote saranno soltanto un ricordo lontano, ____ sarà il nostro denaro.",
     "blanks": 1
   },
+  
   {
-    "text": "Il nuovo piatto di Masterchef: _____ al _____.",
+    "text": "____. questa cosa mi innervosisce tantissimo!",
+    "blanks": 1
+  },
+  {
+    "text": "Ho ____, mi sento bene.",
+    "blanks": 1
+  },
+  {
+    "text": "____ accade ogni giorno sulla linea regionale Roma - Viterbo.",
+    "blanks": 1
+  },
+  {
+    "text": "Buongiorno, sono Maria dell’ISTAT. La chiamo per un sondaggio nazionale riguardo ____, ha due minuti da dedicarmi?",
+    "blanks": 1
+  },
+  {
+    "text": "Nella grotta di Gesù, nascosto dietro al bue e all’asinello, c’era ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Mi ha lasciato dopo 5 anni dicendomi che non si era mai abituata a ____.",
+    "blanks": 1
+  },
+  {
+    "text": "Il nuovo piatto di Masterchef: ____ al ____.",
     "blanks": 2
   },
   {
-    "text": "Il segreto di una buona relazione è _____ e _____.",
+    "text": "Il segreto di una buona relazione è ____ e ____.",
     "blanks": 2
   },
   {
-    "text": "Il mio piano per conquistare il mondo inizia con _____ e finisce con _____.",
+    "text": "Il mio piano per conquistare il mondo inizia con ____ e finisce con ____.",
     "blanks": 2
   },
   {
@@ -837,7 +866,27 @@
     "blanks": 2
   },
   {
-    "text": "Nella serata più memorabile della mia vita ero con ____. È cominciata con ____ ed è inevitabilmente terminata con ____.",
+    "text": "____ m’ispira ____.",
+    "blanks": 2
+  },
+  {
+    "text": "____ e ____ non vanno bene insieme.",
+    "blanks": 2
+  },
+  {
+    "text": "____ aspetterà: ci sono cose più importanti, come ____",
+    "blanks": 2
+  },
+  {
+    "text": "Cara, dall'estratto conto risulta la voce ____ e la voce ____ nello stesso giorno. Puoi darmi spiegazioni?",
+    "blanks": 2
+  },
+  {
+    "text": "____ per risolvere ____.",
+    "blanks": 2
+  },
+  {
+    "text": "Nella mia famiglia chiamiamo Trinità ____, ____ e ____.",
     "blanks": 3
   },
   {
@@ -846,6 +895,10 @@
   },
   {
     "text": "____ + ____ = ____.",
+    "blanks": 3
+  },
+  {
+    "text": "____ per farsi eleggere. ____ per governare. ____ per entrare nella storia.",
     "blanks": 3
   }
 ]
