@@ -82,20 +82,22 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         const oldHandLength = prev.hand.length;
         const newHandLength = hand.length;
         
-        // Se abbiamo ricevuto nuove carte, identifica quali sono nuove
-        let newCardIndices = [];
-        if (newHandLength > oldHandLength) {
-          // Le nuove carte sono quelle aggiunte alla fine
-          for (let i = oldHandLength; i < newHandLength; i++) {
-            newCardIndices.push(i);
-          }
-        }
-        
         // Aggiorna gli stati delle carte
-        setCardStates(prevStates => ({
-          ...prevStates,
-          newCardIndices: newCardIndices
-        }));
+        setCardStates(prevStates => {
+          // Se abbiamo ricevuto nuove carte E siamo almeno al round 2, identifica quali sono nuove
+          let newCardIndices = [];
+          if (newHandLength > oldHandLength && prevStates.currentRound >= 1) {
+            // Le nuove carte sono quelle aggiunte alla fine
+            for (let i = oldHandLength; i < newHandLength; i++) {
+              newCardIndices.push(i);
+            }
+          }
+          
+          return {
+            ...prevStates,
+            newCardIndices: newCardIndices
+          };
+        });
         
         return {
           ...prev,
