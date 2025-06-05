@@ -18,18 +18,15 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     hasPlayed: false
   });
   
-  // Stato per la selezione del giudice
   const [judgeSelection, setJudgeSelection] = useState({
     selectedIndex: null,
     isConfirming: false
   });
   
-  // Nuovo stato per la selezione multipla delle carte
-  // Modifica lo stato handSelection per gestire array di carte
-const [handSelection, setHandSelection] = useState({ 
-  selectedIndices: [], // Cambiato da selectedIndex a selectedIndices (array)
-  isConfirming: false 
-});
+  const [handSelection, setHandSelection] = useState({ 
+    selectedIndices: [],
+    isConfirming: false 
+  });
   
   const socket = useSocket();
   
@@ -49,14 +46,10 @@ const [handSelection, setHandSelection] = useState({
           : null
       }));
       
-      // Reset delle selezioni quando cambia lo stato del round
       if (data.roundStatus !== 'judging') {
         setJudgeSelection({ selectedIndex: null, isConfirming: false });
       }
       if (data.roundStatus !== 'playing') {
-        // Negli useEffect e nelle altre funzioni, sostituisci:
-        // setHandSelection({ selectedIndex: null, isConfirming: false });
-        // con:
         setHandSelection({ selectedIndices: [], isConfirming: false });
       }
     });
@@ -75,14 +68,30 @@ const [handSelection, setHandSelection] = useState({
         gameWinner: winner
       }));
     });
-    
+
     return () => {
       socket.off('game-update');
       socket.off('update-hand');
       socket.off('game-over');
     };
   }, [socket]);
-  
+
+  // AGGIUNGI QUESTO useEffect QUI (DENTRO IL COMPONENTE)
+  useEffect(() => {
+    // Prevenzione refresh accidentali
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+      return 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   const handleCardSelect = (cardIndex) => {
     console.log('handleCardSelect chiamata con cardIndex:', cardIndex);
     console.log('gameData.roundStatus:', gameData.roundStatus);
