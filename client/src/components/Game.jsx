@@ -82,23 +82,23 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         const oldHandLength = prev.hand.length;
         const newHandLength = hand.length;
         
-        // Identifica le carte nuove solo dopo il primo round
+        // Identifica le carte nuove solo se:
+        // 1. Non è il primo caricamento della mano (oldHandLength > 0)
+        // 2. Abbiamo ricevuto più carte di quelle che avevamo
         let newCardIndices = [];
         
-        setCardStates(prevStates => {
-          // Solo dopo il primo round (currentRound > 0) identifica le carte nuove
-          if (prevStates.currentRound > 0 && newHandLength > oldHandLength) {
-            // Le nuove carte sono quelle aggiunte alla fine
-            for (let i = oldHandLength; i < newHandLength; i++) {
-              newCardIndices.push(i);
-            }
+        // Se avevamo già delle carte in mano e ne abbiamo ricevute di più,
+        // allora le nuove sono quelle aggiunte alla fine
+        if (oldHandLength > 0 && newHandLength > oldHandLength) {
+          for (let i = oldHandLength; i < newHandLength; i++) {
+            newCardIndices.push(i);
           }
-          
-          return {
-            ...prevStates,
-            newCardIndices: newCardIndices
-          };
-        });
+        }
+        
+        setCardStates(prevStates => ({
+          ...prevStates,
+          newCardIndices: newCardIndices
+        }));
         
         return {
           ...prev,
