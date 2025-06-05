@@ -62,7 +62,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       if (isNewRound) {
         setCardStates(prev => ({
           playedCardIndices: [],
-          newCardIndices: prev.newCardIndices, // Mantieni le carte nuove per un round
+          newCardIndices: [], // Reset delle carte nuove ad ogni nuovo round
           currentRound: prev.currentRound + 1
         }));
       }
@@ -82,11 +82,12 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         const oldHandLength = prev.hand.length;
         const newHandLength = hand.length;
         
-        // Aggiorna gli stati delle carte
+        // Identifica le carte nuove solo dopo il primo round
+        let newCardIndices = [];
+        
         setCardStates(prevStates => {
-          // Se abbiamo ricevuto nuove carte E siamo almeno al round 2, identifica quali sono nuove
-          let newCardIndices = [];
-          if (newHandLength > oldHandLength && prevStates.currentRound >= 1) {
+          // Solo dopo il primo round (currentRound > 0) identifica le carte nuove
+          if (prevStates.currentRound > 0 && newHandLength > oldHandLength) {
             // Le nuove carte sono quelle aggiunte alla fine
             for (let i = oldHandLength; i < newHandLength; i++) {
               newCardIndices.push(i);
