@@ -3,9 +3,9 @@ import { io } from 'socket.io-client';
 import Home from './components/Home';
 import Lobby from './components/Lobby';
 import Game from './components/Game';
-import { SocketProvider } from './hooks/useSocket'; // Assicurati che il percorso sia corretto
-import { ThemeProvider } from './hooks/useTheme'; // Assicurati che il percorso sia corretto
-import AppFooter from './components/AppFooter'; // <-- IMPORT THE FOOTER
+import { SocketProvider } from './hooks/useSocket';
+import { ThemeProvider } from './hooks/useTheme';
+import AppFooter from './components/AppFooter';
 
 const App = () => {
   // Recupera lo stato dal localStorage al caricamento
@@ -45,6 +45,7 @@ const App = () => {
     setNickname('');
     setRoomCode('');
   };
+  
   const [socket, setSocket] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -72,13 +73,12 @@ const App = () => {
     const newSocket = io(serverUrl, {
       transports: ['polling'],
       timeout: 20000,
-      // forceNew: true, // Rimuovi o commenta forceNew, può causare problemi
       reconnection: true,
       reconnectionDelay: 1000,
-      reconnectionAttempts: 5, // Potrebbe essere Infinity per tentativi illimitati
+      reconnectionAttempts: 5,
     });
 
-    setSocket(newSocket); // Imposta il socket qui
+    setSocket(newSocket);
 
     newSocket.on('connect', () => {
       console.log('✅ Connesso al server Socket.io! ID:', newSocket.id);
@@ -90,7 +90,6 @@ const App = () => {
 
     newSocket.on('disconnect', (reason) => {
       console.log('Disconnesso dal server:', reason);
-      // Potresti voler gestire la logica di riconnessione o lo stato UI qui
     });
 
     newSocket.on('reconnect', (attemptNumber) => {
@@ -101,12 +100,34 @@ const App = () => {
       console.error('Errore di riconnessione:', error);
     });
 
-    // Cleanup effect: disconnetti il socket quando il componente App viene smontato
     return () => {
       console.log('App.jsx: Disconnessione socket...');
       newSocket.disconnect();
     };
-  }, []); // Esegui questo effetto solo una volta al mount del componente App
+  }, []);
+
+  // SPOSTATO QUI DENTRO IL COMPONENTE - Tentativo di riconnessione
+  useEffect(() => {
+    if (gameState !== 'home' && nickname && roomCode && socket?.connected) {
+      console.log('Tentativo di riconnessione a:', roomCode, 'con nickname:', nickname);
+      
+      socket.emit('rejoin-room', { nickname, roomCode });
+      
+      socket.on('rejoin-success', (data) => {
+        console.log('Riconnessione riuscita:', data);
+        if (data.gameStarted) {
+          setGameState('game');
+        } else {
+          setGameState('lobby');
+        }
+      });
+      
+      socket.on('rejoin-failed', (error) => {
+        console.log('Riconnessione fallita:', error);
+        clearGameState();
+      });
+    }
+  }, [socket, gameState, nickname, roomCode]);
 
   const toggleTheme = () => {
     const newDarkMode = !darkMode;
@@ -129,7 +150,7 @@ const App = () => {
             setGameState={setGameState} 
             setNickname={setNickname} 
             setRoomCode={setRoomCode}
-            nickname={nickname} // Aggiungi questa prop
+            nickname={nickname}
           />
         );
       case 'lobby':
@@ -158,10 +179,10 @@ const App = () => {
     <ThemeProvider value={{ darkMode, toggleTheme }}>
       <SocketProvider value={socket}>
         <div className="min-h-screen bg-texture text-gray-900 dark:text-white transition-colors duration-200 flex flex-col">
-          <main className="flex-grow pb-0"> {/* Ridotto da pb-16 a pb-0 per eliminare lo spazio eccessivo */}
+          <main className="flex-grow pb-0">
             {renderContent()}
           </main>
-          <AppFooter /> {/* <-- ADD THE FOOTER COMPONENT HERE */}
+          <AppFooter />
         </div>
       </SocketProvider>
     </ThemeProvider>
@@ -169,28 +190,3 @@ const App = () => {
 };
 
 export default App;
-
-useEffect(() => {
-  // Tentativo di riconnessione se c'è uno stato salvato
-  if (gameState !== 'home' && nickname && roomCode && socket?.connected) {
-    console.log('Tentativo di riconnessione a:', roomCode, 'con nickname:', nickname);
-    
-    // Tenta di rientrare nella stanza
-    socket.emit('rejoin-room', { nickname, roomCode });
-    
-    // Gestisci la risposta
-    socket.on('rejoin-success', (data) => {
-      console.log('Riconnessione riuscita:', data);
-      if (data.gameStarted) {
-        setGameState('game');
-      } else {
-        setGameState('lobby');
-      }
-    });
-    
-    socket.on('rejoin-failed', (error) => {
-      console.log('Riconnessione fallita:', error);
-      clearGameState();
-    });
-  }
-}, [socket, gameState, nickname, roomCode]);
