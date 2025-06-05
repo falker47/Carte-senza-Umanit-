@@ -62,8 +62,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       if (isNewRound) {
         setCardStates(prev => ({
           playedCardIndices: [],
-          // Non resettare newCardIndices qui, lascia che vengano gestite da update-hand
-          newCardIndices: prev.newCardIndices,
+          newCardIndices: prev.newCardIndices, // NON resettare qui, lascia che update-hand gestisca
           currentRound: prev.currentRound + 1
         }));
       }
@@ -80,29 +79,26 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       console.log('Received update-hand (inspect card text here):', hand);
       
       setGameData(prev => {
-        const oldHand = prev.hand || [];
+        const oldHandLength = prev.hand.length;
+        const newHandLength = hand.length;
         
-        // Identifica le carte nuove confrontando il contenuto delle carte
-        // invece della lunghezza della mano
+        // Identifica le carte nuove solo se:
+        // 1. Non è il primo caricamento della mano (oldHandLength > 0)
+        // 2. Abbiamo ricevuto più carte di quelle che avevamo
         let newCardIndices = [];
         
-        // Se abbiamo già delle carte e ne riceviamo di nuove
-        if (oldHand.length > 0) {
-          hand.forEach((newCard, index) => {
-            // Se questa carta non era presente nella mano precedente
-            if (!oldHand.includes(newCard)) {
-              newCardIndices.push(index);
-            }
-          });
+        // Se avevamo già delle carte in mano e ne abbiamo ricevute di più,
+        // allora le nuove sono quelle aggiunte alla fine
+        if (oldHandLength > 0 && newHandLength > oldHandLength) {
+          for (let i = oldHandLength; i < newHandLength; i++) {
+            newCardIndices.push(i);
+          }
         }
         
-        // Aggiorna gli stati delle carte solo se abbiamo identificato carte nuove
-        if (newCardIndices.length > 0) {
-          setCardStates(prevStates => ({
-            ...prevStates,
-            newCardIndices: newCardIndices
-          }));
-        }
+        setCardStates(prevStates => ({
+          ...prevStates,
+          newCardIndices: newCardIndices
+        }));
         
         return {
           ...prev,
@@ -140,7 +136,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     };
   }, []); // Array di dipendenze vuoto per eseguirlo solo al mount e smontaggio
 
-  const handleCardSelect = (index) => {
+  const handleCardSelect = (cardIndex) => {
     console.log('handleCardSelect chiamata con cardIndex:', cardIndex);
     console.log('gameData.roundStatus:', gameData.roundStatus);
     console.log('gameData.hasPlayed:', gameData.hasPlayed);
