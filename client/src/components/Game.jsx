@@ -76,7 +76,6 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     };
   }, [socket]);
 
-  // AGGIUNGI QUESTO useEffect QUI (DENTRO IL COMPONENTE)
   useEffect(() => {
     // Prevenzione refresh accidentali
     const handleBeforeUnload = (e) => {
@@ -90,7 +89,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, []); // Array di dipendenze vuoto per eseguirlo solo al mount e smontaggio
 
   const handleCardSelect = (cardIndex) => {
     console.log('handleCardSelect chiamata con cardIndex:', cardIndex);
@@ -773,19 +772,3 @@ const Game = ({ roomCode, nickname, setGameState }) => {
 };
 
 export default Game;
-
-// AGGIUNGI QUESTO useEffect DENTRO IL COMPONENTE, PRIMA DEL RETURN
-useEffect(() => {
-// Prevenzione refresh accidentali
-const handleBeforeUnload = (e) => {
-e.preventDefault();
-e.returnValue = 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
-return 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
-};
-
-window.addEventListener('beforeunload', handleBeforeUnload);
-
-return () => {
-window.removeEventListener('beforeunload', handleBeforeUnload);
-};
-}, []);
