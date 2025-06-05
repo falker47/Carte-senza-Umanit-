@@ -62,7 +62,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       if (isNewRound) {
         setCardStates(prev => ({
           playedCardIndices: [],
-          newCardIndices: prev.newCardIndices, // NON resettare qui, lascia che update-hand gestisca
+          newCardIndices: [], // Reset delle carte nuove quando inizia un nuovo round
           currentRound: prev.currentRound + 1
         }));
       }
@@ -82,23 +82,26 @@ const Game = ({ roomCode, nickname, setGameState }) => {
         const oldHandLength = prev.hand.length;
         const newHandLength = hand.length;
         
-        // Identifica le carte nuove solo se:
-        // 1. Non è il primo caricamento della mano (oldHandLength > 0)
-        // 2. Abbiamo ricevuto più carte di quelle che avevamo
+        // Identifica le carte nuove basandosi sul round corrente
         let newCardIndices = [];
         
-        // Se avevamo già delle carte in mano e ne abbiamo ricevute di più,
-        // allora le nuove sono quelle aggiunte alla fine
-        if (oldHandLength > 0 && newHandLength > oldHandLength) {
-          for (let i = oldHandLength; i < newHandLength; i++) {
-            newCardIndices.push(i);
+        setCardStates(prevStates => {
+          // Se siamo nel secondo round o successivi, tutte le carte nuove ricevute
+          // sono considerate "nuove" (tipicamente le ultime carte della mano)
+          if (prevStates.currentRound > 0 && newHandLength > 0) {
+            // Assumiamo che le nuove carte siano sempre le ultime aggiunte
+            // In un gioco di Cards Against Humanity, tipicamente si ricevono 1-2 carte nuove
+            const newCardsCount = Math.min(2, newHandLength); // Massimo 2 carte nuove
+            for (let i = newHandLength - newCardsCount; i < newHandLength; i++) {
+              newCardIndices.push(i);
+            }
           }
-        }
-        
-        setCardStates(prevStates => ({
-          ...prevStates,
-          newCardIndices: newCardIndices
-        }));
+          
+          return {
+            ...prevStates,
+            newCardIndices: newCardIndices
+          };
+        });
         
         return {
           ...prev,
