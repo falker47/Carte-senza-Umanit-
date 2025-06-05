@@ -765,18 +765,18 @@ const [handSelection, setHandSelection] = useState({
 
 export default Game;
 
-// ...existing code ...
+// AGGIUNGI QUESTO useEffect DENTRO IL COMPONENTE, PRIMA DEL RETURN
 useEffect(() => {
-  // Prevenzione refresh accidentali
-  const handleBeforeUnload = (e) => {
-    e.preventDefault();
-    e.returnValue = 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
-    return 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
-  };
+// Prevenzione refresh accidentali
+const handleBeforeUnload = (e) => {
+e.preventDefault();
+e.returnValue = 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+return 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+};
 
-  window.addEventListener('beforeunload', handleBeforeUnload);
+window.addEventListener('beforeunload', handleBeforeUnload);
 
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
+return () => {
+window.removeEventListener('beforeunload', handleBeforeUnload);
+};
 }, []);
