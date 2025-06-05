@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending, isJudging, cards }) {
+function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPending, isJudging, cards, isPlayed, isNew }) {
   // Se abbiamo un array di carte (per il giudizio), mostralo come gruppo
   if (cards && Array.isArray(cards)) {
     return (
@@ -59,25 +59,41 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
     ${isWinner ? 'border-4 border-green-500 shadow-green-500/50 shadow-xl' : 'border-2 border-gray-300'}
     ${isSelected ? 'border-4 border-blue-500 shadow-blue-500/50 shadow-lg' : ''}
     ${isPending ? 'border-4 border-yellow-500 shadow-yellow-500/50 shadow-lg animate-pulse' : ''}
-    ${isSelectable && type === 'white' ? 'cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out' : ''}
+    ${isPlayed ? 'opacity-75 bg-gray-100 dark:bg-gray-600' : ''}
+    ${isSelectable && type === 'white' && !isPlayed ? 'cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all duration-200 ease-in-out' : ''}
     p-3 rounded-lg shadow-lg min-h-[140px] max-h-[200px] flex flex-col justify-between relative text-left ${isJudging ? 'w-80 max-w-sm mx-auto' : 'w-full'} break-words whitespace-pre-wrap
   `;
 
   const textClasses = `
     text-sm md:text-base font-semibold leading-tight
     ${type === 'black' ? 'leading-relaxed' : ''}
+    ${isPlayed ? 'text-gray-500 dark:text-gray-400' : ''}
   `;
 
   const displayText = formatText(text);
 
   return (
-    <div className={cardClasses} onClick={onClick}>
+    <div className={cardClasses} onClick={!isPlayed ? onClick : undefined}>
       <div className="flex-grow flex items-center">
         <div className={textClasses} dangerouslySetInnerHTML={{ __html: displayText }} />
       </div>
       
+      {/* Badge per carta giocata */}
+      {isPlayed && (
+        <div className="absolute top-2 left-2 bg-green-600 text-white rounded-full px-2 py-1 text-xs font-bold shadow-lg">
+          ✓ Giocata
+        </div>
+      )}
+      
+      {/* Badge per carta nuova */}
+      {isNew && !isPlayed && (
+        <div className="absolute top-2 left-2 bg-blue-600 text-white rounded-full px-2 py-1 text-xs font-bold shadow-lg animate-pulse">
+          ✨ Nuova
+        </div>
+      )}
+      
       {/* Indicatore di stato per le carte selezionate */}
-      {isSelected && !isPending && (
+      {isSelected && !isPending && !isPlayed && (
         <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
           ✓
         </div>
@@ -100,13 +116,8 @@ function Card({ type, text, onClick, isSelected, isWinner, isSelectable, isPendi
           Carte Senza Umanità ®
         </div>
       )}
-      {type === 'black' && (
-        <div className="absolute bottom-1 right-2 text-xs text-gray-300 font-medium">
-          Carte Senza Umanità ®
-        </div>
-      )}
     </div>
   );
-};
+}
 
 export default Card;

@@ -18,6 +18,13 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     hasPlayed: false
   });
   
+  // Nuovo stato per tracciare le carte giocate e nuove
+  const [cardStates, setCardStates] = useState({
+    playedCardIndices: [], // Indici delle carte giocate nel round corrente
+    newCardIndices: [], // Indici delle carte nuove ricevute
+    currentRound: 0 // Per tracciare i cambi di round
+  });
+  
   const [judgeSelection, setJudgeSelection] = useState({
     selectedIndex: null,
     isConfirming: false
@@ -35,6 +42,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     
     socket.on('game-update', (data) => {
       console.log('Received game-update:', data); 
+      
+      // Controlla se è iniziato un nuovo round
+      const isNewRound = data.roundStatus === 'playing' && 
+                        (gameData.roundStatus === 'roundEnd' || gameData.roundStatus === 'waiting');
+      
       setGameData(prev => ({
         ...prev,
         ...data, 
@@ -46,6 +58,15 @@ const Game = ({ roomCode, nickname, setGameState }) => {
           : null
       }));
       
+      // Reset degli stati delle carte per nuovo round
+      if (isNewRound) {
+        setCardStates(prev => ({
+          playedCardIndices: [],
+          newCardIndices: prev.newCardIndices, // Mantieni le carte nuove per un round
+          currentRound: prev.currentRound + 1
+        }));
+      }
+      
       if (data.roundStatus !== 'judging') {
         setJudgeSelection({ selectedIndex: null, isConfirming: false });
       }
@@ -56,10 +77,31 @@ const Game = ({ roomCode, nickname, setGameState }) => {
 
     socket.on('update-hand', (hand) => {
       console.log('Received update-hand (inspect card text here):', hand);
-      setGameData(prev => ({
-        ...prev,
-        hand: hand
-      }));
+      
+      setGameData(prev => {
+        const oldHandLength = prev.hand.length;
+        const newHandLength = hand.length;
+        
+        // Se abbiamo ricevuto nuove carte, identifica quali sono nuove
+        let newCardIndices = [];
+        if (newHandLength > oldHandLength) {
+          // Le nuove carte sono quelle aggiunte alla fine
+          for (let i = oldHandLength; i < newHandLength; i++) {
+            newCardIndices.push(i);
+          }
+        }
+        
+        // Aggiorna gli stati delle carte
+        setCardStates(prevStates => ({
+          ...prevStates,
+          newCardIndices: newCardIndices
+        }));
+        
+        return {
+          ...prev,
+          hand: hand
+        };
+      });
     });
     
     socket.on('game-over', ({ winner }) => {
@@ -74,7 +116,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
       socket.off('update-hand');
       socket.off('game-over');
     };
-  }, [socket]);
+  }, [socket, gameData.roundStatus]);
 
   useEffect(() => {
     // Prevenzione refresh accidentali
@@ -96,6 +138,11 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     console.log('gameData.roundStatus:', gameData.roundStatus);
     console.log('gameData.hasPlayed:', gameData.hasPlayed);
     console.log('isCurrentPlayerJudge():', isCurrentPlayerJudge());
+    
+    // Non permettere selezione di carte già giocate
+    if (cardStates.playedCardIndices.includes(cardIndex)) {
+      return;
+    }
     
     if (gameData.roundStatus !== 'playing' || gameData.hasPlayed) {
       console.log('Condizioni non soddisfatte per selezionare carta');
@@ -142,6 +189,13 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     }
     
     setHandSelection(prev => ({ ...prev, isConfirming: true }));
+    
+    // Marca le carte come giocate
+    setCardStates(prev => ({
+      ...prev,
+      playedCardIndices: [...prev.playedCardIndices, ...handSelection.selectedIndices],
+      newCardIndices: prev.newCardIndices.filter(index => !handSelection.selectedIndices.includes(index))
+    }));
     
     socket.emit('play-card', {
       roomCode,
@@ -654,16 +708,20 @@ const Game = ({ roomCode, nickname, setGameState }) => {
                         gameData.hand.map((card, index) => {
                           const isSelected = handSelection.selectedIndices.includes(index);
                           const isPending = isSelected && handSelection.isConfirming;
+                          const isPlayed = cardStates.playedCardIndices.includes(index);
+                          const isNew = cardStates.newCardIndices.includes(index);
                           
                           return (
                             <Card 
                               key={index}
                               type="white" 
                               text={card}
-                              onClick={!gameData.hasPlayed ? () => handleCardSelect(index) : undefined}
-                              isSelectable={!gameData.hasPlayed}
+                              onClick={!gameData.hasPlayed && !isPlayed ? () => handleCardSelect(index) : undefined}
+                              isSelectable={!gameData.hasPlayed && !isPlayed}
                               isSelected={isSelected}
                               isPending={isPending}
+                              isPlayed={isPlayed}
+                              isNew={isNew}
                             />
                           );
                         })
