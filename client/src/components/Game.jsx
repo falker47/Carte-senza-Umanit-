@@ -764,3 +764,19 @@ const [handSelection, setHandSelection] = useState({
 };
 
 export default Game;
+
+// ...existing code ...
+useEffect(() => {
+  // Prevenzione refresh accidentali
+  const handleBeforeUnload = (e) => {
+    e.preventDefault();
+    e.returnValue = 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+    return 'Sei sicuro di voler uscire dalla partita? Perderai il progresso attuale.';
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, []);

@@ -8,10 +8,44 @@ import { ThemeProvider } from './hooks/useTheme'; // Assicurati che il percorso 
 import AppFooter from './components/AppFooter'; // <-- IMPORT THE FOOTER
 
 const App = () => {
-  const [gameState, setGameState] = useState('home');
+  // Recupera lo stato dal localStorage al caricamento
+  const [gameState, setGameState] = useState(() => {
+    const savedState = localStorage.getItem('gameState');
+    return savedState || 'home';
+  });
+  
+  const [nickname, setNickname] = useState(() => {
+    return localStorage.getItem('nickname') || '';
+  });
+  
+  const [roomCode, setRoomCode] = useState(() => {
+    return localStorage.getItem('roomCode') || '';
+  });
+
+  // Salva lo stato nel localStorage quando cambia
+  useEffect(() => {
+    if (gameState !== 'home') {
+      localStorage.setItem('gameState', gameState);
+      localStorage.setItem('nickname', nickname);
+      localStorage.setItem('roomCode', roomCode);
+    } else {
+      // Pulisci il localStorage quando si torna alla home
+      localStorage.removeItem('gameState');
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('roomCode');
+    }
+  }, [gameState, nickname, roomCode]);
+
+  // Funzione per pulire lo stato (da chiamare quando si esce volontariamente)
+  const clearGameState = () => {
+    localStorage.removeItem('gameState');
+    localStorage.removeItem('nickname');
+    localStorage.removeItem('roomCode');
+    setGameState('home');
+    setNickname('');
+    setRoomCode('');
+  };
   const [socket, setSocket] = useState(null);
-  const [nickname, setNickname] = useState('');
-  const [roomCode, setRoomCode] = useState('');
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -135,3 +169,28 @@ const App = () => {
 };
 
 export default App;
+
+useEffect(() => {
+  // Tentativo di riconnessione se c'è uno stato salvato
+  if (gameState !== 'home' && nickname && roomCode && socket?.connected) {
+    console.log('Tentativo di riconnessione a:', roomCode, 'con nickname:', nickname);
+    
+    // Tenta di rientrare nella stanza
+    socket.emit('rejoin-room', { nickname, roomCode });
+    
+    // Gestisci la risposta
+    socket.on('rejoin-success', (data) => {
+      console.log('Riconnessione riuscita:', data);
+      if (data.gameStarted) {
+        setGameState('game');
+      } else {
+        setGameState('lobby');
+      }
+    });
+    
+    socket.on('rejoin-failed', (error) => {
+      console.log('Riconnessione fallita:', error);
+      clearGameState();
+    });
+  }
+}, [socket, gameState, nickname, roomCode]);

@@ -258,30 +258,69 @@ io.on('connection', (socket) => {
     // Rimuovi il giocatore dalla stanza socket.io
     socket.leave(roomCode);
     
+    // Gestione disconnessione
+    socket.on('rejoin-room', ({ nickname, roomCode }) => {
+      console.log(`Tentativo di riconnessione da ${socket.id} a stanza ${roomCode} con nickname ${nickname}`);
+      
+      const result = gameManager.rejoinRoom(socket.id, nickname, roomCode);
+      
+      if (result.success) {
+        socket.join(roomCode);
+        
+        const players = gameManager.getPlayersInRoom(roomCode);
+        const hostId = gameManager.rooms[roomCode].hostId;
+        const room = gameManager.rooms[roomCode];
+        
+        socket.emit('rejoin-success', {
+          players,
+          host: hostId,
+          code: roomCode,
+          gameStarted: room.gameStarted
+        });
+        
+        // Se il gioco è iniziato, invia lo stato del gioco
+        if (room.gameStarted) {
+          const gameState = gameManager.getGameState(roomCode);
+          socket.emit('game-update', gameState);
+          
+          // Invia la mano del giocatore
+          const player = room.players.find(p => p.id === socket.id);
+          if (player) {
+            socket.emit('hand-update', { hand: player.hand });
+          }
+        }
+        
+        // Notifica gli altri giocatori
+        socket.to(roomCode).emit('room-players', {
+          players,
+          host: hostId,
+          code: roomCode
+        });
+      } else {
+        socket.emit('rejoin-failed', { message: result.error });
+      }
+    });
+    
     // Gestione disconnessione improvvisa
     socket.on('disconnect', () => {
       console.log(`Client disconnesso: ${socket.id}`);
       
-      // Gestisci la disconnessione logica
-      const updates = gameManager.handleDisconnect(socket.id);
-      
-      // Invia aggiornamenti a tutte le stanze interessate
-      updates.forEach(update => {
-        if (update.isGameOver) {
-          io.to(update.roomCode).emit('game-over', {
-            reason: update.hostLeft ? 'Host ha lasciato la stanza' : 'Troppi pochi giocatori'
-          });
-        } else {
-          const room = gameManager.rooms[update.roomCode];
-          if (room) {
-            io.to(update.roomCode).emit('room-players', {
-              players: update.players,
-              host: room.hostId,
-              code: update.roomCode
-            });
+      const roomCode = gameManager.playerRooms[socket.id];
+      if (roomCode) {
+        const room = gameManager.rooms[roomCode];
+        if (room && room.gameStarted) {
+          // Se il gioco è iniziato, non rimuovere il giocatore immediatamente
+          // Marca il giocatore come disconnesso ma mantienilo nella partita
+          const player = room.players.find(p => p.id === socket.id);
+          if (player) {
+            player.disconnected = true;
+            console.log(`Giocatore ${player.nickname} marcato come disconnesso`);
           }
+        } else {
+          // Se il gioco non è iniziato, rimuovi il giocatore normalmente
+          gameManager.removePlayer(socket.id);
         }
-      });
+      }
     });
     
     // Conferma al giocatore che è uscito

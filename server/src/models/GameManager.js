@@ -234,4 +234,34 @@ export class GameManager {
       hostLeft: false
     }];
   }
+
+  rejoinRoom(newSocketId, nickname, roomCode) {
+    const upperCaseRoomCode = roomCode.toUpperCase();
+    
+    if (!this.rooms[upperCaseRoomCode]) {
+      return { success: false, error: 'Stanza non trovata' };
+    }
+    
+    const room = this.rooms[upperCaseRoomCode];
+    const existingPlayer = room.players.find(p => p.nickname.toLowerCase() === nickname.toLowerCase());
+    
+    if (!existingPlayer) {
+      return { success: false, error: 'Giocatore non trovato in questa stanza' };
+    }
+    
+    // Aggiorna l'ID del socket per il giocatore esistente
+    const oldSocketId = existingPlayer.id;
+    existingPlayer.id = newSocketId;
+    
+    // Aggiorna le mappe
+    delete this.playerRooms[oldSocketId];
+    this.playerRooms[newSocketId] = upperCaseRoomCode;
+    
+    // Se era l'host, aggiorna l'hostId
+    if (room.hostId === oldSocketId) {
+      room.hostId = newSocketId;
+    }
+    
+    return { success: true };
+  }
 }
