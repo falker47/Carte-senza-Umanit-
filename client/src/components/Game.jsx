@@ -76,7 +76,6 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     };
   }, [socket]);
 
-  // AGGIUNGI QUESTO useEffect QUI (DENTRO IL COMPONENTE)
   useEffect(() => {
     // Prevenzione refresh accidentali
     const handleBeforeUnload = (e) => {
@@ -90,7 +89,7 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, []); // Array di dipendenze vuoto per eseguirlo solo al mount e smontaggio
 
   const handleCardSelect = (cardIndex) => {
     console.log('handleCardSelect chiamata con cardIndex:', cardIndex);

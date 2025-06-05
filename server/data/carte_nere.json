@@ -160,7 +160,7 @@
     "blanks": 1
   },
   {
-    "text": "I miei genitori mi minacciano avvertendomi che se verrò bocciato dovranno ____.",
+    "text": "I miei genitori mi hanno detto che se verrò bocciato mi aspetta ____.",
     "blanks": 1
   },
   {
@@ -200,7 +200,7 @@
     "blanks": 1
   },
   {
-    "text": "Ho scoperto che il/la mio/a compagno/a ama ____. Disgustoso!",
+    "text": "Ho scoperto che il mio partner adora ____. Disgustoso!",
     "blanks": 1
   },
   {
@@ -830,11 +830,11 @@
     "blanks": 2
   },
   {
-    "text": "____ è morto/a di ____.",
+    "text": "____ è morto per ____.",
     "blanks": 2
   },
   {
-    "text": "Salve, sono ____ il creatore di ____.",
+    "text": "Salve, sono ____! Sì, proprio colui che inventato ____.",
     "blanks": 2
   },
   {
