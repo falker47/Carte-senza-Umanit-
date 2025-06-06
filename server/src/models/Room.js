@@ -411,18 +411,16 @@ export class Room {
       gameStarted: this.gameStarted,
       currentRound: this.currentRound,
       currentJudge: this.players[this.judgeIndex]?.id,
-      blackCard: this.currentBlackCard, // Changed from currentBlackCard to blackCard for direct mapping
+      blackCard: this.currentBlackCard,
       maxPoints: this.maxPoints,
       maxPlayers: this.maxPlayers,
       handSize: this.handSize,
-      roundStatus: this.roundStatus, // Use the actual roundStatus property
-      // Invia le carte giocate (mescolate) solo se si sta giudicando o il round è finito.
-      // Per la visualizzazione della carta vincente, useremo winningCardText.
+      roundStatus: this.roundStatus,
+      playersPlayedCount: this.getPlayersPlayedCount(), // Aggiungi questa riga
       playedCards: (this.roundStatus === 'judging' || this.roundStatus === 'roundEnd') ? 
         this.getPlayedCards().map(pc => ({
           playerId: pc.playerId,
-          cards: pc.cards || [pc.card], // Assicura che sia sempre un array
-          // Per retrocompatibilità con carte singole
+          cards: pc.cards || [pc.card],
           card: Array.isArray(pc.cards) ? pc.cards.join(' / ') : pc.card
         })) : [],
       roundWinner: this.roundWinner,

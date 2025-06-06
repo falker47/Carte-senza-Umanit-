@@ -5,6 +5,7 @@ import Card from './Card';
 import PlayerList from './PlayerList';
 
 const Game = ({ roomCode, nickname, setGameState }) => {
+  // Aggiungi playersPlayedCount allo stato iniziale
   const [gameData, setGameData] = useState({
     players: [],
     currentJudge: null,
@@ -15,7 +16,8 @@ const Game = ({ roomCode, nickname, setGameState }) => {
     gameWinner: null,
     roundStatus: 'waiting',
     selectedCard: null,
-    hasPlayed: false
+    hasPlayed: false,
+    playersPlayedCount: { played: 0, total: 0 } // Aggiungi questa riga
   });
   
   // Nuovo stato per tracciare le carte giocate e nuove
@@ -531,7 +533,14 @@ const Game = ({ roomCode, nickname, setGameState }) => {
               {/* Mostra la carta nera solo se il gioco non è finito */}
               {gameData.blackCard && (
                 <div className="mb-4">
-                  <h2 className="text-lg font-medium mb-3">Carta Nera</h2>
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-medium">Carta Nera</h2>
+                    {gameData.roundStatus === 'playing' && gameData.playersPlayedCount && (
+                      <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        {gameData.playersPlayedCount.played}/{gameData.playersPlayedCount.total} giocatori hanno scelto
+                      </span>
+                    )}
+                  </div>
                   <div className="max-w-md mx-auto">
                     <Card 
                       type="black" 
